@@ -10,4 +10,9 @@ public class HelloController {
     public String hello() {
         return "Hello, BookMark!";
     }
+
+    @GetMapping("/")
+    public String root() {
+        return "Welcome to the BookMark API!";
+    }
 }
