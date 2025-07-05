@@ -1,8 +1,10 @@
 name: Deploy to EC2
 
 on:
-  push:
-    branches: [ dev ]
+  workflow_run:
+    workflows: ["Build and Push to DockerHub"]
+    types:
+      - completed
 
 jobs:
   deploy:
