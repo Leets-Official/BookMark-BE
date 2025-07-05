@@ -46,4 +46,3 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
-
