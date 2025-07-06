@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.repository.UserRepository;
+import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
+import leets.bookmark.global.auth.jwt.service.JwtProvider;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final JwtProvider jwtProvider;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -30,12 +33,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String kakaoId = userInfo.getProviderId();
         User user = userRepository.findByKakaoId(kakaoId).orElseThrow();
 
+        JwtTokenDto token = jwtProvider.createToken(user);
+
         response.setContentType("application/json;charset=UTF-8");
         objectMapper.writeValue(response.getWriter(), Map.of(
                 "id", user.getId(),
                 "nickname", user.getNickname(),
                 "email", user.getEmail(),
-                "profileImage", user.getProfileImage()
+                "profileImage", user.getProfileImage(),
+                "accessToken", token.accessToken(),
+                "refreshToken", token.refreshToken()
         ));
     }
 }
