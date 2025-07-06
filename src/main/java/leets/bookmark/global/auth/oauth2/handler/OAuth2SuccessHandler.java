@@ -35,6 +35,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         JwtTokenDto token = jwtProvider.createToken(user);
 
+        user.updateTokens(token.accessToken(), token.refreshToken());
+        userRepository.save(user);
+
         response.setContentType("application/json;charset=UTF-8");
         objectMapper.writeValue(response.getWriter(), Map.of(
                 "id", user.getId(),
