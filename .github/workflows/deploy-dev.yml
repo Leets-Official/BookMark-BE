@@ -19,10 +19,6 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            CURRENT_TZ=$(timedatectl | grep "Time zone" | awk '{print $3}')
-            if [ "$CURRENT_TZ" != "Asia/Seoul" ]; then
-              sudo timedatectl set-timezone Asia/Seoul
-            fi
             docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
             docker stop bookmark-app || true
             docker rm -f bookmark-app || true
