@@ -17,6 +17,12 @@ import java.util.Date;
 @Slf4j
 public class JwtProvider {
 
+    public static final String CLAIM_ID = "id";
+    public static final String CLAIM_EMAIL = "email";
+    public static final String CLAIM_ROLE = "role";
+    public static final String SUBJECT_ACCESS_TOKEN = "accessToken";
+    public static final String SUBJECT_REFRESH_TOKEN = "refreshToken";
+
     @Value("${jwt.key}")
     private String key;
 
@@ -32,18 +38,18 @@ public class JwtProvider {
 
         // Access Token 생성
         String accessToken = Jwts.builder()
-                .claim("id", user.getId())
-                .claim("email", user.getEmail())
-                .claim("role", user.getRole())
-                .setSubject("accessToken")
+                .claim(CLAIM_ID, user.getId())
+                .claim(CLAIM_EMAIL, user.getEmail())
+                .claim(CLAIM_ROLE, user.getRole())
+                .setSubject(SUBJECT_ACCESS_TOKEN)
                 .setExpiration(new Date(now + accessTokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .claim("id", user.getId())
-                .setSubject("refreshToken")
+                .claim(CLAIM_ID, user.getId())
+                .setSubject(SUBJECT_REFRESH_TOKEN)
                 .setExpiration(new Date(now + refreshTokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
@@ -70,6 +76,6 @@ public class JwtProvider {
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("id", Long.class);
+                .get(CLAIM_ID, Long.class);
     }
 }
