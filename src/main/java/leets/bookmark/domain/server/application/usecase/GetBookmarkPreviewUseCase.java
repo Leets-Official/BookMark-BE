@@ -3,16 +3,14 @@ package leets.bookmark.domain.server.application.usecase;
 import leets.bookmark.domain.server.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.server.domain.entity.Bookmark;
 import leets.bookmark.domain.server.domain.repository.BookmarkRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GetBookmarkPreviewUseCase {
 
     private final BookmarkRepository bookmarkRepository;
-
-    public GetBookmarkPreviewUseCase(BookmarkRepository bookmarkRepository) {
-        this.bookmarkRepository = bookmarkRepository;
-    }
 
     public BookmarkPreviewResponse execute(Long bookmarkId) {
         Bookmark bookmark = bookmarkRepository.findById(bookmarkId);
@@ -22,8 +20,8 @@ public class GetBookmarkPreviewUseCase {
         }
 
         return new BookmarkPreviewResponse(
-                bookmark.getTitle(),
-                bookmark.getThumbnailUrl()
+            bookmark.getTitle(),
+            bookmark.getThumbnailUrl()
         );
     }
 }
