@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
 import lombok.Builder;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -15,9 +13,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    // TODO: User 병합 후 복원
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "user_id", nullable = false)
     //private User user;
 
     @Column(length = 100, nullable = false)

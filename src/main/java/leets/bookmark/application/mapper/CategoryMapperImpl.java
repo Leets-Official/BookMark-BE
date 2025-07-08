@@ -16,7 +16,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         // user.setId(userId);
 
         return Category.builder()
-                .user(null) // 임시 null 처리
+                //.user(null) // 임시 null 처리
                 .name(request.name())
                 .build();
     }
