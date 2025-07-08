@@ -1,4 +1,4 @@
 package leets.bookmark.application.dto.response;
 
-public class CategoryResponse {
+public record CategoryResponse(Long id, String name) {
 }

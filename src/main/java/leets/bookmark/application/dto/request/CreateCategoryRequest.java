@@ -1,4 +1,4 @@
 package leets.bookmark.application.dto.request;
 
-public class CreateCategoryRequest {
+public record CreateCategoryRequest(String name) {
 }
