@@ -13,7 +13,6 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .components(new Components())
                 .info(apiInfo())
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"))
                 .components(attachBearerAuthScheme());
@@ -27,13 +26,14 @@ public class SwaggerConfig {
     }
 
     private Components attachBearerAuthScheme() {
-        return new Components().addSecuritySchemes("Authorization",
-                new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
-                        .in(SecurityScheme.In.HEADER)
-                        .name("Authorization")
-                        .description("JWT 토큰을 넣어주세요."));
+        return new Components()
+                .addSecuritySchemes("Authorization",
+                    new SecurityScheme()
+                            .type(SecurityScheme.Type.HTTP)
+                            .scheme("bearer")
+                            .bearerFormat("JWT")
+                            .in(SecurityScheme.In.HEADER)
+                            .name("Authorization")
+                            .description("JWT 토큰을 넣어주세요."));
     }
 }
