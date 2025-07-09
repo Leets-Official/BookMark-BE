@@ -7,6 +7,7 @@ import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.repository.UserRepository;
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
 import leets.bookmark.global.auth.jwt.service.JwtProvider;
+import leets.bookmark.global.auth.oauth2.exception.KakaoUserNotFoundException;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         KakaoOAuth2UserInfo userInfo = new KakaoOAuth2UserInfo(oAuth2User.getAttributes());
 
         String kakaoId = userInfo.getProviderId();
-        User user = userRepository.findByKakaoId(kakaoId).orElseThrow();
+        User user = userRepository.findByKakaoId(kakaoId)
+                .orElseThrow(KakaoUserNotFoundException::new);
 
         JwtTokenDto token = jwtProvider.createToken(user);
 
