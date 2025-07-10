@@ -1,8 +1,7 @@
-package leets.bookmark.domain.server.application.usecase;
+package leets.bookmark.domain.searchhistory.application.usecase;
 
-import leets.bookmark.domain.server.application.dto.response.SearchHistoryResponse;
-import leets.bookmark.domain.server.domain.entity.SearchHistory;
-import leets.bookmark.domain.server.domain.repository.SearchHistoryRepository;
+import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
+import leets.bookmark.domain.searchhistory.domain.repository.SearchHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package leets.bookmark.domain.server.domain.repository;
+package leets.bookmark.domain.bookmark.domain.repository;
 
-import leets.bookmark.domain.server.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,8 +1,7 @@
-package leets.bookmark.domain.server.domain.repository;
-
-import leets.bookmark.domain.server.domain.entity.SearchHistory;
+package leets.bookmark.domain.searchhistory.domain.repository;
 
 import java.util.List;
+import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import org.springframework.stereotype.Repository;
 
 @Repository

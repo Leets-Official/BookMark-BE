@@ -1,7 +1,7 @@
-package leets.bookmark.domain.server.presentation;
+package leets.bookmark.domain.bookmark.presentation;
 
-import leets.bookmark.domain.server.application.dto.response.BookmarkPreviewResponse;
-import leets.bookmark.domain.server.application.usecase.GetBookmarkPreviewUseCase;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
+import leets.bookmark.domain.bookmark.application.usecase.GetBookmarkPreviewUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

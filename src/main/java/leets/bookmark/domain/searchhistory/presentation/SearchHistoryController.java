@@ -1,7 +1,7 @@
-package leets.bookmark.domain.server.presentation;
+package leets.bookmark.domain.searchhistory.presentation;
 
-import leets.bookmark.domain.server.application.dto.response.SearchHistoryResponse;
-import leets.bookmark.domain.server.application.usecase.GetSearchHistoryUseCase;
+import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
+import leets.bookmark.domain.searchhistory.application.usecase.GetSearchHistoryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

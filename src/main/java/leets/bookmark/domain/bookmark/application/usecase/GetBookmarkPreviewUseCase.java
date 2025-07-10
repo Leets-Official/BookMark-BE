@@ -1,8 +1,8 @@
-package leets.bookmark.domain.server.application.usecase;
+package leets.bookmark.domain.bookmark.application.usecase;
 
-import leets.bookmark.domain.server.application.dto.response.BookmarkPreviewResponse;
-import leets.bookmark.domain.server.domain.entity.Bookmark;
-import leets.bookmark.domain.server.domain.repository.BookmarkRepository;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

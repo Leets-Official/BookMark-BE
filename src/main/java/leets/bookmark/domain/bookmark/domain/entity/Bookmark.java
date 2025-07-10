@@ -1,4 +1,4 @@
-package leets.bookmark.domain.server.domain.entity;
+package leets.bookmark.domain.bookmark.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
