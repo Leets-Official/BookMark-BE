@@ -1,6 +1,7 @@
 package leets.bookmark.domain.searchhistory.application.usecase;
 
 import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
+import leets.bookmark.domain.searchhistory.application.mapper.SearchHistoryMapper;
 import leets.bookmark.domain.searchhistory.domain.repository.SearchHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,11 @@ import java.util.stream.Collectors;
 public class GetSearchHistoryUseCase {
 
     private final SearchHistoryRepository searchHistoryRepository;
+    private final SearchHistoryMapper searchHistoryMapper;
 
     public List<SearchHistoryResponse> execute(Long userId) {
         return searchHistoryRepository.findByUserId(userId).stream()
-            .map(h -> new SearchHistoryResponse(h.getId(), h.getKeyword(), h.getSearchedAt()))
+            .map(searchHistoryMapper::toResponse)
             .collect(Collectors.toList());
     }
 }
