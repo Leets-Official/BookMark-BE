@@ -8,6 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface BookmarkMapper {
 
-    @Mapping(source = "category.name", target = "categoryName")
+    // @Mapping(source = "category.name", target = "categoryName")
     BookmarkResponse toResponse(Bookmark bookmark);
 }
