@@ -1,5 +1,6 @@
-package leets.bookmark.presentation;
+package leets.bookmark.presentation.controller;
 
+import jakarta.validation.Valid;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.dto.response.CategoryResponse;
 import leets.bookmark.application.usecase.CreateCategoryUseCase;
@@ -16,8 +17,8 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(
-            @RequestBody CreateCategoryRequest request,
-            @RequestHeader("X-USER-ID") Long userId // 실제 프로젝트에 맞게 수정 가능
+            @RequestBody @Valid CreateCategoryRequest request,
+            @RequestHeader("X-USER-ID") Long userId
     ) {
         CategoryResponse response = createCategoryUseCase.createCategory(userId, request);
         return ResponseEntity.ok(response);

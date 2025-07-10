@@ -27,7 +27,7 @@ public class Category {
     // @OneToMany(mappedBy = "category")
     // private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @Builder
+    @Builder(toBuilder = true)
     public Category(String name) {
         // this.user = user;
         this.name = name;
