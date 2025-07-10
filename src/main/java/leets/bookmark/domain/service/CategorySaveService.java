@@ -10,12 +10,14 @@ import lombok.RequiredArgsConstructor;
 public class CategorySaveService {
     private final CategoryRepository categoryRepository;
 
+    /*
     public Category save(Category category, Long userId) {
         if (categoryRepository.existsByUserIdAndName(userId, category.getName())) {
             throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
         }
         return categoryRepository.save(category);
     }
+    */
 
     /*
     public Category save(Category category) {
@@ -30,7 +32,7 @@ public class CategorySaveService {
     }
     */
     public Category save(Category category) {
-        System.out.println("[임시 처리] User  병합 전 - category 저장 로직 단축 호출");
-        return save(category, null);
+        System.out.println("[임시 처리] User 병합 전 - category 저장 로직 단축 호출");
+        return categoryRepository.save(category);
     }
 }
