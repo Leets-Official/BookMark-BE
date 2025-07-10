@@ -1,8 +1,7 @@
-
 package leets.bookmark.domain.entity;
 
 import jakarta.persistence.*;
-import leets.category.domain.entity.Category;
+// import leets.category.domain.entity.Category;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -27,9 +26,9 @@ public class Bookmark {
 
     private String thumbnailUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "category_id")
+    // private Category category;
 
     private LocalDateTime createdAt;
 }
