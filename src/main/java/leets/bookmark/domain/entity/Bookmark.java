@@ -2,6 +2,7 @@ package leets.bookmark.domain.entity;
 
 import jakarta.persistence.*;
 // import leets.category.domain.entity.Category;
+import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Bookmark {
+public class Bookmark extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +31,4 @@ public class Bookmark {
     // @JoinColumn(name = "category_id")
     // private Category category;
 
-    private LocalDateTime createdAt;
 }
