@@ -1,6 +1,7 @@
 package leets.bookmark.domain.entity;
 
 import leets.bookmark.global.common.entity.BaseTimeEntity;
+//import leets.bookmark.domain.entity.User;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class Category extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // TODO: User 병합 후 복원
+
     //@ManyToOne(fetch = FetchType.LAZY)
     //@JoinColumn(name = "user_id", nullable = false)
     //private User user;
@@ -31,7 +32,6 @@ public class Category extends BaseTimeEntity {
 
     @Builder(toBuilder = true)
     public Category(String name) {
-        // this.user = user;
         this.name = name;
     }
 
