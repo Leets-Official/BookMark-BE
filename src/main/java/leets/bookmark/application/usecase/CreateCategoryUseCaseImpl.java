@@ -1,5 +1,7 @@
 package leets.bookmark.application.usecase;
 
+import leets.bookmark.global.exception.DuplicateCategoryNameException;
+
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.dto.response.CategoryResponse;
 import leets.bookmark.application.mapper.CategoryMapper;
@@ -18,9 +20,12 @@ public class CreateCategoryUseCaseImpl implements CreateCategoryUseCase {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public CategoryResponse createCategory(Long userId, CreateCategoryRequest request) {
+    public void createCategory(Long userId, CreateCategoryRequest request) {
+        if (categoryRepository.findAllByUserId(userId).stream()
+                .anyMatch(c -> c.getName().equals(request.name()))) {
+            throw new DuplicateCategoryNameException(request.name());
+        }
         Category category = categoryMapper.toCategory(userId, request);
-        Category saved = categorySaveService.save(category);
-        return categoryMapper.toResponse(saved);
+        categorySaveService.save(category);
     }
 }

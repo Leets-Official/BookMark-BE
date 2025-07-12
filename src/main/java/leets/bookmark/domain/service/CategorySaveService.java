@@ -31,8 +31,8 @@ public class CategorySaveService {
         return categoryRepository.save(category);
     }
     */
-    public Category save(Category category) {
+    public void save(Category category) {
         System.out.println("[임시 처리] User 병합 전 - category 저장 로직 단축 호출");
-        return categoryRepository.save(category);
+        categoryRepository.save(category);
     }
 }

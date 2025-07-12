@@ -16,11 +16,11 @@ public class CategoryController {
     private final CreateCategoryUseCase createCategoryUseCase;
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(
+    public ResponseEntity<Void> createCategory(
             @RequestBody @Valid CreateCategoryRequest request,
             @RequestHeader("X-USER-ID") Long userId
     ) {
-        CategoryResponse response = createCategoryUseCase.createCategory(userId, request);
-        return ResponseEntity.ok(response);
+        createCategoryUseCase.createCategory(userId, request);
+        return ResponseEntity.ok().build();
     }
 }
