@@ -14,7 +14,7 @@ public class CategoryReadService {
 
     private final CategoryRepository categoryRepository;
 
-    public Category getById(Long id) {
+    public Category findById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 카테고리를 찾을 수 없습니다."));
     }
