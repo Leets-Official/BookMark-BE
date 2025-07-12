@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class CategoryMapperImpl implements CategoryMapper {
 
     @Override
-    public Category toEntity(Long userId, CreateCategoryRequest request) {
+    public Category toCategory(Long userId, CreateCategoryRequest request) {
         // TODO: User 엔티티 머지 후 아래 코드로 교체
         // User user = new User();
         // user.setId(userId);
