@@ -4,5 +4,5 @@ import leets.bookmark.application.dto.response.BookmarkResponse;
 import java.util.List;
 
 public interface GetBookmarkByMemoUseCase {
-    List<BookmarkResponse> execute(String keyword);
+    List<BookmarkResponse> getBookmarksByMemo(String keyword);
 }
