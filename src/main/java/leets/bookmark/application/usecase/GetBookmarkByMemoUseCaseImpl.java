@@ -14,13 +14,12 @@ import java.util.List;
 public class GetBookmarkByMemoUseCaseImpl implements GetBookmarkByMemoUseCase {
 
     private final BookmarkGetService bookmarkGetService;
-    private final BookmarkMapper bookmarkMapper;
 
     @Override
     public List<BookmarkResponse> getBookmarksByMemo(String keyword) {
         List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemo(keyword);
         return bookmarks.stream()
-                .map(bookmarkMapper::toResponse)
+                .map(BookmarkMapper::toResponse)
                 .toList();
     }
 }

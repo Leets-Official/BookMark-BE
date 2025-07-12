@@ -2,12 +2,22 @@ package leets.bookmark.application.mapper;
 
 import leets.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.entity.Bookmark;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface BookmarkMapper {
+public class BookmarkMapper {
 
-    // @Mapping(source = "category.name", target = "categoryName")
-    BookmarkResponse toResponse(Bookmark bookmark);
+    private BookmarkMapper() {
+        // Utility class
+    }
+
+    public static BookmarkResponse toResponse(Bookmark bookmark) {
+        return BookmarkResponse.builder()
+                .id(bookmark.getId())
+                .title(bookmark.getTitle())
+                .url(bookmark.getUrl())
+                .memo(bookmark.getMemo())
+                .createdAt(bookmark.getCreatedAt())
+                .updatedAt(bookmark.getUpdatedAt())
+                //.categoryName(bookmark.getCategory().getName())
+                .build();
+    }
 }
