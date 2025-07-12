@@ -22,7 +22,7 @@ public class BookmarkController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<BookmarkResponse>>> searchBookmarksByMemo(@RequestParam String keyword) {
-        List<BookmarkResponse> result = getBookmarkByMemoUseCase.execute(keyword);
+        List<BookmarkResponse> result = getBookmarkByMemoUseCase.getBookmarksByMemo(keyword);
         return ResponseEntity.ok(ApiResponse.success("북마크 검색 성공", result));
     }
 }

@@ -17,7 +17,7 @@ public class GetBookmarkByMemoUseCaseImpl implements GetBookmarkByMemoUseCase {
     private final BookmarkMapper bookmarkMapper;
 
     @Override
-    public List<BookmarkResponse> execute(String keyword) {
+    public List<BookmarkResponse> getBookmarksByMemo(String keyword) {
         List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemo(keyword);
         return bookmarks.stream()
                 .map(bookmarkMapper::toResponse)
