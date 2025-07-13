@@ -3,6 +3,9 @@ spring:
     active: local
   jackson:
     time-zone: Asia/Seoul
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 springdoc:
   swagger-ui:
