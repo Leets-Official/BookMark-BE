@@ -16,8 +16,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         // user.setId(userId);
 
         return Category.builder()
-                //.user(null) // 임시 null 처리
-                .name(request.name())
+                .categoryName(request.name())
                 .build();
     }
 
@@ -25,7 +24,7 @@ public class CategoryMapperImpl implements CategoryMapper {
     public CategoryResponse toResponse(Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())
-                .name(category.getName())
+                .name(category.getCategoryName())
                 .build();
     }
 }

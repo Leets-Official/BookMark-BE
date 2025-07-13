@@ -22,7 +22,7 @@ public class Category extends BaseTimeEntity {
     //private User user;
 
     @Column(length = 100, nullable = false)
-    private String name;
+    private String categoryName;
 
     // @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     // private List<Tag> tags = new ArrayList<>();
@@ -31,11 +31,11 @@ public class Category extends BaseTimeEntity {
     // private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder(toBuilder = true)
-    public Category(String name) {
-        this.name = name;
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public void updateName(String newName) {
-        this.name = newName;
+    public void updateName(String newCategoryName) {
+        this.categoryName = newCategoryName;
     }
 }
