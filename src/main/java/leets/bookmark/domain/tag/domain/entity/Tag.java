@@ -18,9 +18,10 @@ public class Tag extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tag_id")
     private Long id;
 
     private Long categoryId; // Category category
 
-    private String name;
+    private String tagName;
 }
