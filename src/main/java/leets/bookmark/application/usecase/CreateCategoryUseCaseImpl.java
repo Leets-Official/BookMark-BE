@@ -22,7 +22,7 @@ public class CreateCategoryUseCaseImpl implements CreateCategoryUseCase {
     @Override
     public void createCategory(Long userId, CreateCategoryRequest request) {
         if (categoryRepository.findAllByUserId(userId).stream()
-                .anyMatch(c -> c.getName().equals(request.name()))) {
+                .anyMatch(c -> c.getCategoryName().equals(request.name()))) {
             throw new DuplicateCategoryNameException(request.name());
         }
         Category category = categoryMapper.toCategory(userId, request);

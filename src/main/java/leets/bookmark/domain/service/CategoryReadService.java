@@ -3,6 +3,7 @@ package leets.bookmark.domain.service;
 import leets.bookmark.domain.entity.Category;
 import leets.bookmark.domain.repository.CategoryRepository;
 import leets.bookmark.global.exception.EntityNotFoundException;
+import leets.bookmark.global.common.entity.CategoryErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class CategoryReadService {
 
     public Category findById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 카테고리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException(CategoryErrorCode.CATEGORY_NOT_FOUND.getMessage()));
     }
 
     public List<Category> getByUserId(Long userId) {
