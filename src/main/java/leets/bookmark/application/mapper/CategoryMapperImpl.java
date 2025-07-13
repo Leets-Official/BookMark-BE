@@ -23,6 +23,9 @@ public class CategoryMapperImpl implements CategoryMapper {
 
     @Override
     public CategoryResponse toResponse(Category category) {
-        return new CategoryResponse(category.getId(), category.getName());
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
     }
 }

@@ -1,4 +1,15 @@
 package leets.bookmark.application.dto.response;
 
-public record CategoryResponse(Long id, String name) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
+
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CategoryResponse {
+    private Long id;
+    private String name;
 }
