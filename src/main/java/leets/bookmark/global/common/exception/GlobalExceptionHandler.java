@@ -49,15 +49,15 @@ public class GlobalExceptionHandler {
         });
 
         CommonResponse<List<BindExceptionResponse>> response = CommonResponse.createFailure(
-                ErrorCode.BIND_EXCEPTION.getStatusCode(),
-                ErrorCode.BIND_EXCEPTION.getMessage(),
+                GlobalErrorCode.BIND_EXCEPTION.getStatusCode(),
+                GlobalErrorCode.BIND_EXCEPTION.getMessage(),
                 exceptionResponses);
 
         log.warn("BindException: ", ex);
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.BIND_EXCEPTION.getStatusCode(), exceptionResponses);
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.BIND_EXCEPTION.getStatusCode(), exceptionResponses);
 
         return ResponseEntity
-                .status(ErrorCode.BIND_EXCEPTION.getStatusCode())
+                .status(GlobalErrorCode.BIND_EXCEPTION.getStatusCode())
                 .body(response);
     }
 
@@ -65,14 +65,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<CommonResponse<Void>> handle(MethodArgumentTypeMismatchException ex) {
 
-        CommonResponse<Void> response = CommonResponse.createFailure(ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(),
-                ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getFormatted(ex.getName()));
+        CommonResponse<Void> response = CommonResponse.createFailure(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(),
+                GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getFormatted(ex.getName()));
 
         log.warn("MethodArgumentTypeMismatchException");
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(), ex.getMessage());
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(), ex.getMessage());
 
         return ResponseEntity
-                .status(ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode())
+                .status(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode())
                 .body(response);
     }
 
@@ -90,15 +90,15 @@ public class GlobalExceptionHandler {
                 ).toList();
 
         CommonResponse<List<ArgumentNotValidExceptionResponse>> response = CommonResponse.createFailure(
-                ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(),
-                ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getMessage(),
+                GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(),
+                GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getMessage(),
                 exceptionResponses);
 
         log.warn("MethodArgumentNotValidException: ", ex);
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(), exceptionResponses);
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(), exceptionResponses);
 
         return ResponseEntity
-                .status(ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode())
+                .status(GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode())
                 .body(response);
     }
 
@@ -115,23 +115,23 @@ public class GlobalExceptionHandler {
             }
 
             log.warn("MethodArgumentTypeMismatchException");
-            log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(), ex.getMessage());
+            log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(), ex.getMessage());
 
             CommonResponse<Void> response = CommonResponse.createFailure(
-                    ErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(),
-                    ErrorCode.MISMATCHED_INPUT_EXCEPTION.getFormatted(fieldName));
+                    GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(),
+                    GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getFormatted(fieldName));
             return ResponseEntity
-                    .status(ErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
+                    .status(GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
                     .body(response);
         }
         // 이외의 경우
         log.warn("HttpMessageNotReadableException");
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), ex.getMessage());
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), ex.getMessage());
 
-        CommonResponse<Void> response = CommonResponse.createFailure(ErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(),ErrorCode.JSON_PARSE_EXCEPTION.getMessage());
+        CommonResponse<Void> response = CommonResponse.createFailure(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), GlobalErrorCode.JSON_PARSE_EXCEPTION.getMessage());
 
         return ResponseEntity
-                .status(ErrorCode.JSON_PARSE_EXCEPTION.getStatus())
+                .status(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatus())
                 .body(response);
     }
 

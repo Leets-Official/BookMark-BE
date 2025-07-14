@@ -3,6 +3,9 @@ spring:
     active: local
   jackson:
     time-zone: Asia/Seoul
+  jpa:
+    hibernate:
+      ddl-auto: update
   security:
     oauth2:
       client:
