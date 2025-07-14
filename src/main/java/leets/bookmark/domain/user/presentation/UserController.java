@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static leets.bookmark.domain.user.presentation.UserResponseMessage.*;
+
 @Tag(name = "USER", description = "사용자 API")
 @RestController
 @RequestMapping("/api/v1/users")
@@ -24,6 +26,6 @@ public class UserController {
     @Operation(summary = "내 정보 조회 API", description = "JWT로 인증된 사용자 본인의 정보를 반환합니다.")
     public CommonResponse<UserInfoResponse> getUserInfo(@CurrentUser User user) {
         UserInfoResponse response = userUseCase.getUserInfo(user);
-        return CommonResponse.createSuccess("정보 조회에 성공했습니다.", response);
+        return CommonResponse.createSuccess(GET_USER_INFO_SUCCESS.getMessage(), response);
     }
 }

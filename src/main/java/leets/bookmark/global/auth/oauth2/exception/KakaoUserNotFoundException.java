@@ -4,6 +4,6 @@ import leets.bookmark.global.common.exception.BusinessException;
 
 public class KakaoUserNotFoundException extends BusinessException {
     public KakaoUserNotFoundException() {
-        super(404, "해당 Kakao 사용자를 찾을 수 없습니다.");
+        super(OAuth2ErrorCode.KAKAO_USER_NOT_FOUND_EXCEPTION);
     }
 }
