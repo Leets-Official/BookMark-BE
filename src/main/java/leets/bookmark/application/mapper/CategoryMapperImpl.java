@@ -16,7 +16,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         // user.setId(userId);
 
         return Category.builder()
-                .categoryName(request.name())
+                .categoryName(request.categoryName())
                 .build();
     }
 
@@ -24,7 +24,7 @@ public class CategoryMapperImpl implements CategoryMapper {
     public CategoryResponse toResponse(Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())
-                .name(category.getCategoryName())
+                .categoryName(category.getCategoryName())
                 .build();
     }
 }

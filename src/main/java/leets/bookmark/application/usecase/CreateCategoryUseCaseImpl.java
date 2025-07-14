@@ -22,8 +22,8 @@ public class CreateCategoryUseCaseImpl implements CreateCategoryUseCase {
     @Override
     public void save(Long userId, CreateCategoryRequest request) {
         if (categoryRepository.findAllByUserId(userId).stream()
-                .anyMatch(c -> c.getCategoryName().equals(request.name()))) {
-            throw new DuplicateCategoryNameException(request.name());
+                .anyMatch(c -> c.getCategoryName().equals(request.categoryName()))) {
+            throw new DuplicateCategoryNameException(request.categoryName());
         }
         Category category = categoryMapper.toCategory(userId, request);
         categorySaveService.save(category);
