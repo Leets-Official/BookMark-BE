@@ -1,4 +1,4 @@
-package leets.bookmark.presentation.Contoller;
+package leets.bookmark.presentation.Controller;
 
 import leets.bookmark.global.common.response.ApiResponse;
 
