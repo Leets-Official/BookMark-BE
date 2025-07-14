@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookmarkPreviewMapper {
+
     public BookmarkPreviewResponse toResponse(Bookmark bookmark) {
-        return new BookmarkPreviewResponse(
-            bookmark.getTitle(),
-            bookmark.getThumbnailUrl()
-        );
+        return BookmarkPreviewResponse.builder()
+            .title(bookmark.getTitle())
+            .thumbnailUrl(bookmark.getThumbnailUrl())
+            .build();
     }
 }
