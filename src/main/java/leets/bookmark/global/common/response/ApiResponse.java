@@ -1,15 +1,16 @@
 package leets.bookmark.global.common.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
 
-@Getter
-@AllArgsConstructor
-public class ApiResponse<T> {
-    private String message;
-    private T data;
-
+@Builder
+public record ApiResponse<T>(
+    String message,
+    T data
+) {
     public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(message, data);
+        return ApiResponse.<T>builder()
+            .message(message)
+            .data(data)
+            .build();
     }
 }
