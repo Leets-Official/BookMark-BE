@@ -17,7 +17,7 @@ public class CategoryGetService {
 
     public Category findById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(CategoryErrorCode.CATEGORY_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new EntityNotFoundException(CategoryErrorCode.CATEGORY_NOT_FOUND));
     }
 
     public List<Category> getByUserId(Long userId) {
