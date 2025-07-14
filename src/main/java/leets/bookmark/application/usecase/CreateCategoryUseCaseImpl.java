@@ -20,7 +20,7 @@ public class CreateCategoryUseCaseImpl implements CreateCategoryUseCase {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public void createCategory(Long userId, CreateCategoryRequest request) {
+    public void save(Long userId, CreateCategoryRequest request) {
         if (categoryRepository.findAllByUserId(userId).stream()
                 .anyMatch(c -> c.getCategoryName().equals(request.name()))) {
             throw new DuplicateCategoryNameException(request.name());

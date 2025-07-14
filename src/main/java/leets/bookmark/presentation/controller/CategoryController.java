@@ -20,7 +20,7 @@ public class CategoryController {
             @RequestBody @Valid CreateCategoryRequest request,
             @RequestHeader("X-USER-ID") Long userId
     ) {
-        createCategoryUseCase.createCategory(userId, request);
+        createCategoryUseCase.save(userId, request);
         return ResponseEntity.ok().build();
     }
 }
