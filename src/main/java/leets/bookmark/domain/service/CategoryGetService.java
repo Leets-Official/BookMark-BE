@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryReadService {
+public class CategoryGetService {
 
     private final CategoryRepository categoryRepository;
 
