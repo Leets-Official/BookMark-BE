@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor // JPA는 기본 생성자 필요
+@NoArgsConstructor
 @Entity
 @Table(name = "bookmark")
 public class Bookmark {

@@ -17,8 +17,10 @@ public class GetSearchHistoryUseCase {
     private final SearchHistoryMapper searchHistoryMapper;
 
     public List<SearchHistoryResponse> execute(Long userId) {
-        return searchHistoryRepository.findByUserId(userId).stream()
-            .map(searchHistoryMapper::toResponse)
-            .collect(Collectors.toList());
+        return List.copyOf(
+            searchHistoryRepository.findByUserId(userId).stream()
+                .map(searchHistoryMapper::toResponse)
+                .collect(Collectors.toList())
+        );
     }
 }
