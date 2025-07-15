@@ -32,8 +32,8 @@ public class GlobalExceptionHandler {
         log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ex.getStatusCode(), ex.getMessage());
 
         return ResponseEntity
-                .status(ex.getStatusCode())
-                .body(response);
+            .status(ex.getStatusCode())
+            .body(response);
     }
 
     //	@ModelAttribute로 받은 값의 유효성 검사 또는 타입 변환 실패
@@ -43,37 +43,37 @@ public class GlobalExceptionHandler {
 
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
             exceptionResponses.add(BindExceptionResponse.builder()
-                    .message(fieldError.getDefaultMessage())
-                    .data(fieldError.getRejectedValue())
-                    .build());
+                .message(fieldError.getDefaultMessage())
+                .data(fieldError.getRejectedValue())
+                .build());
         });
 
         CommonResponse<List<BindExceptionResponse>> response = CommonResponse.createFailure(
-                ErrorCode.BIND_EXCEPTION.getStatusCode(),
-                ErrorCode.BIND_EXCEPTION.getMessage(),
-                exceptionResponses);
+            GlobalErrorCode.BIND_EXCEPTION.getStatusCode(),
+            GlobalErrorCode.BIND_EXCEPTION.getMessage(),
+            exceptionResponses);
 
         log.warn("BindException: ", ex);
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.BIND_EXCEPTION.getStatusCode(), exceptionResponses);
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.BIND_EXCEPTION.getStatusCode(), exceptionResponses);
 
         return ResponseEntity
-                .status(ErrorCode.BIND_EXCEPTION.getStatusCode())
-                .body(response);
+            .status(GlobalErrorCode.BIND_EXCEPTION.getStatusCode())
+            .body(response);
     }
 
     // 요청 파라미터(RequestParam, @PathVariable)의 타입 불일치
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<CommonResponse<Void>> handle(MethodArgumentTypeMismatchException ex) {
 
-        CommonResponse<Void> response = CommonResponse.createFailure(ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(),
-                ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getFormatted(ex.getName()));
+        CommonResponse<Void> response = CommonResponse.createFailure(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(),
+            GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getFormatted(ex.getName()));
 
         log.warn("MethodArgumentTypeMismatchException");
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(), ex.getMessage());
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(), ex.getMessage());
 
         return ResponseEntity
-                .status(ErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode())
-                .body(response);
+            .status(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode())
+            .body(response);
     }
 
     // @RequestBody로 받은 값의 유효성 검사 실패
@@ -81,25 +81,25 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CommonResponse<List<ArgumentNotValidExceptionResponse>>> handleValidation(MethodArgumentNotValidException ex) {
 
         List<ArgumentNotValidExceptionResponse> exceptionResponses = ex.getBindingResult()
-                .getFieldErrors().stream()
-                .map(error -> ArgumentNotValidExceptionResponse.builder()
-                        .field(error.getField())
-                        .message(error.getDefaultMessage())
-                        .data(error.getRejectedValue())
-                        .build()
-                ).toList();
+            .getFieldErrors().stream()
+            .map(error -> ArgumentNotValidExceptionResponse.builder()
+                .field(error.getField())
+                .message(error.getDefaultMessage())
+                .data(error.getRejectedValue())
+                .build()
+            ).toList();
 
         CommonResponse<List<ArgumentNotValidExceptionResponse>> response = CommonResponse.createFailure(
-                ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(),
-                ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getMessage(),
-                exceptionResponses);
+            GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(),
+            GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getMessage(),
+            exceptionResponses);
 
         log.warn("MethodArgumentNotValidException: ", ex);
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(), exceptionResponses);
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(), exceptionResponses);
 
         return ResponseEntity
-                .status(ErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode())
-                .body(response);
+            .status(GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode())
+            .body(response);
     }
 
     // @RequestBody로 전달된 JSON이 잘못되었거나, 필드 타입이 일치하지 않는 경우
@@ -115,24 +115,24 @@ public class GlobalExceptionHandler {
             }
 
             log.warn("MethodArgumentTypeMismatchException");
-            log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(), ex.getMessage());
+            log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(), ex.getMessage());
 
             CommonResponse<Void> response = CommonResponse.createFailure(
-                    ErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(),
-                    ErrorCode.MISMATCHED_INPUT_EXCEPTION.getFormatted(fieldName));
+                GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(),
+                GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getFormatted(fieldName));
             return ResponseEntity
-                    .status(ErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
-                    .body(response);
+                .status(GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
+                .body(response);
         }
         // 이외의 경우
         log.warn("HttpMessageNotReadableException");
-        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), ErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), ex.getMessage());
+        log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), ex.getMessage());
 
-        CommonResponse<Void> response = CommonResponse.createFailure(ErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(),ErrorCode.JSON_PARSE_EXCEPTION.getMessage());
+        CommonResponse<Void> response = CommonResponse.createFailure(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), GlobalErrorCode.JSON_PARSE_EXCEPTION.getMessage());
 
         return ResponseEntity
-                .status(ErrorCode.JSON_PARSE_EXCEPTION.getStatus())
-                .body(response);
+            .status(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatus())
+            .body(response);
     }
 
     // 이외 예외 처리
@@ -150,8 +150,8 @@ public class GlobalExceptionHandler {
         CommonResponse<Void> response = CommonResponse.createFailure(statusCode, ex.getMessage());
 
         return ResponseEntity
-                .status(statusCode)
-                .body(response);
+            .status(statusCode)
+            .body(response);
     }
 
 }
