@@ -36,11 +36,6 @@ public class User extends BaseTimeEntity {
 
     private String refreshToken;
 
-    public void updateProfile(String nickname, String profileImage) {
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-    }
-
     public void updateTokens(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
