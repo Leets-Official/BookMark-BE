@@ -11,7 +11,7 @@ public class SearchHistoryMapper {
         return new SearchHistoryResponse(
             history.getId(),
             history.getKeyword(),
-            history.getSearchedAt()
+            history.getCreatedAt()
         );
     }
 }
