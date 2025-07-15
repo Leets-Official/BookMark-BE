@@ -1,6 +1,5 @@
 package leets.bookmark.global.auth.oauth2.service;
 
-import jakarta.transaction.Transactional;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserSaveService;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
@@ -13,6 +12,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
