@@ -16,7 +16,7 @@ public class GetSearchHistoryUseCase {
     private final SearchHistoryRepository searchHistoryRepository;
     private final SearchHistoryMapper searchHistoryMapper;
 
-    public List<SearchHistoryResponse> execute(Long userId) {
+    public List<SearchHistoryResponse> getSearchHistory(Long userId) {
         return List.copyOf(
             searchHistoryRepository.findByUserId(userId).stream()
                 .map(searchHistoryMapper::toResponse)

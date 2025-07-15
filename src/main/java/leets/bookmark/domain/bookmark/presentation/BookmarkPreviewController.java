@@ -14,6 +14,6 @@ public class BookmarkPreviewController {
 
     @GetMapping("/preview")
     public BookmarkPreviewResponse getBookmarkPreview(@RequestParam("id") Long bookmarkId) {
-        return getBookmarkPreviewUseCase.execute(bookmarkId);
+        return getBookmarkPreviewUseCase.getBookmarkPreview(bookmarkId);
     }
 }

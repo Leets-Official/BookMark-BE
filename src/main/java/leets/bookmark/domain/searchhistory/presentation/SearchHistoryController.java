@@ -16,6 +16,6 @@ public class SearchHistoryController {
 
     @GetMapping
     public List<SearchHistoryResponse> getSearchHistories(@RequestParam("userId") Long userId) {
-        return getSearchHistoryUseCase.execute(userId);
+        return getSearchHistoryUseCase.getSearchHistory(userId);
     }
 }

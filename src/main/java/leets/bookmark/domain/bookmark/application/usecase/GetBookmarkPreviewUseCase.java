@@ -15,7 +15,7 @@ public class GetBookmarkPreviewUseCase {
     private final BookmarkRepository bookmarkRepository;
     private final BookmarkPreviewMapper bookmarkPreviewMapper;
 
-    public BookmarkPreviewResponse execute(Long bookmarkId) {
+    public BookmarkPreviewResponse getBookmarkPreview(Long bookmarkId) {
         Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
             .orElseThrow(BookMarkNotFoundException::new);
 
