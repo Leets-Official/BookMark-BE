@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class getByMemoContainingUseCaseImpl implements getByMemoContainingUseCase {
+public class GetByMemoContainingUseCaseImpl implements GetByMemoContainingUseCase {
 
     private final BookmarkGetService bookmarkGetService;
 
     @Override
-    public List<BookmarkResponse> getByMemoContaining(String keyword) {
+    public List<BookmarkResponse> GetByMemoContaining(String keyword) {
         List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemo(keyword);
         return bookmarks.stream()
                 .map(BookmarkMapper::toResponse)
