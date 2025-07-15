@@ -49,16 +49,16 @@ public class GlobalExceptionHandler {
         });
 
         CommonResponse<List<BindExceptionResponse>> response = CommonResponse.createFailure(
-            GlobalErrorCode.BIND_EXCEPTION.getStatusCode(),
-            GlobalErrorCode.BIND_EXCEPTION.getMessage(),
-            exceptionResponses);
+                GlobalErrorCode.BIND_EXCEPTION.getStatusCode(),
+                GlobalErrorCode.BIND_EXCEPTION.getMessage(),
+                exceptionResponses);
 
         log.warn("BindException: ", ex);
         log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.BIND_EXCEPTION.getStatusCode(), exceptionResponses);
 
         return ResponseEntity
-            .status(GlobalErrorCode.BIND_EXCEPTION.getStatusCode())
-            .body(response);
+                .status(GlobalErrorCode.BIND_EXCEPTION.getStatusCode())
+                .body(response);
     }
 
     // 요청 파라미터(RequestParam, @PathVariable)의 타입 불일치
@@ -66,14 +66,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CommonResponse<Void>> handle(MethodArgumentTypeMismatchException ex) {
 
         CommonResponse<Void> response = CommonResponse.createFailure(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(),
-            GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getFormatted(ex.getName()));
+                GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getFormatted(ex.getName()));
 
         log.warn("MethodArgumentTypeMismatchException");
         log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode(), ex.getMessage());
 
         return ResponseEntity
-            .status(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode())
-            .body(response);
+                .status(GlobalErrorCode.ARGUMENT_TYPE_MISMATCH_EXCEPTION.getStatusCode())
+                .body(response);
     }
 
     // @RequestBody로 받은 값의 유효성 검사 실패
@@ -90,16 +90,16 @@ public class GlobalExceptionHandler {
             ).toList();
 
         CommonResponse<List<ArgumentNotValidExceptionResponse>> response = CommonResponse.createFailure(
-            GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(),
-            GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getMessage(),
-            exceptionResponses);
+                GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(),
+                GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getMessage(),
+                exceptionResponses);
 
         log.warn("MethodArgumentNotValidException: ", ex);
         log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode(), exceptionResponses);
 
         return ResponseEntity
-            .status(GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode())
-            .body(response);
+                .status(GlobalErrorCode.ARGUMENT_NOT_VALID_EXCEPTION.getStatusCode())
+                .body(response);
     }
 
     // @RequestBody로 전달된 JSON이 잘못되었거나, 필드 타입이 일치하지 않는 경우
@@ -118,11 +118,11 @@ public class GlobalExceptionHandler {
             log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(), ex.getMessage());
 
             CommonResponse<Void> response = CommonResponse.createFailure(
-                GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(),
-                GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getFormatted(fieldName));
+                    GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatusCode(),
+                    GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getFormatted(fieldName));
             return ResponseEntity
-                .status(GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
-                .body(response);
+                    .status(GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
+                    .body(response);
         }
         // 이외의 경우
         log.warn("HttpMessageNotReadableException");
@@ -131,8 +131,8 @@ public class GlobalExceptionHandler {
         CommonResponse<Void> response = CommonResponse.createFailure(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), GlobalErrorCode.JSON_PARSE_EXCEPTION.getMessage());
 
         return ResponseEntity
-            .status(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatus())
-            .body(response);
+                .status(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatus())
+                .body(response);
     }
 
     // 이외 예외 처리
