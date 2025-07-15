@@ -1,6 +1,7 @@
 package leets.bookmark.domain.user.application.mapper;
 
 import leets.bookmark.domain.user.application.dto.response.UserInfoResponse;
+import leets.bookmark.domain.user.application.dto.response.UserNicknameUpdateResponse;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.entity.enums.Role;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
@@ -27,6 +28,12 @@ public class UserMapper {
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .role(String.valueOf(user.getRole()))
+                .build();
+    }
+
+    public UserNicknameUpdateResponse toUserNicknameUpdateResponse(User user) {
+        return UserNicknameUpdateResponse.builder()
+                .nickname(user.getNickname())
                 .build();
     }
 }

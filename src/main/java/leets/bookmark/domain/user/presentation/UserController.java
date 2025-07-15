@@ -2,15 +2,16 @@ package leets.bookmark.domain.user.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import leets.bookmark.domain.user.application.dto.request.UserNicknameUpdateRequest;
 import leets.bookmark.domain.user.application.dto.response.UserInfoResponse;
+import leets.bookmark.domain.user.application.dto.response.UserNicknameUpdateResponse;
 import leets.bookmark.domain.user.application.usecase.UserUseCase;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import static leets.bookmark.domain.user.presentation.UserResponseMessage.*;
 
@@ -27,5 +28,15 @@ public class UserController {
     public CommonResponse<UserInfoResponse> getUserInfo(@CurrentUser User user) {
         UserInfoResponse response = userUseCase.getUserInfo(user);
         return CommonResponse.createSuccess(GET_USER_INFO_SUCCESS.getMessage(), response);
+    }
+
+    @PatchMapping("/me/nickname")
+    @Operation(summary = "닉네임 변경 API", description = "사용자가 본인 닉네임을 변경할 수 있도록 하는 API입니다.")
+    public CommonResponse<UserNicknameUpdateResponse> updateUserNickname(
+            @CurrentUser User user,
+            @Validated @RequestBody UserNicknameUpdateRequest request
+    ) {
+        UserNicknameUpdateResponse response = userUseCase.updateNickname(user, request.nickname());
+        return CommonResponse.createSuccess(UPDATE_USER_NICKNAME_SUCCESS.getMessage(), response);
     }
 }
