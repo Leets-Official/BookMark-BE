@@ -1,14 +1,11 @@
 package leets.bookmark.domain.searchhistory.application.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Builder;
 
-@Getter
-@AllArgsConstructor
-public class SearchHistoryResponse {
-    private Long id;
-    private String keyword;
-    private LocalDateTime searchedAt;
-}
+@Builder
+public record SearchHistoryResponse(
+    Long id,
+    String keyword,
+    LocalDateTime searchedAt
+) {}

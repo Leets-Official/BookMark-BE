@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 public class SearchHistoryMapper {
 
     public SearchHistoryResponse toResponse(SearchHistory history) {
-        return new SearchHistoryResponse(
-            history.getId(),
-            history.getKeyword(),
-            history.getCreatedAt()
-        );
+        return SearchHistoryResponse.builder()
+            .id(history.getId())
+            .keyword(history.getKeyword())
+            .searchedAt(history.getCreatedAt())
+            .build();
     }
 }

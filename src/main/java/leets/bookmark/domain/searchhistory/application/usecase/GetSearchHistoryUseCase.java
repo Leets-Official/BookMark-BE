@@ -20,7 +20,7 @@ public class GetSearchHistoryUseCase {
         return List.copyOf(
             searchHistoryRepository.findByUserId(userId).stream()
                 .map(searchHistoryMapper::toResponse)
-                .collect(Collectors.toList())
+                .toList()
         );
     }
 }

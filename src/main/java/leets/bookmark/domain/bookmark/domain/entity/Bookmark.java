@@ -4,24 +4,22 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import leets.bookmark.global.common.entity.BaseTimeEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "bookmark")
-public class Bookmark {
+public class Bookmark extends BaseTimeEntity {
 
     @Id
     @Column(name = "bookmark_id")
     private Long id;
 
-    @Column(name = "title")
     private String title;
 
-    @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 }

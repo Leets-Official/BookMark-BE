@@ -20,9 +20,7 @@ public class SearchHistory extends BaseTimeEntity {
     @Column(name = "search_history_id")
     private Long id;
 
-    @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "keyword")
     private String keyword;
 }
