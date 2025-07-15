@@ -12,5 +12,4 @@ public class SearchHistory extends BaseTimeEntity {
     private Long id;
     private Long userId;
     private String keyword;
-    private LocalDateTime searchedAt;
 }
