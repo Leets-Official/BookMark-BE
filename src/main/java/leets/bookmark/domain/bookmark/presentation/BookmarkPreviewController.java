@@ -16,7 +16,6 @@ public class BookmarkPreviewController {
     @Operation(
         summary = "북마크 미리보기 조회",
         description = "bookmarkId를 기반으로 해당 북마크의 썸네일과 제목 정보를 반환합니다. "
-            + "북마크 등록 전 미리보기 용도로 사용됩니다."
     )
     @GetMapping("/preview")
     public BookmarkPreviewResponse getBookmarkPreview(@RequestParam("id") Long bookmarkId) {
