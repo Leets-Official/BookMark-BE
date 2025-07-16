@@ -1,7 +1,9 @@
 package leets.bookmark.application.dto.response;
 
-import java.time.LocalDateTime;
+import lombok.Builder;
 
+import java.time.LocalDateTime;
+@Builder
 public record BookmarkResponse(
     Long id,
     String url,
