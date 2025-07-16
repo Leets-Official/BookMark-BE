@@ -19,7 +19,7 @@ public class BookmarkGetServiceImpl implements BookmarkGetService {
     private final BookmarkRepository bookmarkRepository;
 
     @Override
-    public ResponseEntity<CommonResponse<List<BookmarkResponse>>> getBookmarksByMemo(String keyword) {
+    public ResponseEntity<CommonResponse<List<BookmarkResponse>>> getBookmarksAllByMemo(String keyword) {
         List<Bookmark> bookmarks = bookmarkRepository.findByMemoContaining(keyword);
         List<BookmarkResponse> responseList = convertToResponseList(bookmarks);
 

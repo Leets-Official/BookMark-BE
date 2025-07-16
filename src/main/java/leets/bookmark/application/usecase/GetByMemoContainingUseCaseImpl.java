@@ -17,7 +17,7 @@ public class GetByMemoContainingUseCaseImpl implements GetByMemoContainingUseCas
 
     @Override
     public List<BookmarkResponse> GetByMemoContaining(String keyword) {
-        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemo(keyword);
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksAllByMemo(keyword);
         return bookmarks.stream()
                 .map(BookmarkMapper::toResponse)
                 .toList();

@@ -1,6 +1,5 @@
 package leets.bookmark.presentation.Controller;
 
-import leets.bookmark.global.common.response.ApiResponse;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.global.common.response.ResponseMessage;
 
