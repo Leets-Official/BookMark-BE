@@ -15,6 +15,7 @@ import lombok.Builder;
 public class Category extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id", updatable = false, nullable = false)
     private Long id;
 
     //@ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +31,7 @@ public class Category extends BaseTimeEntity {
     // @OneToMany(mappedBy = "category")
     // private List<Bookmark> bookmarks = new ArrayList<>();
 
+    @Builder
     public Category(String categoryName) {
         this.categoryName = categoryName;
     }
