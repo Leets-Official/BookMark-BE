@@ -8,7 +8,6 @@ import leets.bookmark.application.usecase.CreateCategoryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Category", description = "카테고리 관련 API")
 @RestController
