@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CreateCategoryUseCase {
+public class CategoryUseCase {
 
     private final CategorySaveService categorySaveService;
     private final CategoryMapper categoryMapper;

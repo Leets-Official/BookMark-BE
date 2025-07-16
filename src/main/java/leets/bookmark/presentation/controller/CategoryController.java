@@ -3,8 +3,7 @@ package leets.bookmark.presentation.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
-import leets.bookmark.application.dto.response.CategoryResponse;
-import leets.bookmark.application.usecase.CreateCategoryUseCase;
+import leets.bookmark.application.usecase.CategoryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private final CreateCategoryUseCase createCategoryUseCase;
+    private final CategoryUseCase createCategoryUseCase;
 
     @PostMapping
     public ResponseEntity<Void> createCategory(
