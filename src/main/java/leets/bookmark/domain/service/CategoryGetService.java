@@ -2,7 +2,7 @@ package leets.bookmark.domain.service;
 
 import leets.bookmark.domain.entity.Category;
 import leets.bookmark.domain.repository.CategoryRepository;
-import leets.bookmark.global.exception.CategoryNotFoundException;
+import leets.bookmark.domain.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

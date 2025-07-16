@@ -1,4 +1,4 @@
-package leets.bookmark.global.common.entity;
+package leets.bookmark.domain.exception;
 
 import leets.bookmark.global.common.exception.ErrorCode;
 import lombok.Getter;
