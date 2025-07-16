@@ -17,6 +17,7 @@ public class Bookmark extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bookmark_id")
     private Long id;
 
     private String url;
