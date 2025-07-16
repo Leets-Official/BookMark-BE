@@ -3,8 +3,21 @@ package leets.bookmark.application.mapper;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.entity.Category;
+import org.springframework.stereotype.Component;
 
-public interface CategoryMapper {
-    Category toCategory(Long userId, CreateCategoryRequest request);
-    CategoryResponse toResponse(Category category);
+@Component
+public class CategoryMapper {
+
+    public Category toCategory(Long userId, CreateCategoryRequest request) {
+        return Category.builder()
+                .categoryName(request.categoryName())
+                .build();
+    }
+
+    public CategoryResponse toResponse(Category category) {
+        return new CategoryResponse(
+                category.getId(),
+                category.getCategoryName()
+        );
+    }
 }

@@ -30,7 +30,6 @@ public class Category extends BaseTimeEntity {
     // @OneToMany(mappedBy = "category")
     // private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @Builder(toBuilder = true)
     public Category(String categoryName) {
         this.categoryName = categoryName;
     }
