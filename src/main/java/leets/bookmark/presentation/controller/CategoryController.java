@@ -1,5 +1,6 @@
 package leets.bookmark.presentation.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.dto.response.CategoryResponse;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Category", description = "카테고리 관련 API")
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
