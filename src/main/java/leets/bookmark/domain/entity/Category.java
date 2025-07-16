@@ -25,12 +25,6 @@ public class Category extends BaseTimeEntity {
     @Column(length = 100, nullable = false)
     private String categoryName;
 
-    // @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<Tag> tags = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "category")
-    // private List<Bookmark> bookmarks = new ArrayList<>();
-
     @Builder
     public Category(User user, String categoryName) {
         this.user = user;
