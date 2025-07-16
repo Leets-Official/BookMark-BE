@@ -9,27 +9,6 @@ import lombok.RequiredArgsConstructor;
 public class CategorySaveService {
     private final CategoryRepository categoryRepository;
 
-    /*
-    public Category save(Category category, Long userId) {
-        if (categoryRepository.existsByUserIdAndName(userId, category.getName())) {
-            throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
-        }
-        return categoryRepository.save(category);
-    }
-    */
-
-    /*
-    public Category save(Category category) {
-        if (category.getUser() == null || category.getUser().getId() == null) {
-            throw new IllegalArgumentException("User 정보가 누락되었습니다.");
-        }
-        Long userId = category.getUser().getId();
-        if (categoryRepository.existsByUserIdAndName(userId, category.getName())) {
-            throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
-        }
-        return categoryRepository.save(category);
-    }
-    */
     public void save(Category category) {
         categoryRepository.save(category);
     }
