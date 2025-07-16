@@ -14,6 +14,7 @@ public class CategoryUseCase {
     private final CategoryMapper categoryMapper;
 
     public void save(Long userId, CreateCategoryRequest request) {
-        categorySaveService.save(categoryMapper.toCategory(userId, request));
+        var category = categoryMapper.toCategory(userId, request);
+        categorySaveService.save(category);
     }
 }
