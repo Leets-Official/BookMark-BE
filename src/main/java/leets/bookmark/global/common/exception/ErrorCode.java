@@ -11,7 +11,8 @@ public enum ErrorCode {
     ARGUMENT_NOT_VALID_EXCEPTION(HttpStatus.BAD_REQUEST, "입력값이 유효하지 않습니다."),
     ARGUMENT_TYPE_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "%s 파라미터의 타입이 잘못되었습니다."),
     MISMATCHED_INPUT_EXCEPTION(HttpStatus.BAD_REQUEST, "%s 데이터의 타입이 잘못되었습니다."),
-    JSON_PARSE_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다");
+    JSON_PARSE_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다"),
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
