@@ -23,7 +23,8 @@ public class BookmarkController {
 
     @GetMapping("/search")
     public ResponseEntity<CommonResponse<List<BookmarkResponse>>> searchBookmarksByMemo(@RequestParam String keyword) {
-        List<BookmarkResponse> result = getBookmarkByMemoUseCase.GetByMemoContaining(keyword);
+        ResponseEntity<CommonResponse<List<BookmarkResponse>>> response = getBookmarkByMemoUseCase.GetByMemoContaining(keyword);
+        List<BookmarkResponse> result = response.getBody().getData();
         return ResponseEntity.ok(CommonResponse.createSuccess(ResponseMessage.BOOKMARK_SEARCH_SUCCESS.getMessage(), result));
     }
 }
