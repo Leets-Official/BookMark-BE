@@ -1,7 +1,6 @@
 package leets.bookmark.domain.service;
 import leets.bookmark.domain.repository.CategoryRepository;
 import leets.bookmark.domain.entity.Category;
-import leets.bookmark.global.exception.DuplicateCategoryNameException;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
