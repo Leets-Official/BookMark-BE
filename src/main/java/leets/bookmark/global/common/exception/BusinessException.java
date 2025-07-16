@@ -1,7 +1,6 @@
 package leets.bookmark.global.common.exception;
 
 import lombok.Getter;
-import leets.bookmark.global.common.entity.ErrorCode;
 
 @Getter
 public class BusinessException extends RuntimeException{

@@ -1,5 +1,6 @@
 package leets.bookmark.global.common.entity;
 
+import leets.bookmark.global.common.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

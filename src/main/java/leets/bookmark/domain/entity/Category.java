@@ -1,7 +1,7 @@
 package leets.bookmark.domain.entity;
 
+import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
-//import leets.bookmark.domain.entity.User;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,9 +18,9 @@ public class Category extends BaseTimeEntity {
     @Column(name = "category_id", updatable = false, nullable = false)
     private Long id;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_id", nullable = false)
-    //private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(length = 100, nullable = false)
     private String categoryName;
@@ -32,7 +32,8 @@ public class Category extends BaseTimeEntity {
     // private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder
-    public Category(String categoryName) {
+    public Category(User user, String categoryName) {
+        this.user = user;
         this.categoryName = categoryName;
     }
 
