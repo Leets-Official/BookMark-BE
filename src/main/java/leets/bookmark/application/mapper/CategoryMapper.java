@@ -15,9 +15,9 @@ public class CategoryMapper {
     }
 
     public CategoryResponse toResponse(Category category) {
-        return new CategoryResponse(
-                category.getId(),
-                category.getCategoryName()
-        );
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .categoryName(category.getCategoryName())
+                .build();
     }
 }
