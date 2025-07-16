@@ -1,6 +1,7 @@
 package leets.bookmark.presentation.Controller;
 
 import leets.bookmark.global.common.response.ApiResponse;
+import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.global.common.response.ResponseMessage;
 
 import leets.bookmark.application.dto.response.BookmarkResponse;
@@ -22,8 +23,8 @@ public class BookmarkController {
     private final GetByMemoContainingUseCase getBookmarkByMemoUseCase;
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<BookmarkResponse>>> searchBookmarksByMemo(@RequestParam String keyword) {
+    public ResponseEntity<CommonResponse<List<BookmarkResponse>>> searchBookmarksByMemo(@RequestParam String keyword) {
         List<BookmarkResponse> result = getBookmarkByMemoUseCase.GetByMemoContaining(keyword);
-        return ResponseEntity.ok(ApiResponse.success(ResponseMessage.BOOKMARK_SEARCH_SUCCESS, result));
+        return ResponseEntity.ok(CommonResponse.createSuccess(ResponseMessage.BOOKMARK_SEARCH_SUCCESS.getMessage(), result));
     }
 }
