@@ -5,6 +5,7 @@ import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.dto.response.PresignedUrlResponse;
+import leets.bookmark.domain.file.application.exception.FileOwnerMismatchException;
 import leets.bookmark.domain.file.application.exception.InvalidFileExtensionException;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.mapper.PreSignedMapper;
@@ -54,8 +55,10 @@ public class FileUseCase {
     }
 
     @Transactional
-    public void updateFile(long bookmarkId, @Valid FileUpdateRequest fileUpdateRequest) {
+    public void updateFile(User user, long bookmarkId, @Valid FileUpdateRequest fileUpdateRequest) {
         File file = fileGetService.findByBookmarkId(bookmarkId);
+        validateFileOwner(user, file);
+
         FileType fileType = FileType.fromExtension(getExtension(fileUpdateRequest.fileName()))
                 .orElseThrow(InvalidFileExtensionException::new);
 
@@ -68,4 +71,11 @@ public class FileUseCase {
         }
         return fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
     }
+
+    private void validateFileOwner(User user, File file){
+        if(!(user.getId().equals(file.getUser().getId()))){
+            throw new FileOwnerMismatchException();
+        }
+    }
+
 }
