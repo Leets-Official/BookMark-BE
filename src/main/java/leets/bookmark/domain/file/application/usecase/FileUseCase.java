@@ -6,8 +6,11 @@ import leets.bookmark.domain.file.application.dto.response.PresignedUrlResponse;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.mapper.PreSignedMapper;
 import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.file.domain.service.FileGetService;
 import leets.bookmark.domain.file.domain.service.FileSaveService;
 import leets.bookmark.domain.file.domain.service.PreSignedService;
+import leets.bookmark.domain.user.domain.entity.User;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,20 +20,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class FileUseCase {
 
     private final PreSignedService preSignedService;
-
     private final FileSaveService fileSaveService;
+    private final FileGetService fileGetService;
 
     private final FileMapper fileMapper;
     private final PreSignedMapper preSignedMapper;
 
-    public PresignedUrlResponse getPreSignedUrl(String fileName){
-        return preSignedMapper.toResponse(fileName, preSignedService.createPresignedUrl());
+    public PresignedUrlResponse getPreSignedUrl(String fileName) {
+        return preSignedMapper.toResponse(fileName, preSignedService.createPresignedUrl(fileName));
     }
 
     @Transactional
-    public FileResponse saveFile(Long userId, Long bookmarkId, FileSaveRequest fileSaveRequest){
-        File file = fileMapper.toFile(userId, 0L, fileSaveRequest);
+    public void saveFile(User user, Long bookmarkId, FileSaveRequest fileSaveRequest) {
+        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest);
         fileSaveService.save(file);
+    }
+
+    @Transactional(readOnly = true)
+    public FileResponse getFile(Long bookmarkId) {
+        File file = fileGetService.findByBookmarkId(bookmarkId);
         return fileMapper.toFileResponse(file);
     }
 
