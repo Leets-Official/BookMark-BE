@@ -3,13 +3,15 @@ package leets.bookmark.application.mapper;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.entity.Category;
+import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapper {
 
-    public Category toCategory(Long userId, CreateCategoryRequest request) {
+    public Category toCategory(User user, CreateCategoryRequest request) {
         return Category.builder()
+                .user(user)
                 .categoryName(request.categoryName())
                 .build();
     }

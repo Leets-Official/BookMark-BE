@@ -25,7 +25,8 @@ public class CategoryController {
             @CurrentUser Long userId,
             @Validated @RequestBody CreateCategoryRequest request
     ) {
-        createCategoryUseCase.save(userId, request);
+        User user = User.builder().id(userId).build();
+        createCategoryUseCase.save(user, request);
         return CommonResponse.createSuccess("카테고리 생성 성공");
     }
 }

@@ -1,6 +1,7 @@
 package leets.bookmark.domain.service;
 
 import leets.bookmark.domain.entity.Category;
+import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.repository.CategoryRepository;
 import leets.bookmark.domain.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class CategoryGetService {
                 .orElseThrow(CategoryNotFoundException::new);
     }
 
-    public List<Category> getAllByUserId(Long userId) {
-        return categoryRepository.findAllByUserId(userId);
+    public List<Category> getAllByUser(User user) {
+        return categoryRepository.findAllByUser(user);
     }
 }
