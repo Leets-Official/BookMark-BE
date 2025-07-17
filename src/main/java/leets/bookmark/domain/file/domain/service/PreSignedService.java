@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -21,11 +22,13 @@ public class PreSignedService {
 
     private final S3Presigner s3Presigner;
 
-    public String createPresignedUrl() {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+    public String createPresignedUrl(String fileName) {
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
-                .key(generateRandomFileName())
+                .key(generateUrl(fileName))
                 .build();
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
@@ -39,7 +42,8 @@ public class PreSignedService {
 
     }
 
-    private String generateRandomFileName(){
-        return LocalDateTime.now() + UUID.randomUUID().toString();
+    private String generateUrl(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        return LocalDateTime.now().format(FORMATTER) + UUID.randomUUID().toString() + "." + extension;
     }
 }

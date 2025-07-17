@@ -15,8 +15,8 @@ public class FileController {
 
     private final FileUseCase fileUseCase;
 
-    @GetMapping
-    public CommonResponse<PresignedUrlResponse> getPresignedUrl(@RequestParam String fileName){
+    @GetMapping("/presigned-url")
+    public CommonResponse<PresignedUrlResponse> getPresignedUrl(@RequestParam String fileName) {
         PresignedUrlResponse response = fileUseCase.getPreSignedUrl(fileName);
         return CommonResponse.createSuccess(FileResponseCode.PRE_SIGNED_URL_SUCCESS.getMessage(), response);
     }
