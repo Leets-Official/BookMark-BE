@@ -1,4 +1,4 @@
-package leets.bookmark.presentation.Controller;
+package leets.bookmark.presentation.controller;
 
 import leets.bookmark.global.common.response.CommonResponse;
 
@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/vi/bookmarks")
+@RequestMapping("api/v1/bookmarks")
 @RequiredArgsConstructor
 public class BookmarkController {
 

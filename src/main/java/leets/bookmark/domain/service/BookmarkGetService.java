@@ -5,16 +5,18 @@ import leets.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.global.common.response.ResponseMessage;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public interface BookmarkGetService {
+@RequiredArgsConstructor
+public class BookmarkGetService {
 
-    BookmarkRepository bookmarkRepository = null;
+    private final BookmarkRepository bookmarkRepository;
 
-    default CommonResponse<List<BookmarkResponse>> getBookmarksAllByMemo(String keyword) {
+    public CommonResponse<List<BookmarkResponse>> getBookmarksAllByMemo(String keyword) {
         List<Bookmark> bookmarks = bookmarkRepository.findByMemoContaining(keyword);
         List<BookmarkResponse> responseList = bookmarks.stream()
             .map(bookmark -> BookmarkResponse.builder()
