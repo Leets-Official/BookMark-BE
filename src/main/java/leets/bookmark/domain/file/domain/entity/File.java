@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Table(name = "files")
 @Getter
 @SuperBuilder
 @RequiredArgsConstructor
@@ -31,5 +32,11 @@ public class File extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     FileType fileType;
+
+    public void updateFile(String fileName, String fileUrl, FileType fileType){
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+    }
 
 }
