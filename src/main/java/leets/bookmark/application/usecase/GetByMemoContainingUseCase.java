@@ -7,5 +7,5 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface GetByMemoContainingUseCase {
-    ResponseEntity<CommonResponse<List<BookmarkResponse>>> GetByMemoContaining(String keyword);
+    CommonResponse<List<BookmarkResponse>> getByMemoContaining(String keyword);
 }

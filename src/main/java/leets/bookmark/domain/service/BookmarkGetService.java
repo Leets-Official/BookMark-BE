@@ -14,7 +14,7 @@ public interface BookmarkGetService {
 
     BookmarkRepository bookmarkRepository = null;
 
-    default ResponseEntity<CommonResponse<List<BookmarkResponse>>> getBookmarksAllByMemo(String keyword) {
+    default CommonResponse<List<BookmarkResponse>> getBookmarksAllByMemo(String keyword) {
         List<Bookmark> bookmarks = bookmarkRepository.findByMemoContaining(keyword);
         List<BookmarkResponse> responseList = bookmarks.stream()
             .map(bookmark -> BookmarkResponse.builder()
@@ -28,8 +28,8 @@ public interface BookmarkGetService {
                 .build())
             .toList();
 
-        return ResponseEntity.ok(CommonResponse.createSuccess(
+        return CommonResponse.createSuccess(
             ResponseMessage.BOOKMARK_SEARCH_SUCCESS.getMessage(), responseList
-        ));
+        );
     }
 }

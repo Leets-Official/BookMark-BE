@@ -18,10 +18,7 @@ public class GetByMemoContainingUseCaseImpl implements GetByMemoContainingUseCas
     private final BookmarkGetService bookmarkGetService;
 
     @Override
-    public ResponseEntity<CommonResponse<List<BookmarkResponse>>> GetByMemoContaining(String keyword) {
-        ResponseEntity<CommonResponse<List<BookmarkResponse>>> response = bookmarkGetService.getBookmarksAllByMemo(keyword);
-        List<BookmarkResponse> responses = response.getBody().getData();
-        CommonResponse<List<BookmarkResponse>> body = CommonResponse.createSuccess("조회에 성공하였습니다.", responses);
-        return ResponseEntity.ok(body);
+    public CommonResponse<List<BookmarkResponse>> getByMemoContaining(String keyword) {
+        return bookmarkGetService.getBookmarksAllByMemo(keyword);
     }
 }
