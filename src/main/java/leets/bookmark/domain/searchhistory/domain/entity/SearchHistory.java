@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "search_history")
+@Table(name = "search_historys")
 public class SearchHistory extends BaseTimeEntity {
 
     @Id
