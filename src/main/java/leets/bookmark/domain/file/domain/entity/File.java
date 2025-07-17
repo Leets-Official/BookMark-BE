@@ -2,6 +2,7 @@ package leets.bookmark.domain.file.domain.entity;
 
 import jakarta.persistence.*;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
+import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,9 @@ public class File extends BaseTimeEntity {
     @Column(name = "file_id")
     Long id;
 
-    Long userId;  // User user
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    User user;
 
     Long bookmarkId;    // Bookmark bookmark
 
