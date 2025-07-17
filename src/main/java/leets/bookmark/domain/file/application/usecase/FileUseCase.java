@@ -1,11 +1,14 @@
 package leets.bookmark.domain.file.application.usecase;
 
+import jakarta.validation.Valid;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.dto.response.PresignedUrlResponse;
+import leets.bookmark.domain.file.application.exception.InvalidFileExtensionException;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.mapper.PreSignedMapper;
 import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.file.domain.service.FileGetService;
 import leets.bookmark.domain.file.domain.service.FileSaveService;
 import leets.bookmark.domain.file.domain.service.PreSignedService;
@@ -14,7 +17,9 @@ import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @Service
 @RequiredArgsConstructor
 public class FileUseCase {
@@ -31,8 +36,12 @@ public class FileUseCase {
     }
 
     @Transactional
-    public void saveFile(User user, Long bookmarkId, FileSaveRequest fileSaveRequest) {
-        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest);
+    public void saveFile(User user, Long bookmarkId, @Valid FileSaveRequest fileSaveRequest) {
+
+
+        FileType fileType = FileType.fromExtension(getExtension(fileSaveRequest.fileName()))
+                .orElseThrow(InvalidFileExtensionException::new);
+        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest, fileType);
         fileSaveService.save(file);
     }
 
@@ -40,6 +49,13 @@ public class FileUseCase {
     public FileResponse getFile(Long bookmarkId) {
         File file = fileGetService.findByBookmarkId(bookmarkId);
         return fileMapper.toFileResponse(file);
+    }
+
+    private String getExtension(String fileName){
+        if(fileName == null || !fileName.contains(".")){
+            throw new InvalidFileExtensionException();
+        }
+        return fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
     }
 
 }

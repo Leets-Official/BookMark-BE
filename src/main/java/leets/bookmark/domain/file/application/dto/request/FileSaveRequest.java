@@ -1,9 +1,10 @@
 package leets.bookmark.domain.file.application.dto.request;
 
-import leets.bookmark.domain.file.domain.entity.enums.FileType;
+import jakarta.validation.constraints.NotBlank;
 
 public record FileSaveRequest(
+        @NotBlank
         String fileName,
-        String fileUrl,
-        FileType fileType
+        @NotBlank
+        String fileUrl
 ) {}

@@ -1,10 +1,32 @@
 package leets.bookmark.domain.file.domain.entity.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
+import java.util.stream.Stream;
+
+@Getter
+@RequiredArgsConstructor
 public enum FileType {
-    IMAGE,
-    PDF,
-    WORD,
-    PPT,
-    EXCEL,
-    TXT
+    PNG(".png"),
+    JPG(".jpg"),
+    JPEG(".jpeg"),
+    PDF(".pdf"),
+    DOC(".doc"),
+    DOCX(".docx"),
+    PPTX(".pptx"),
+    PPT(".ppt"),
+    TXT(".txt");
+
+    private final String extension;
+
+    public static Optional<FileType> fromExtension(String ext){
+        if(ext == null){
+            return Optional.empty();
+        }
+        return Stream.of(FileType.values())
+                .filter(fileType -> fileType.getExtension().equalsIgnoreCase(ext))
+                .findFirst();
+    }
 }
