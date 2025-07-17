@@ -24,7 +24,7 @@ public class File extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     User user;
 
-    Long bookmarkId;    // Bookmark bookmark
+    long bookmarkId;    // Bookmark bookmark
 
     String fileName;
 

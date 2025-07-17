@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileMapper {
 
-    public File toFile(User user, Long bookmarkId, FileSaveRequest fileSaveRequest, FileType fileType){
+    public File toFile(User user, long bookmarkId, FileSaveRequest fileSaveRequest, FileType fileType){
         return File.builder()
                 .user(user)
                 .bookmarkId(bookmarkId)

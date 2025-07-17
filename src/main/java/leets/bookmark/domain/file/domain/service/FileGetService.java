@@ -12,7 +12,7 @@ public class FileGetService {
 
     private final FileRepository fileRepository;
 
-    public File findByBookmarkId(Long bookmarkId) {
+    public File findByBookmarkId(long bookmarkId) {
         return fileRepository.findByBookmarkId(bookmarkId)
                 .orElseThrow(FileNotFoundException::new);
     }
