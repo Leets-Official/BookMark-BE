@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import leets.bookmark.global.common.response.CommonResponse;
 
-@Tag(name = "Category", description = "카테고리 관련 API")
+@Tag(name = "Categories", description = "카테고리 관련 API")
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
