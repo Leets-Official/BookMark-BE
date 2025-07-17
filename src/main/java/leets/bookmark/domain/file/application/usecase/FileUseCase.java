@@ -11,10 +11,7 @@ import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.mapper.PreSignedMapper;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
-import leets.bookmark.domain.file.domain.service.FileGetService;
-import leets.bookmark.domain.file.domain.service.FileSaveService;
-import leets.bookmark.domain.file.domain.service.FileUpdateService;
-import leets.bookmark.domain.file.domain.service.PreSignedService;
+import leets.bookmark.domain.file.domain.service.*;
 import leets.bookmark.domain.user.domain.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +28,7 @@ public class FileUseCase {
     private final FileSaveService fileSaveService;
     private final FileGetService fileGetService;
     private final FileUpdateService fileUpdateService;
+    private final FileDeleteService fileDeleteService;
 
     private final FileMapper fileMapper;
     private final PreSignedMapper preSignedMapper;
@@ -63,6 +61,14 @@ public class FileUseCase {
                 .orElseThrow(InvalidFileExtensionException::new);
 
         fileUpdateService.update(file, fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(), fileType);
+    }
+
+    @Transactional
+    public void deleteFile(User user, long bookmarkId) {
+        File file = fileGetService.findByBookmarkId(bookmarkId);
+        validateFileOwner(user, file);
+
+        fileDeleteService.delete(file);
     }
 
     private String getExtension(String fileName){
