@@ -1,8 +1,7 @@
 package leets.bookmark.global.auth.oauth2.service;
 
-import jakarta.transaction.Transactional;
 import leets.bookmark.domain.user.domain.entity.User;
-import leets.bookmark.domain.user.domain.service.UserSaveService;
+import leets.bookmark.global.auth.oauth2.usecase.UserOAuth2UseCase;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserSaveService userSaveService;
+    private final UserOAuth2UseCase userOAuth2UseCase;
 
     @Override
     @Transactional
@@ -30,7 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         KakaoOAuth2UserInfo userInfo = new KakaoOAuth2UserInfo(oAuth2User.getAttributes());
 
-        User user = userSaveService.save(userInfo);
+        User user = userOAuth2UseCase.oAuth2Login(userInfo);
 
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 

@@ -1,6 +1,5 @@
 package leets.bookmark.domain.user.domain.service;
 
-import jakarta.transaction.Transactional;
 import leets.bookmark.domain.user.application.mapper.UserMapper;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.repository.UserRepository;
@@ -15,13 +14,8 @@ public class UserSaveService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    @Transactional
     public User save(KakaoOAuth2UserInfo userInfo) {
         return userRepository.findByKakaoId(userInfo.getProviderId())
-                .map(existing -> {
-                    existing.updateProfile(userInfo.getNickname(), userInfo.getProfileImageUrl());
-                    return existing;
-                })
                 .orElseGet(() -> userRepository.save(userMapper.toUserEntity(userInfo)));
     }
 }
