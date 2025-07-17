@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/search-histories")
+@RequestMapping("api/v1/search-histories")
 public class SearchHistoryController {
 
     private final GetSearchHistoryUseCase getSearchHistoryUseCase;
