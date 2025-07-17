@@ -9,4 +9,5 @@ public record CategoryResponse(
         String categoryName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
-) { }
+) {
+}

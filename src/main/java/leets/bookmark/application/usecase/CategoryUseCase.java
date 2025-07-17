@@ -3,6 +3,7 @@ package leets.bookmark.application.usecase;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.mapper.CategoryMapper;
 import leets.bookmark.domain.service.CategorySaveService;
+import leets.bookmark.domain.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class CategoryUseCase {
     private final CategoryMapper categoryMapper;
 
     public void save(Long userId, CreateCategoryRequest request) {
-        var category = categoryMapper.toCategory(userId, request);
+        Category category = categoryMapper.toCategory(userId, request);
         categorySaveService.save(category);
     }
 }

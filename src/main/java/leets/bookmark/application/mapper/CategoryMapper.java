@@ -18,6 +18,8 @@ public class CategoryMapper {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
+                .createdAt(category.getCreatedAt())
+                .updatedAt(category.getUpdatedAt())
                 .build();
     }
 }

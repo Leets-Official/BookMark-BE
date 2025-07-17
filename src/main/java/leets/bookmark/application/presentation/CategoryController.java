@@ -5,10 +5,11 @@ import jakarta.validation.Valid;
 import leets.bookmark.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.application.usecase.CategoryUseCase;
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.global.auth.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import leets.bookmark.global.common.response.CommonResponse;
 
 @Tag(name = "Category", description = "카테고리 관련 API")
@@ -20,11 +21,11 @@ public class CategoryController {
     private final CategoryUseCase createCategoryUseCase;
 
     @PostMapping
-    public ResponseEntity<CommonResponse<Void>> createCategory(
-            @RequestBody @Valid CreateCategoryRequest request,
-            @AuthenticationPrincipal User user
+    public CommonResponse<Void> createCategory(
+            @CurrentUser Long userId,
+            @Validated @RequestBody CreateCategoryRequest request
     ) {
-        createCategoryUseCase.save(user.getId(), request);
-        return ResponseEntity.ok(CommonResponse.createSuccess("카테고리 생성 성공"));
+        createCategoryUseCase.save(userId, request);
+        return CommonResponse.createSuccess("카테고리 생성 성공");
     }
 }
