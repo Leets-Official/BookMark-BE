@@ -39,4 +39,14 @@ public class CategoryController {
         categoryUseCase.save(userId, request);
         return CommonResponse.createSuccess(CREATE_CATEGORY_SUCCESS.getMessage());
     }
+
+    @DeleteMapping("/{categoryId}")
+    @Operation(summary = "카테고리 삭제 API", description = "본인의 카테고리를 삭제할 수 있는 API입니다.")
+    public CommonResponse<Void> deleteCategory(
+            @CurrentUser Long userId,
+            @PathVariable Long categoryId
+    ) {
+        categoryUseCase.delete(userId, categoryId);
+        return CommonResponse.createSuccess(DELETE_CATEGORY_SUCCESS.getMessage());
+    }
 }
