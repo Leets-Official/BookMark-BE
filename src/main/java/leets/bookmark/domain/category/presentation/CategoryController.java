@@ -3,6 +3,7 @@ package leets.bookmark.domain.category.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
+import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.usecase.CategoryUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
@@ -38,6 +39,17 @@ public class CategoryController {
     ) {
         categoryUseCase.save(userId, request);
         return CommonResponse.createSuccess(CREATE_CATEGORY_SUCCESS.getMessage());
+    }
+
+    @PatchMapping("/{categoryId}")
+    @Operation(summary = "카테고리명 수정 API", description = "해당 카테고리의 이름을 수정할 수 있는 API입니다.")
+    public CommonResponse<Void> updateCategory(
+            @CurrentUser Long userId,
+            @PathVariable Long categoryId,
+            @RequestBody @Validated CategoryNameUpdateRequest request
+    ) {
+        categoryUseCase.update(userId, categoryId, request);
+        return CommonResponse.createSuccess(UPDATE_CATEGORY_SUCCESS.getMessage());
     }
 
     @DeleteMapping("/{categoryId}")

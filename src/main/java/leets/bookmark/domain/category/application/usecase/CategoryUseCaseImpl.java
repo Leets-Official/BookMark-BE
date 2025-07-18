@@ -1,6 +1,7 @@
 package leets.bookmark.domain.category.application.usecase;
 
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
+import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
@@ -9,6 +10,7 @@ import leets.bookmark.domain.category.domain.service.CategoryDeleteService;
 import leets.bookmark.domain.category.domain.service.CategoryGetService;
 import leets.bookmark.domain.category.domain.service.CategorySaveService;
 import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.category.domain.service.CategoryUpdateService;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +28,14 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private final UserGetService userGetService;
     private final CategoryGetService categoryGetService;
     private final CategoryDeleteService categoryDeleteService;
+    private final CategoryUpdateService categoryUpdateService;
 
     @Transactional
     @Override
     public void save(Long userId, CategoryCreateRequest request) {
         User user = userGetService.findById(userId);
 
-        validateCategoryName(user, request);
+        validateCategoryName(user, request.categoryName());
 
         Category category = categoryMapper.toCategory(user, request);
         categorySaveService.save(category);
@@ -45,6 +48,18 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
         List<Category> categories = categoryGetService.getAllByUser(user);
         return categoryMapper.toCategoryResponseList(categories);
+    }
+
+    @Transactional
+    @Override
+    public void update(Long userId, Long categoryId, CategoryNameUpdateRequest request) {
+        User user = userGetService.findById(userId);
+        Category category = categoryGetService.findById(categoryId);
+
+        validateCategoryOwner(category, user);
+        validateCategoryName(user, request.categoryName());
+
+        categoryUpdateService.update(category, request);
     }
 
     @Transactional
@@ -64,8 +79,8 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         }
     }
 
-    private void validateCategoryName(User user, CategoryCreateRequest request) {
-        if (categoryGetService.existsByUserIdAndCategoryName(user.getId(), request.categoryName())) {
+    private void validateCategoryName(User user, String categoryName) {
+        if (categoryGetService.existsByUserIdAndCategoryName(user.getId(), categoryName)) {
             throw new DuplicatedCategoryNameException();
         }
     }

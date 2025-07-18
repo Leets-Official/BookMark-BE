@@ -27,7 +27,7 @@ public class Category extends BaseTimeEntity {
     @Column(length = 100, nullable = false)
     private String categoryName;
 
-    public void updateName(String newCategoryName) {
+    public void updateCategoryName(String newCategoryName) {
         this.categoryName = newCategoryName;
     }
 }
