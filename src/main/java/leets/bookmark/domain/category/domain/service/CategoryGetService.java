@@ -23,4 +23,8 @@ public class CategoryGetService {
     public List<Category> getAllByUser(User user) {
         return categoryRepository.findAllByUser(user);
     }
+
+    public boolean existsByUserIdAndCategoryName(Long userId, String categoryName) {
+        return categoryRepository.existsByUserIdAndCategoryName(userId, categoryName);
+    }
 }
