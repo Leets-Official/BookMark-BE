@@ -1,5 +1,6 @@
 package leets.bookmark.domain.category.presentation;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
@@ -23,12 +24,14 @@ public class CategoryController {
     private final CategoryUseCase categoryUseCase;
 
     @GetMapping
+    @Operation(summary = "전체 카테고리 조회 API", description = "사용자 본인의 전체 카테고리를 조회할 수 있는 API입니다.")
     public CommonResponse<List<CategoryResponse>> getAllCategories(@CurrentUser Long userId) {
         List<CategoryResponse> response = categoryUseCase.getAllCategories(userId);
         return CommonResponse.createSuccess(GET_ALL_CATEGORIES_SUCCESS.getMessage(), response);
     }
 
     @PostMapping
+    @Operation(summary = "카테고리 생성 API", description = "카테고리를 생성할 수 있는 API입니다.")
     public CommonResponse<Void> createCategory(
             @CurrentUser Long userId,
             @Validated @RequestBody CreateCategoryRequest request
