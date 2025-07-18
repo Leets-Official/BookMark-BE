@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Table(name = "files")
 @Getter
 @SuperBuilder
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class File extends BaseTimeEntity {
 
