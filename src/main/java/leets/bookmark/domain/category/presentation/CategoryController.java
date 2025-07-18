@@ -2,12 +2,15 @@ package leets.bookmark.domain.category.presentation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.usecase.CategoryUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import leets.bookmark.global.common.response.CommonResponse;
+
+import java.util.List;
 
 import static leets.bookmark.domain.category.presentation.CategoryResponseMessage.*;
 
@@ -18,6 +21,12 @@ import static leets.bookmark.domain.category.presentation.CategoryResponseMessag
 public class CategoryController {
 
     private final CategoryUseCase categoryUseCase;
+
+    @GetMapping
+    public CommonResponse<List<CategoryResponse>> getAllCategories(@CurrentUser Long userId) {
+        List<CategoryResponse> response = categoryUseCase.getAllCategories(userId);
+        return CommonResponse.createSuccess(GET_ALL_CATEGORIES_SUCCESS.getMessage(), response);
+    }
 
     @PostMapping
     public CommonResponse<Void> createCategory(

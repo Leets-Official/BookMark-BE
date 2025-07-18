@@ -6,6 +6,9 @@ import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class CategoryMapper {
 
@@ -16,12 +19,18 @@ public class CategoryMapper {
                 .build();
     }
 
-    public CategoryResponse toResponse(Category category) {
+    public static CategoryResponse toResponse(Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
                 .createdAt(category.getCreatedAt())
                 .updatedAt(category.getUpdatedAt())
                 .build();
+    }
+
+    public List<CategoryResponse> toCategoryResponseList(List<Category> categories) {
+        return categories.stream()
+                .map(CategoryMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }
