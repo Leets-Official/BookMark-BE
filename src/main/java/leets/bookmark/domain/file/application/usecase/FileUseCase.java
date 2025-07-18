@@ -39,10 +39,8 @@ public class FileUseCase {
 
     @Transactional
     public void saveFile(User user, long bookmarkId, @Valid FileSaveRequest fileSaveRequest) {
-
-        FileType fileType = FileType.fromExtension(getExtension(fileSaveRequest.fileName()))
-                .orElseThrow(InvalidFileExtensionException::new);
-        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest, fileType);
+        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest,
+                getValidatedFileType(fileSaveRequest.fileName()));
         fileSaveService.save(file);
     }
 
@@ -57,10 +55,8 @@ public class FileUseCase {
         File file = fileGetService.findByBookmarkId(bookmarkId);
         validateFileOwner(user, file);
 
-        FileType fileType = FileType.fromExtension(getExtension(fileUpdateRequest.fileName()))
-                .orElseThrow(InvalidFileExtensionException::new);
-
-        fileUpdateService.update(file, fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(), fileType);
+        fileUpdateService.update(file, fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(),
+                getValidatedFileType(fileUpdateRequest.fileName()));
     }
 
     @Transactional
@@ -71,6 +67,12 @@ public class FileUseCase {
         fileDeleteService.delete(file);
     }
 
+    private void validateFileOwner(User user, File file){
+        if(!(user.getId().equals(file.getUser().getId()))){
+            throw new FileOwnerMismatchException();
+        }
+    }
+
     private String getExtension(String fileName){
         if(fileName == null || !fileName.contains(".")){
             throw new InvalidFileExtensionException();
@@ -78,10 +80,9 @@ public class FileUseCase {
         return fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
     }
 
-    private void validateFileOwner(User user, File file){
-        if(!(user.getId().equals(file.getUser().getId()))){
-            throw new FileOwnerMismatchException();
-        }
+    private FileType getValidatedFileType(String fileName){
+       return FileType.fromExtension(getExtension(getExtension(fileName)))
+                .orElseThrow(InvalidFileExtensionException::new);
     }
 
 }
