@@ -70,6 +70,8 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
         validateCategoryOwner(category, user);
 
+        // TODO: 해당 카테고리 내에 컨텐츠(북마크DB)가 존재하면 삭제 불가능하도록 로직 추가
+
         categoryDeleteService.delete(categoryId);
     }
 
