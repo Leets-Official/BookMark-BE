@@ -3,6 +3,7 @@ package leets.bookmark.domain.tag.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
+import leets.bookmark.domain.tag.application.dto.request.TagNameUpdateRequest;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.usecase.TagUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
@@ -41,6 +42,17 @@ public class TagController {
     ) {
         tagUseCase.save(userId, request);
         return CommonResponse.createSuccess(CREATE_TAG_SUCCESS.getMessage());
+    }
+
+    @PatchMapping("/{tagId}")
+    @Operation(summary = "태그명 수정 API", description = "해당 태그의 이름을 수정할 수 있는 API입니다.")
+    public CommonResponse<Void> updateTag(
+            @CurrentUser Long userId,
+            @PathVariable Long tagId,
+            @RequestBody @Validated TagNameUpdateRequest request
+    ) {
+        tagUseCase.update(userId, tagId, request);
+        return CommonResponse.createSuccess(UPDATE_TAG_SUCCESS.getMessage());
     }
 
     @DeleteMapping("/{tagId}")

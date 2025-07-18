@@ -27,4 +27,8 @@ public class Tag extends BaseTimeEntity {
     private Category category;
 
     private String tagName;
+
+    public void updateTagName(String tagName) {
+        this.tagName = tagName;
+    }
 }
