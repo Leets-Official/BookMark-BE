@@ -4,6 +4,6 @@ import leets.bookmark.global.common.exception.BusinessException;
 
 public class CategoryNotFoundException extends BusinessException {
     public CategoryNotFoundException() {
-        super(CategoryErrorCode.CATEGORY_NOT_FOUND);
+        super(CategoryErrorCode.CATEGORY_NOT_FOUND_EXCEPTION);
     }
 }

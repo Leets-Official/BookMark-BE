@@ -5,6 +5,6 @@ import leets.bookmark.global.common.exception.BusinessException;
 
 public class DuplicatedCategoryNameException extends BusinessException {
     public DuplicatedCategoryNameException() {
-        super(CategoryErrorCode.DUPLICATE_NAME);
+        super(CategoryErrorCode.DUPLICATE_CATEGORY_NAME_EXCEPTION);
     }
 }
