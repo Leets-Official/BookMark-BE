@@ -7,17 +7,24 @@ import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TagGetService {
 
     private final TagRepository tagRepository;
 
-    public Tag findById(Long id) {
-        return tagRepository.findById(id).orElseThrow(TagNotFoundException::new);
+    public Tag findById(Long tagId) {
+        return tagRepository.findById(tagId)
+                .orElseThrow(TagNotFoundException::new);
     }
 
     public boolean existsByCategoryAndTagName(Category category, String tagName) {
         return tagRepository.existsByCategoryAndTagName(category, tagName);
+    }
+
+    public List<Tag> findAllByCategory(Category category) {
+        return tagRepository.findAllByCategory(category);
     }
 }

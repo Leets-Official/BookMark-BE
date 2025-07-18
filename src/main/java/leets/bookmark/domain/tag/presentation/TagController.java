@@ -3,12 +3,15 @@ package leets.bookmark.domain.tag.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
+import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.usecase.TagUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static leets.bookmark.domain.tag.presentation.TagResponseMessage.*;
 
@@ -19,6 +22,16 @@ import static leets.bookmark.domain.tag.presentation.TagResponseMessage.*;
 public class TagController {
 
     private final TagUseCase tagUseCase;
+
+    @GetMapping
+    @Operation(summary = "카테고리별 태그 조회 API", description = "사용자 본인의 태그를 카테고리별로 조회할 수 있는 API입니다.")
+    public CommonResponse<List<TagResponse>> findTags(
+            @CurrentUser Long userId,
+            @RequestParam Long categoryId
+    ) {
+        List<TagResponse> response = tagUseCase.findAllByCategory(userId, categoryId);
+        return CommonResponse.createSuccess(FIND_ALL_TAGS_SUCCESS.getMessage(), response);
+    }
 
     @PostMapping
     @Operation(summary = "태그 생성 API", description = "태그를 생성할 수 있는 API입니다.")

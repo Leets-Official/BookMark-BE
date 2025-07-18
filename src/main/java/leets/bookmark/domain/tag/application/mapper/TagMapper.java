@@ -6,6 +6,9 @@ import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class TagMapper {
 
@@ -16,10 +19,16 @@ public class TagMapper {
                 .build();
     }
 
-    public TagResponse toTagResponse(Tag tag) {
+    public static TagResponse toTagResponse(Tag tag) {
         return TagResponse.builder()
                 .categoryId(tag.getCategory().getId())
                 .tagName(tag.getTagName())
                 .build();
+    }
+
+    public List<TagResponse> toTagResponseList(List<Tag> tags) {
+        return tags.stream()
+                .map(TagMapper::toTagResponse)
+                .collect(Collectors.toList());
     }
 }

@@ -4,6 +4,7 @@ import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatc
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryGetService;
 import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
+import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.exception.DuplicatedTagNameException;
 import leets.bookmark.domain.tag.application.exception.TagOwnerMismatchException;
 import leets.bookmark.domain.tag.application.mapper.TagMapper;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TagUseCaseImpl implements TagUseCase {
@@ -28,6 +31,18 @@ public class TagUseCaseImpl implements TagUseCase {
 
     private final TagMapper tagMapper;
     private final TagDeleteService tagDeleteService;
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<TagResponse> findAllByCategory(Long userId, Long categoryId) {
+        User user = userGetService.findById(userId);
+        Category category = categoryGetService.findById(categoryId);
+
+        validateCategoryOwner(category, user);
+
+        List<Tag> tags = tagGetService.findAllByCategory(category);
+        return tagMapper.toTagResponseList(tags);
+    }
 
     @Transactional
     @Override
