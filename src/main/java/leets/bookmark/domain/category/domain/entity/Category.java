@@ -4,16 +4,17 @@ import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "categories")
+@AllArgsConstructor
+@SuperBuilder
 public class Category extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id", updatable = false, nullable = false)
@@ -25,12 +26,6 @@ public class Category extends BaseTimeEntity {
 
     @Column(length = 100, nullable = false)
     private String categoryName;
-
-    @Builder
-    public Category(User user, String categoryName) {
-        this.user = user;
-        this.categoryName = categoryName;
-    }
 
     public void updateName(String newCategoryName) {
         this.categoryName = newCategoryName;
