@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TagResponseMessage {
 
-    CREATE_TAG_SUCCESS("태그 생성에 성공했습니다.");
+    CREATE_TAG_SUCCESS("태그 생성에 성공했습니다."),
+    DELETE_TAG_SUCCESS("태그 삭제에 성공했습니다.");
 
     private final String message;
 }

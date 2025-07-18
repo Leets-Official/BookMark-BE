@@ -8,12 +8,9 @@ import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static leets.bookmark.domain.tag.presentation.TagResponseMessage.CREATE_TAG_SUCCESS;
+import static leets.bookmark.domain.tag.presentation.TagResponseMessage.*;
 
 @Tag(name = "TAG", description = "태그 API")
 @RestController
@@ -32,4 +29,15 @@ public class TagController {
         tagUseCase.save(userId, request);
         return CommonResponse.createSuccess(CREATE_TAG_SUCCESS.getMessage());
     }
+
+    @DeleteMapping("/{tagId}")
+    @Operation(summary = "태그 삭제 API", description = "본인의 태그를 삭제할 수 있는 API입니다.")
+    public CommonResponse<Void> deleteTag(
+            @CurrentUser Long userId,
+            @PathVariable Long tagId
+    ) {
+        tagUseCase.delete(userId, tagId);
+        return CommonResponse.createSuccess(DELETE_TAG_SUCCESS.getMessage());
+    }
+
 }
