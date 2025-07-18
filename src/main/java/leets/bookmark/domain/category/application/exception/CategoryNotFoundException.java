@@ -1,14 +1,9 @@
 package leets.bookmark.domain.category.application.exception;
 
-import lombok.Getter;
+import leets.bookmark.global.common.exception.BusinessException;
 
-@Getter
-public class CategoryNotFoundException extends RuntimeException {
-
-    private final CategoryErrorCode errorCode;
-
+public class CategoryNotFoundException extends BusinessException {
     public CategoryNotFoundException() {
-        super(CategoryErrorCode.CATEGORY_NOT_FOUND.getMessage());
-        this.errorCode = CategoryErrorCode.CATEGORY_NOT_FOUND;
+        super(CategoryErrorCode.CATEGORY_NOT_FOUND);
     }
 }
