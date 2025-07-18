@@ -1,9 +1,9 @@
-package leets.bookmark.application.usecase;
+package leets.bookmark.domain.category.application.usecase;
 
-import leets.bookmark.application.dto.request.CreateCategoryRequest;
-import leets.bookmark.application.mapper.CategoryMapper;
-import leets.bookmark.domain.service.CategorySaveService;
-import leets.bookmark.domain.entity.Category;
+import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.mapper.CategoryMapper;
+import leets.bookmark.domain.category.domain.service.CategorySaveService;
+import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

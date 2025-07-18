@@ -1,13 +1,11 @@
-package leets.bookmark.application.presentation;
+package leets.bookmark.domain.category.presentation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import leets.bookmark.application.dto.request.CreateCategoryRequest;
-import leets.bookmark.application.usecase.CategoryUseCase;
+import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.usecase.CategoryUseCase;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import leets.bookmark.global.common.response.CommonResponse;

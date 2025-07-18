@@ -1,4 +1,4 @@
-package leets.bookmark.domain.entity;
+package leets.bookmark.domain.category.domain.entity;
 
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;

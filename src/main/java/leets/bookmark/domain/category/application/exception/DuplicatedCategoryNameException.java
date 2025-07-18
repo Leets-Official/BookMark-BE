@@ -1,4 +1,4 @@
-package leets.bookmark.domain.exception;
+package leets.bookmark.domain.category.application.exception;
 
 
 import leets.bookmark.global.common.exception.BusinessException;

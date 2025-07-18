@@ -1,4 +1,4 @@
-package leets.bookmark.application.dto.response;
+package leets.bookmark.domain.category.application.dto.response;
 
 import lombok.Builder;
 import java.time.LocalDateTime;

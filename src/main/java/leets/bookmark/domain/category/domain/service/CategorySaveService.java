@@ -1,6 +1,6 @@
-package leets.bookmark.domain.service;
-import leets.bookmark.domain.repository.CategoryRepository;
-import leets.bookmark.domain.entity.Category;
+package leets.bookmark.domain.category.domain.service;
+import leets.bookmark.domain.category.domain.repository.CategoryRepository;
+import leets.bookmark.domain.category.domain.entity.Category;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 

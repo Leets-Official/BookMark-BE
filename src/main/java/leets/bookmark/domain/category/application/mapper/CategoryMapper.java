@@ -1,8 +1,8 @@
-package leets.bookmark.application.mapper;
+package leets.bookmark.domain.category.application.mapper;
 
-import leets.bookmark.application.dto.request.CreateCategoryRequest;
-import leets.bookmark.application.dto.response.CategoryResponse;
-import leets.bookmark.domain.entity.Category;
+import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
+import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
 
