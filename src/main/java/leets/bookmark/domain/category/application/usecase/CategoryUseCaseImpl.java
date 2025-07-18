@@ -1,6 +1,6 @@
 package leets.bookmark.domain.category.application.usecase;
 
-import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
@@ -29,7 +29,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
     @Transactional
     @Override
-    public void save(Long userId, CreateCategoryRequest request) {
+    public void save(Long userId, CategoryCreateRequest request) {
         User user = userGetService.findById(userId);
 
         validateCategoryName(user, request);
@@ -64,7 +64,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         }
     }
 
-    private void validateCategoryName(User user, CreateCategoryRequest request) {
+    private void validateCategoryName(User user, CategoryCreateRequest request) {
         if (categoryGetService.existsByUserIdAndCategoryName(user.getId(), request.categoryName())) {
             throw new DuplicatedCategoryNameException();
         }

@@ -1,6 +1,6 @@
 package leets.bookmark.domain.category.application.mapper;
 
-import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryMapper {
 
-    public Category toCategory(User user, CreateCategoryRequest request) {
+    public Category toCategory(User user, CategoryCreateRequest request) {
         return Category.builder()
                 .user(user)
                 .categoryName(request.categoryName())

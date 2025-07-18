@@ -2,7 +2,7 @@ package leets.bookmark.domain.category.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import leets.bookmark.domain.category.application.dto.request.CreateCategoryRequest;
+import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.usecase.CategoryUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
@@ -34,7 +34,7 @@ public class CategoryController {
     @Operation(summary = "카테고리 생성 API", description = "카테고리를 생성할 수 있는 API입니다.")
     public CommonResponse<Void> createCategory(
             @CurrentUser Long userId,
-            @Validated @RequestBody CreateCategoryRequest request
+            @Validated @RequestBody CategoryCreateRequest request
     ) {
         categoryUseCase.save(userId, request);
         return CommonResponse.createSuccess(CREATE_CATEGORY_SUCCESS.getMessage());
