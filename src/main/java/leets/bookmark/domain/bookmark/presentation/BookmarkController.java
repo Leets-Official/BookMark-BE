@@ -25,7 +25,8 @@ public class BookmarkController {
     @GetMapping("/search")
     @Operation(summary = "북마크 메모 검색 API", description = "키워드를 포함하는 메모를 가진 북마크 목록을 조회합니다.")
     public CommonResponse<List<BookmarkResponse>> searchBookmarksByMemo(@RequestParam String keyword) {
-        return bookmarkUseCase.getByMemoContaining(keyword);
+        List<BookmarkResponse> result = bookmarkUseCase.getByMemoContaining(keyword);
+        return CommonResponse.createSuccess(BOOKMARK_MEMO_SEARCH_SUCCESS.getMessage(), result);
     }
 
     @GetMapping
@@ -35,12 +36,14 @@ public class BookmarkController {
         @RequestParam(required = false) List<String> tagNames
     ) {
         BookmarkFilterRequest request = new BookmarkFilterRequest(categoryId, tagNames);
-        return bookmarkUseCase.getFilteredBookmarks(request);
+        List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(request);
+        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 
     @GetMapping("/all")
     @Operation(summary = "전체 북마크 조회 API", description = "모든 북마크를 조회합니다.")
     public CommonResponse<List<BookmarkResponse>> getAllBookmarks() {
-        return bookmarkUseCase.getAllBookmarks();
+        List<BookmarkResponse> result = bookmarkUseCase.getAllBookmarks();
+        return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), result);
     }
 }

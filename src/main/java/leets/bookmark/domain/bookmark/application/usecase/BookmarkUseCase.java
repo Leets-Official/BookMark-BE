@@ -7,7 +7,7 @@ import leets.bookmark.global.common.response.CommonResponse;
 import java.util.List;
 
 public interface BookmarkUseCase {
-    CommonResponse<List<BookmarkResponse>> getByMemoContaining(String keyword);
-    CommonResponse<List<BookmarkResponse>> getFilteredBookmarks(BookmarkFilterRequest request);
-    CommonResponse<List<BookmarkResponse>> getAllBookmarks();
+    List<BookmarkResponse> getByMemoContaining(String keyword);
+    List<BookmarkResponse> getFilteredBookmarks(BookmarkFilterRequest request);
+    List<BookmarkResponse> getAllBookmarks();
 }
