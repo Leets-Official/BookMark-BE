@@ -21,7 +21,7 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
             jpql.append(" AND 북마크.category.id = :categoryId");
         }
         if (tagNames != null && !tagNames.isEmpty()) {
-            jpql.append(" AND 태그.name IN :tagNames");
+            jpql.append(" AND 태그.tagName IN :tagNames");
         }
 
         TypedQuery<Bookmark> query = em.createQuery(jpql.toString(), Bookmark.class);
