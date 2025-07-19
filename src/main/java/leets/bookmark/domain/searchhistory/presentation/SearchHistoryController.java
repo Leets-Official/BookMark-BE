@@ -1,6 +1,7 @@
 package leets.bookmark.domain.searchhistory.presentation;
 
 import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
+import leets.bookmark.domain.searchhistory.application.dto.request.SearchHistoryRequest;
 import leets.bookmark.domain.searchhistory.application.usecase.SearchHistoryUseCase;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.annotation.CurrentUser;
@@ -22,6 +23,12 @@ public class SearchHistoryController {
     public CommonResponse<List<SearchHistoryResponse>> getSearchHistories(@CurrentUser User user) {
         List<SearchHistoryResponse> histories = searchHistoryUseCase.getSearchHistory(user);
         return CommonResponse.createSuccess(SearchHistoryResponseMessage.GET_SUCCESS.getMessage(), histories);
+    }
+
+    @PostMapping
+    public CommonResponse<Void> createSearchHistory(@CurrentUser User user, @RequestBody SearchHistoryRequest request) {
+        searchHistoryUseCase.createSearchHistory(user, request.keyword());
+        return CommonResponse.createSuccess(SearchHistoryResponseMessage.CREATE_SUCCESS.getMessage(), null);
     }
 
     @DeleteMapping
