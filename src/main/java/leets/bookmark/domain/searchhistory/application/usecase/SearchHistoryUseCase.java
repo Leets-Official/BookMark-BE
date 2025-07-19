@@ -2,6 +2,7 @@ package leets.bookmark.domain.searchhistory.application.usecase;
 
 import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
 import leets.bookmark.domain.searchhistory.application.mapper.SearchHistoryMapper;
+import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryGetService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryDeleteService;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -24,6 +25,7 @@ public class SearchHistoryUseCase {
     }
 
     public void deleteSearchHistory(User user) {
-        searchHistoryDeleteService.deleteByUser(user);
+        List<SearchHistory> histories = searchHistoryGetService.getSearchHistoriesByUser(user);
+        histories.forEach(searchHistoryDeleteService::delete);
     }
 }

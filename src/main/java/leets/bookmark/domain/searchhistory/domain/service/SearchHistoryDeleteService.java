@@ -1,7 +1,7 @@
 package leets.bookmark.domain.searchhistory.domain.service;
 
+import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.repository.SearchHistoryRepository;
-import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ public class SearchHistoryDeleteService {
 
     private final SearchHistoryRepository searchHistoryRepository;
 
-    public void deleteByUser(User user) {
-        searchHistoryRepository.deleteByUser(user);
+    public void delete(SearchHistory history) {
+        searchHistoryRepository.delete(history);
     }
 }

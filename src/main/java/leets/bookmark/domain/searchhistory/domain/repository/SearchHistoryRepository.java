@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Long> {
     List<SearchHistory> findByUser(User user);
-    void deleteByUser(User user);
 }
