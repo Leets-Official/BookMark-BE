@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NotificationMapper {
-    public Notification toNotification(NotificationSaveRequest request, User user, Long bookmarkId, Long fileId){
+    public Notification toNotification(NotificationSaveRequest request, User user, Long bookmarkId, String fileUrl){
         return Notification.builder()
                 .user(user)
                 .bookmarkId(bookmarkId)
-                .title("example")   // Todo : bookmark.getTitle().getMemo()로 수정
-                .description("description") // Todo : bookmark.get로 수정
-                .fileId(fileId)
+                .title("example")   // Todo : bookmark.getTitle().getTitle()로 수정
+                .description("description") // Todo : bookmark.getMemo()로 수정 (null 체크 필수)
+                .fileUrl(fileUrl)   // Todo : boomark.getFile().getFileUrl()로 수정
                 .notifyAt(request.notifyAt())
                 .isNotified(false)
                 .build();
@@ -25,7 +25,7 @@ public class NotificationMapper {
         return NotificationResponse.builder()
                 .notificationId(notification.getId())
                 .notifyAt(notification.getNotifyAt())
-                .isNotified(notification.isNotified())
+                .isNotified(notification.getIsNotified())
                 .createdAt(notification.getCreatedAt())
                 .updatedAt(notification.getUpdatedAt())
                 .build();

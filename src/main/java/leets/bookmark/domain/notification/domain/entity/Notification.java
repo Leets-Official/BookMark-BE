@@ -24,13 +24,13 @@ public class Notification extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     User user;
 
-    Long bookmarkId;
+    Long bookmarkId;    // Bookmark bookmark
 
     String title;   // bookmark.getTitle()
 
     String description; // bookmark.getMemo()
 
-    Long fileId;
+    String fileUrl;    // bookmark.getFile.getUrl()
 
     LocalDateTime notifyAt;
 

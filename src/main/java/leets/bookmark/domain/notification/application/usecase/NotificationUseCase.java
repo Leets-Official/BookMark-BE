@@ -31,8 +31,8 @@ public class NotificationUseCase {
                 .orElse(null);
     }
 
-    public void saveNotification(User user, long bookmarkId, long fileId, NotificationSaveRequest request){
-        Notification notification = notificationMapper.toNotification(request, user, bookmarkId, fileId);
+    public void saveNotification(User user, long bookmarkId, String fileUrl, NotificationSaveRequest request){
+        Notification notification = notificationMapper.toNotification(request, user, bookmarkId, fileUrl);
 
         notificationSaveService.save(notification);
     }
