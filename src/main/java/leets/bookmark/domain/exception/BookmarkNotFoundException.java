@@ -7,10 +7,7 @@ import lombok.Getter;
 @Getter
 public class BookmarkNotFoundException extends BusinessException {
 
-    private final ErrorCode errorCode;
-
     public BookmarkNotFoundException() {
-        super(ErrorCode.BOOKMARK_NOT_FOUND.getStatusCode(), ErrorCode.BOOKMARK_NOT_FOUND.getMessage());
-        this.errorCode = ErrorCode.BOOKMARK_NOT_FOUND;
+        super(ErrorCode.BOOKMARK_NOT_FOUND);
     }
 }
