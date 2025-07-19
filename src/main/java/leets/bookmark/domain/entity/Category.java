@@ -1,5 +1,9 @@
 package leets.bookmark.domain.entity;
 
+import leets.bookmark.domain.tag.domain.entity.Tag;
+import java.util.ArrayList;
+import java.util.List;
+
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
@@ -31,10 +35,14 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name = "bookmark_id")
     private Bookmark bookmark;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tag> tags = new ArrayList<>();
+
     @Builder
-    public Category(User user, String categoryName) {
+    public Category(User user, String categoryName, List<Tag> tags) {
         this.user = user;
         this.categoryName = categoryName;
+        this.tags = tags != null ? tags : new ArrayList<>();
     }
 
     public void updateName(String newCategoryName) {

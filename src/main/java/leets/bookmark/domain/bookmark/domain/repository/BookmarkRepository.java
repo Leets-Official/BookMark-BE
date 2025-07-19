@@ -15,9 +15,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     @Query("""
     SELECT DISTINCT b FROM Bookmark b
-    JOIN b.bookmarkCategories c
-    JOIN leets.bookmark.domain.tag.domain.entity.Tag t
-    ON t.categoryId = c.id
+    LEFT JOIN b.bookmarkCategories c
+    LEFT JOIN c.tags t
     WHERE b.user.id = :userId
     AND (:categoryId IS NULL OR c.id = :categoryId)
     AND (:tagNames IS NULL OR t.tagName IN :tagNames)
