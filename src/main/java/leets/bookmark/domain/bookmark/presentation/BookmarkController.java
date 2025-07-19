@@ -1,11 +1,11 @@
 package leets.bookmark.domain.bookmark.presentation;
 
-import leets.bookmark.global.common.response.CommonResponse;
+import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessage.*;
 
+import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
-import leets.bookmark.domain.bookmark.application.usecase.GetByMemoContainingUseCase;
-import leets.bookmark.domain.bookmark.application.usecase.GetFilteredBookmarksUseCase;
+import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkController {
 
-    private final GetByMemoContainingUseCase getByMemoContainingUseCase;
-    private final GetFilteredBookmarksUseCase getFilteredBookmarksUseCase;
+    private final BookmarkUseCase bookmarkUseCase;
 
     @GetMapping("/search")
     @Operation(summary = "북마크 메모 검색 API", description = "키워드를 포함하는 메모를 가진 북마크 목록을 조회합니다.")
     public CommonResponse<List<BookmarkResponse>> searchBookmarksByMemo(@RequestParam String keyword) {
-        return getByMemoContainingUseCase.getByMemoContaining(keyword);
+        return bookmarkUseCase.getByMemoContaining(keyword);
     }
 
     @GetMapping
@@ -36,7 +35,12 @@ public class BookmarkController {
         @RequestParam(required = false) List<String> tagNames
     ) {
         BookmarkFilterRequest request = new BookmarkFilterRequest(categoryId, tagNames);
-        List<BookmarkResponse> result = getFilteredBookmarksUseCase.getFilteredBookmarks(request);
-        return CommonResponse.createSuccess(BookmarkResponseMessage.BOOKMARK_FILTER_SUCCESS.getMessage(), result);
+        return bookmarkUseCase.getFilteredBookmarks(request);
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "전체 북마크 조회 API", description = "모든 북마크를 조회합니다.")
+    public CommonResponse<List<BookmarkResponse>> getAllBookmarks() {
+        return bookmarkUseCase.getAllBookmarks();
     }
 }
