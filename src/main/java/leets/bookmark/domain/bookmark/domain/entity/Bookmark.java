@@ -1,12 +1,10 @@
-package leets.bookmark.domain.entity;
+package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
 // import leets.category.domain.entity.Category;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 //import leets.bookmark.domain.entity.File;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookmarks")

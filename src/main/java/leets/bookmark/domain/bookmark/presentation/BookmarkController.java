@@ -1,4 +1,4 @@
-package leets.bookmark.presentation.controller;
+package leets.bookmark.domain.bookmark.presentation;
 
 import leets.bookmark.global.common.response.CommonResponse;
 

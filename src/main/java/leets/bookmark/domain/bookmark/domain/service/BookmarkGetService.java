@@ -1,7 +1,7 @@
-package leets.bookmark.domain.bookmark.service;
+package leets.bookmark.domain.bookmark.domain.service;
 
-import leets.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.bookmark.repository.BookmarkRepository;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
