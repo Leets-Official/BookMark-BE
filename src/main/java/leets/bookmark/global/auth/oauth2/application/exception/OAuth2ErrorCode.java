@@ -1,4 +1,4 @@
-package leets.bookmark.global.auth.oauth2.exception;
+package leets.bookmark.global.auth.oauth2.application.exception;
 
 import leets.bookmark.global.common.exception.ErrorCode;
 import lombok.Getter;

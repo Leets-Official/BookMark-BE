@@ -1,4 +1,4 @@
-package leets.bookmark.global.auth.jwt.exception;
+package leets.bookmark.global.auth.jwt.application.exception;
 
 import leets.bookmark.global.common.exception.BusinessException;
 

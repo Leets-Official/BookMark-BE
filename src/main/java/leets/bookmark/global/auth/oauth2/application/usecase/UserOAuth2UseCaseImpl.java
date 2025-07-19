@@ -1,4 +1,4 @@
-package leets.bookmark.global.auth.oauth2.usecase;
+package leets.bookmark.global.auth.oauth2.application.usecase;
 
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserSaveService;
