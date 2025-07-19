@@ -2,6 +2,8 @@ package leets.bookmark.domain.searchhistory.presentation;
 
 import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
 import leets.bookmark.domain.searchhistory.application.usecase.SearchHistoryUseCase;
+import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.global.auth.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +17,12 @@ public class SearchHistoryController {
     private final SearchHistoryUseCase searchHistoryUseCase;
 
     @GetMapping
-    public List<SearchHistoryResponse> getSearchHistories(@RequestParam("userId") Long userId) {
-        return searchHistoryUseCase.getSearchHistory(userId);
+    public List<SearchHistoryResponse> getSearchHistories(@CurrentUser User user) {
+        return searchHistoryUseCase.getSearchHistory(user);
     }
+
     @DeleteMapping
-    public void deleteSearchHistories(@RequestParam("userId") Long userId) {
-        searchHistoryUseCase.deleteSearchHistory(userId);
+    public void deleteSearchHistories(@CurrentUser User user) {
+        searchHistoryUseCase.deleteSearchHistory(user);
     }
 }
