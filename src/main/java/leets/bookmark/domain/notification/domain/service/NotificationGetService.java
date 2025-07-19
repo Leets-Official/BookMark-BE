@@ -6,6 +6,8 @@ import leets.bookmark.domain.notification.domain.repository.NotificationReposito
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class NotificationGetService {
@@ -15,5 +17,9 @@ public class NotificationGetService {
     public Notification findById(long notificationId){
         return notificationRepository.findById(notificationId)
                 .orElseThrow(NotificationNotFoundException::new);
+    }
+
+    public Optional<Notification> findByBookmarkId(Long bookmarkId) {
+        return notificationRepository.findByBookmarkId(bookmarkId);
     }
 }

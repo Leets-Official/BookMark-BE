@@ -1,6 +1,7 @@
 package leets.bookmark.domain.notification.application.mapper;
 
-import leets.bookmark.domain.notification.application.dto.NotificationSaveRequest;
+import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
+import leets.bookmark.domain.notification.application.dto.response.NotificationResponse;
 import leets.bookmark.domain.notification.domain.entity.Notification;
 import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
@@ -17,5 +18,14 @@ public class NotificationMapper {
                 .notifyAt(request.notifyAt())
                 .build();
 
+    }
+
+    public NotificationResponse toNotificationResponse(Notification notification) {
+        return NotificationResponse.builder()
+                .notificationId(notification.getId())
+                .notifyAt(notification.getNotifyAt())
+                .createdAt(notification.getCreatedAt())
+                .updatedAt(notification.getUpdatedAt())
+                .build();
     }
 }

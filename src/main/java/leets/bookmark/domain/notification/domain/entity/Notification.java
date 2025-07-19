@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-
+@Table(name = "notifications")
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

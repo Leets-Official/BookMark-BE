@@ -1,4 +1,4 @@
-package leets.bookmark.domain.notification.application.dto;
+package leets.bookmark.domain.notification.application.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
