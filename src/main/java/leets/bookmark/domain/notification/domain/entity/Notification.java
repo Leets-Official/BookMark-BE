@@ -34,6 +34,10 @@ public class Notification extends BaseTimeEntity {
 
     LocalDateTime notifyAt;
 
-    boolean isNotified;
+    Boolean isNotified;
+
+    public void setNotified(){
+        this.isNotified = true;
+    }
 
 }
