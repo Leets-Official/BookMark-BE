@@ -2,6 +2,7 @@ package leets.bookmark.domain.service;
 
 import leets.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.entity.Bookmark;
+import leets.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.global.common.response.ResponseMessage;
@@ -19,15 +20,7 @@ public class BookmarkGetService {
     public CommonResponse<List<BookmarkResponse>> getBookmarksAllByMemo(String keyword) {
         List<Bookmark> bookmarks = bookmarkRepository.findByMemoContaining(keyword);
         List<BookmarkResponse> responseList = bookmarks.stream()
-            .map(bookmark -> BookmarkResponse.builder()
-                .id(bookmark.getId())
-                .url(bookmark.getUrl())
-                .title(bookmark.getTitle())
-                .memo(bookmark.getMemo())
-                .thumbnailUrl(bookmark.getThumbnailUrl())
-                .createdAt(bookmark.getCreatedAt())
-                .updatedAt(bookmark.getUpdatedAt())
-                .build())
+            .map(BookmarkMapper::toResponse)
             .toList();
 
         return CommonResponse.createSuccess(
