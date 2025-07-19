@@ -2,6 +2,7 @@ package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
 // import leets.category.domain.entity.Category;
+import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 //import leets.bookmark.domain.entity.File;
 import lombok.*;
@@ -27,12 +28,12 @@ public class Bookmark extends BaseTimeEntity {
 
     private String thumbnailUrl;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "category_id")
-    // private Category category;
-
     //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "file_id")
-    //private File file;
+    //@JoinColumn(name = "category_id")
+    //private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id")
+    private File file;
 
 }
