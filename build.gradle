@@ -40,6 +40,9 @@ dependencies {
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// S3
+	implementation 'software.amazon.awssdk:s3:2.31.78'
+
 }
 
 tasks.named('test') {
