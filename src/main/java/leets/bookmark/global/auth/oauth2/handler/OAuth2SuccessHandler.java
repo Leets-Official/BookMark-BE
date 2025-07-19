@@ -7,7 +7,7 @@ import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.repository.UserRepository;
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
 import leets.bookmark.global.auth.jwt.service.JwtProvider;
-import leets.bookmark.global.auth.oauth2.exception.KakaoUserNotFoundException;
+import leets.bookmark.global.auth.oauth2.application.exception.KakaoUserNotFoundException;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
