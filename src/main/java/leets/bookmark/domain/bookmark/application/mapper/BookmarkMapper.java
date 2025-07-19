@@ -6,7 +6,7 @@ import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 public class BookmarkMapper {
 
     public static BookmarkResponse toResponse(Bookmark bookmark) {
-        java.util.List<String> categoryNames = bookmark.getCategories().stream()
+        java.util.List<String> categoryNames = bookmark.getBookmarkCategories().stream()
                 .map(category -> category.getCategoryName())
                 .toList();
 

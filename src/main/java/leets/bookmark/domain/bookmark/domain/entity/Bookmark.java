@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import leets.bookmark.domain.entity.Category;
 import jakarta.persistence.CascadeType;
 import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
-//import leets.bookmark.domain.entity.File;
+
 import lombok.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -38,4 +39,11 @@ public class Bookmark extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private File file;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 }

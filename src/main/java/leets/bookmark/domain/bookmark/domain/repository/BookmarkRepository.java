@@ -8,15 +8,23 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-    List<Bookmark> findByMemoContaining(String keyword);
+
+    List<Bookmark> findByMemoContainingAndUserId(String keyword, Long userId);
+
+    List<Bookmark> findAllByUserId(Long userId);
 
     @Query("""
     SELECT DISTINCT b FROM Bookmark b
-    JOIN b.categories c
+    JOIN b.bookmarkCategories c
     JOIN leets.bookmark.domain.tag.domain.entity.Tag t
     ON t.categoryId = c.id
-    WHERE (:categoryId IS NULL OR c.id = :categoryId)
+    WHERE b.user.id = :userId
+    AND (:categoryId IS NULL OR c.id = :categoryId)
     AND (:tagNames IS NULL OR t.tagName IN :tagNames)
     """)
-    List<Bookmark> findAllWithFilter(@Param("categoryId") Long categoryId, @Param("tagNames") List<String> tagNames);
+    List<Bookmark> findAllWithFilter(
+        @Param("userId") Long userId,
+        @Param("categoryId") Long categoryId,
+        @Param("tagNames") List<String> tagNames
+    );
 }

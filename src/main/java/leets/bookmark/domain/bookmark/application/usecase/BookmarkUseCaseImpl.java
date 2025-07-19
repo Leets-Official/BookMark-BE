@@ -20,24 +20,24 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final BookmarkRepository bookmarkRepository;
 
     @Override
-    public List<BookmarkResponse> getFilteredBookmarks(BookmarkFilterRequest request) {
-        List<Bookmark> bookmarks = bookmarkRepository.findAllWithFilter(request.categoryId(), request.tagNames());
+    public List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
+        List<Bookmark> bookmarks = bookmarkRepository.findAllWithFilter(userId, request.categoryId(), request.tagNames());
         return bookmarks.stream()
             .map(BookmarkMapper::toResponse)
             .toList();
     }
 
     @Override
-    public List<BookmarkResponse> getByMemoContaining(String keyword) {
-        List<Bookmark> bookmarks = bookmarkRepository.findByMemoContaining(keyword);
+    public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
+        List<Bookmark> bookmarks = bookmarkRepository.findByMemoContainingAndUserId(keyword, userId);
         return bookmarks.stream()
             .map(BookmarkMapper::toResponse)
             .toList();
     }
 
     @Override
-    public List<BookmarkResponse> getAllBookmarks() {
-        List<Bookmark> bookmarks = bookmarkRepository.findAll();
+    public List<BookmarkResponse> getAllBookmarks(Long userId) {
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserId(userId);
         return bookmarks.stream()
             .map(BookmarkMapper::toResponse)
             .toList();
