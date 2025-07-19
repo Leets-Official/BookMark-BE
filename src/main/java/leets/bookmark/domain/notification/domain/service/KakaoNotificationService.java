@@ -1,6 +1,6 @@
 package leets.bookmark.domain.notification.domain.service;
 
-import leets.bookmark.domain.notification.application.dto.request.ContentItem;
+import leets.bookmark.domain.notification.application.dto.request.NotificationItem;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.oauth2.service.KakaoTokenRefreshService;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ public class KakaoNotificationService {
 
     private final KakaoTokenRefreshService kakaoTokenRefreshService;
 
-    public String sendListTemplate(User user, List<ContentItem> contentItems) {
+    public String sendListTemplate(User user, List<NotificationItem> notificationItems) {
         kakaoTokenRefreshService.refreshAccessToken(user);  // 토큰 갱신
         
         StringBuilder contentsJson = new StringBuilder("[");
 
-        for (int i = 0; i < contentItems.size(); i++) {
-            ContentItem item = contentItems.get(i);
+        for (int i = 0; i < notificationItems.size(); i++) {
+            NotificationItem item = notificationItems.get(i);
             contentsJson.append("""
                 {
                     "title": "%s",
@@ -58,7 +58,7 @@ public class KakaoNotificationService {
                     i + 1
             ));
 
-            if (i < contentItems.size() - 1) {
+            if (i < notificationItems.size() - 1) {
                 contentsJson.append(",");
             }
         }

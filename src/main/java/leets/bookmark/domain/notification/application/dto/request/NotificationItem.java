@@ -1,6 +1,9 @@
 package leets.bookmark.domain.notification.application.dto.request;
 
-public record ContentItem(
+import lombok.Builder;
+
+@Builder
+public record NotificationItem(
         String title,
         String description,
         String imageUrl
