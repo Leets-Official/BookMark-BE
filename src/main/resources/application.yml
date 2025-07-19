@@ -18,6 +18,7 @@ spring:
               - profile_nickname
               - profile_image
               - account_email
+              - talk_message
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -27,6 +28,7 @@ spring:
 
 kakao:
   base-url: ${KAKAO_BASE_URL}
+  notification-title : ${KAKAO_NOTIFICATION_TITLE}
 
 springdoc:
   swagger-ui:

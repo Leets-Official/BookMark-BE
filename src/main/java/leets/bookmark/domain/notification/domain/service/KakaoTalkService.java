@@ -1,6 +1,8 @@
 package leets.bookmark.domain.notification.domain.service;
 
 import leets.bookmark.domain.notification.application.dto.request.ContentItem;
+import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.global.auth.oauth2.service.KakaoTokenRefreshService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -18,9 +20,16 @@ public class KakaoTalkService {
     @Value("${kakao.base-url}")
     private String baseUrl;
 
+    @Value("${kakao.notification-title}")
+    private String notificationTitle;
+
     private final RestClient kakaoRestClient;
 
-    public String sendListTemplate(String accessToken, List<ContentItem> contentItems) {
+    private final KakaoTokenRefreshService kakaoTokenRefreshService;
+
+    public String sendListTemplate(User user, List<ContentItem> contentItems) {
+        kakaoTokenRefreshService.refreshAccessToken(user);  // 토큰 갱신
+        
         StringBuilder contentsJson = new StringBuilder("[");
 
         for (int i = 0; i < contentItems.size(); i++) {
@@ -43,9 +52,10 @@ public class KakaoTalkService {
                     escapeJson(item.title()),
                     escapeJson(item.description()),
                     escapeJson(item.imageUrl()),
-                    baseUrl, i + 1,
-                    baseUrl, i + 1,
-                    i + 1, i + 1
+                    baseUrl,
+                    baseUrl,
+                    i + 1,
+                    i + 1
             ));
 
             if (i < contentItems.size() - 1) {
@@ -58,7 +68,7 @@ public class KakaoTalkService {
         String templateJson = """
             {
                 "object_type": "list",
-                "header_title": "WEEKELY MAGAZINE",
+                "header_title": "%s",
                 "header_link": {
                     "web_url": "%s",
                     "mobile_web_url": "%s",
@@ -83,14 +93,14 @@ public class KakaoTalkService {
                     }
                 ]
             }
-        """.formatted(baseUrl, baseUrl, contentsJson.toString(), baseUrl, baseUrl);
+        """.formatted(notificationTitle, baseUrl, baseUrl, contentsJson.toString(), baseUrl, baseUrl);
 
         String formBody = "template_object=" + URLEncoder.encode(templateJson, StandardCharsets.UTF_8);
 
         return kakaoRestClient.post()
                 .uri("/v2/api/talk/memo/default/send")
                 .headers(headers -> {
-                    headers.setBearerAuth(accessToken);
+                    headers.setBearerAuth(user.getKakaoAccessToken());
                     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
                 })
                 .body(formBody)
