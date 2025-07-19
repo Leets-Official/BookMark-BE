@@ -54,7 +54,7 @@ public class TagUseCaseImpl implements TagUseCase {
         Category category = categoryGetService.findById(request.categoryId());
 
         validateCategoryOwner(category, user);
-        validateTagName(category, request.tagName());
+        checkDuplicateTagName(category, request.tagName());
 
         Tag tag = tagMapper.toTag(category, request);
         tagSaveService.save(tag);
@@ -67,7 +67,7 @@ public class TagUseCaseImpl implements TagUseCase {
         Tag tag = tagGetService.findById(tagId);
 
         validateTagOwner(tag, user);
-        validateTagName(tag.getCategory(), request.tagName());
+        checkDuplicateTagName(tag.getCategory(), request.tagName());
 
         tagUpdateService.update(tag, request);
     }
@@ -95,7 +95,7 @@ public class TagUseCaseImpl implements TagUseCase {
         }
     }
 
-    private void validateTagName(Category category, String tagName) {
+    private void checkDuplicateTagName(Category category, String tagName) {
         if (tagGetService.existsByCategoryAndTagName(category, tagName)) {
             throw new DuplicatedTagNameException();
         }

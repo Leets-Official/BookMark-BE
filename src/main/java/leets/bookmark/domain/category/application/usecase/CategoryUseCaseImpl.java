@@ -37,7 +37,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     public void save(Long userId, CategoryCreateRequest request) {
         User user = userGetService.findById(userId);
 
-        validateCategoryName(user, request.categoryName());
+        checkDuplicateCategoryName(user, request.categoryName());
 
         Category category = categoryMapper.toCategory(user, request);
         categorySaveService.save(category);
@@ -59,7 +59,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         Category category = categoryGetService.findById(categoryId);
 
         validateCategoryOwner(category, user);
-        validateCategoryName(user, request.categoryName());
+        checkDuplicateCategoryName(user, request.categoryName());
 
         categoryUpdateService.update(category, request);
     }
@@ -84,7 +84,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         }
     }
 
-    private void validateCategoryName(User user, String categoryName) {
+    private void checkDuplicateCategoryName(User user, String categoryName) {
         if (categoryGetService.existsByUserIdAndCategoryName(user.getId(), categoryName)) {
             throw new DuplicatedCategoryNameException();
         }
