@@ -32,17 +32,17 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String accessToken;
+    private String jwtAccessToken;
 
-    private String refreshToken;
+    private String jwtRefreshToken;
 
     private String kakaoAccessToken;
 
     private String kakaoRefreshToken;
 
-    public void updateTokens(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+    public void updateTokens(String jwtAccessToken, String jwtRefreshToken) {
+        this.jwtAccessToken = jwtAccessToken;
+        this.jwtRefreshToken = jwtRefreshToken;
     }
 
     public void updateNickname(String nickname) {
