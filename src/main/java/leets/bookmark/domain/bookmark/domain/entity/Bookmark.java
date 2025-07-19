@@ -44,6 +44,4 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
 }

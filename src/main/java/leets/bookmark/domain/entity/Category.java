@@ -1,5 +1,6 @@
 package leets.bookmark.domain.entity;
 
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
@@ -25,6 +26,10 @@ public class Category extends BaseTimeEntity {
 
     @Column(length = 100, nullable = false)
     private String categoryName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookmark_id")
+    private Bookmark bookmark;
 
     @Builder
     public Category(User user, String categoryName) {
