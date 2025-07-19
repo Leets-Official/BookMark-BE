@@ -39,7 +39,7 @@ public class KakaoTokenRefreshService {
                     request,
                     KakaoTokenResponse.class
             );
-            user.updateKakaoTokens(response.getBody().accessToken(), response.getBody().refreshToken());
+            user.updateKakaoAccessToken(response.getBody().accessToken());
 
         } catch (Exception e) {
             throw new KakaoTokenRefreshException();

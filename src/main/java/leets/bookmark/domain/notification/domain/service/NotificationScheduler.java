@@ -5,6 +5,7 @@ import leets.bookmark.domain.notification.application.mapper.NotificationItemMap
 import leets.bookmark.domain.notification.domain.entity.Notification;
 import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationScheduler {
@@ -44,7 +46,11 @@ public class NotificationScheduler {
                     .map(notificationItemMapper::toNotificationItem)
                     .toList();
 
-            kakaoNotificationService.sendListTemplate(user, items);
+            try{
+                kakaoNotificationService.sendListTemplate(user, items);
+            } catch (Exception e){
+                log.error(e.getMessage());
+            }
 
             userNotifications.forEach(Notification::setNotified);
         }
