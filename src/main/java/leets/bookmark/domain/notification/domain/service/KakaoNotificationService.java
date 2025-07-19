@@ -27,7 +27,8 @@ public class KakaoNotificationService {
 
     private final KakaoTokenRefreshService kakaoTokenRefreshService;
 
-    public String sendListTemplate(User user, List<NotificationItem> notificationItems) {
+    public void sendListTemplate(User user, List<NotificationItem> notificationItems) {
+
         kakaoTokenRefreshService.refreshAccessToken(user);  // 토큰 갱신
         
         StringBuilder contentsJson = new StringBuilder("[");
@@ -43,9 +44,7 @@ public class KakaoNotificationService {
                     "image_height": 640,
                     "link": {
                         "web_url": "%s",
-                        "mobile_web_url": "%s",
-                        "android_execution_params": "/contents/%d",
-                        "ios_execution_params": "/contents/%d"
+                        "mobile_web_url": "%s"
                     }
                 }
             """.formatted(
@@ -53,9 +52,7 @@ public class KakaoNotificationService {
                     escapeJson(item.description()),
                     escapeJson(item.imageUrl()),
                     baseUrl,
-                    baseUrl,
-                    i + 1,
-                    i + 1
+                    baseUrl
             ));
 
             if (i < notificationItems.size() - 1) {
@@ -71,9 +68,7 @@ public class KakaoNotificationService {
                 "header_title": "%s",
                 "header_link": {
                     "web_url": "%s",
-                    "mobile_web_url": "%s",
-                    "android_execution_params": "main",
-                    "ios_execution_params": "main"
+                    "mobile_web_url": "%s"
                 },
                 "contents": %s,
                 "buttons": [
@@ -83,13 +78,6 @@ public class KakaoNotificationService {
                             "web_url": "%s",
                             "mobile_web_url": "%s"
                         }
-                    },
-                    {
-                        "title": "앱으로 이동",
-                        "link": {
-                            "android_execution_params": "main",
-                            "ios_execution_params": "main"
-                        }
                     }
                 ]
             }
@@ -97,7 +85,7 @@ public class KakaoNotificationService {
 
         String formBody = "template_object=" + URLEncoder.encode(templateJson, StandardCharsets.UTF_8);
 
-        return kakaoRestClient.post()
+        String response = kakaoRestClient.post()
                 .uri("/v2/api/talk/memo/default/send")
                 .headers(headers -> {
                     headers.setBearerAuth(user.getKakaoAccessToken());
@@ -108,7 +96,8 @@ public class KakaoNotificationService {
                 .body(String.class);
     }
 
-    private String escapeJson(String input) {
-        return input.replace("\"", "\\\"");
+    private String escapeJson(String str) {
+        if (str == null) return "";
+        return str.replace("\"", "\\\"");
     }
 }
