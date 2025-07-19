@@ -6,6 +6,8 @@ import leets.bookmark.domain.notification.domain.repository.NotificationReposito
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -21,5 +23,9 @@ public class NotificationGetService {
 
     public Optional<Notification> findByBookmarkId(Long bookmarkId) {
         return notificationRepository.findByBookmarkId(bookmarkId);
+    }
+
+    public List<Notification> findAllToNotify(LocalDateTime from, LocalDateTime to){
+        return notificationRepository.findAllByIsNotifiedFalseAndNotifyAtBetween(from, to);
     }
 }
