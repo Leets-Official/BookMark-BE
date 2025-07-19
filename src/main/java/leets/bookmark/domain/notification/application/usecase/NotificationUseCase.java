@@ -8,6 +8,7 @@ import leets.bookmark.domain.notification.domain.service.NotificationDeleteServi
 import leets.bookmark.domain.notification.domain.service.NotificationGetService;
 import leets.bookmark.domain.notification.domain.service.NotificationSaveService;
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,17 @@ public class NotificationUseCase {
 
     private final NotificationMapper notificationMapper;
 
+    private final UserGetService userGetService;
+
     public void saveNotification(User user, long bookmarkId, long fileId, NotificationSaveRequest request){
         Notification notification = notificationMapper.toNotification(request, user, bookmarkId, fileId);
 
         notificationSaveService.save(notification);
     }
 
-    public void deleteNotification(User user, long notificationId) {
+    public void deleteNotification(Long userId, long notificationId) {
+        User user = userGetService.findById(userId);
+
         Notification notification = notificationGetService.findById(notificationId);
         validateNotificationOwner(user, notification);
 
