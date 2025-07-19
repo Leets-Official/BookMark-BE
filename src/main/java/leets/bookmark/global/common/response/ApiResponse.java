@@ -1,6 +1,6 @@
 package leets.bookmark.global.common.response;
 
-import leets.bookmark.domain.bookmark.presentation.ResponseMessage;
+import leets.bookmark.global.common.response.ResponseMessage;
 import lombok.Builder;
 
 @Builder
