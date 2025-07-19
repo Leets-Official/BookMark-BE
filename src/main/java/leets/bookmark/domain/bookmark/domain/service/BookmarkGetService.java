@@ -13,7 +13,7 @@ public class BookmarkGetService {
 
     private final BookmarkRepository bookmarkRepository;
 
-    public List<Bookmark> getBookmarksAllByMemo(String keyword, Long userId) {
+    public List<Bookmark> getBookmarksByMemo(String keyword, Long userId) {
         return bookmarkRepository.findByMemoContainingAndUserId(keyword, userId);
     }
 }
