@@ -17,14 +17,7 @@ public class BookmarkGetService {
 
     private final BookmarkRepository bookmarkRepository;
 
-    public CommonResponse<List<BookmarkResponse>> getBookmarksAllByMemo(String keyword) {
-        List<Bookmark> bookmarks = bookmarkRepository.findByMemoContaining(keyword);
-        List<BookmarkResponse> responseList = bookmarks.stream()
-            .map(BookmarkMapper::toResponse)
-            .toList();
-
-        return CommonResponse.createSuccess(
-            ResponseMessage.BOOKMARK_SEARCH_SUCCESS.getMessage(), responseList
-        );
+    public List<Bookmark> getBookmarksAllByMemo(String keyword) {
+        return bookmarkRepository.findByMemoContaining(keyword);
     }
 }
