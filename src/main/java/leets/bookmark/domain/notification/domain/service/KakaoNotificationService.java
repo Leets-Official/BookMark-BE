@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class KakaoTalkService {
+public class KakaoNotificationService {
 
     @Value("${kakao.base-url}")
     private String baseUrl;
