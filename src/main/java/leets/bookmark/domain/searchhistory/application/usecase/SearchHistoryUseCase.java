@@ -5,6 +5,7 @@ import leets.bookmark.domain.searchhistory.application.mapper.SearchHistoryMappe
 import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryGetService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryDeleteService;
+import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryCreateService;
 import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class SearchHistoryUseCase {
 
     private final SearchHistoryGetService searchHistoryGetService;
     private final SearchHistoryDeleteService searchHistoryDeleteService;
+    private final SearchHistoryCreateService searchHistoryCreateService;
     private final SearchHistoryMapper searchHistoryMapper;
 
     public List<SearchHistoryResponse> getSearchHistory(User user) {
@@ -29,5 +31,9 @@ public class SearchHistoryUseCase {
     public void deleteSearchHistory(User user) {
         List<SearchHistory> histories = searchHistoryGetService.getSearchHistoriesByUser(user);
         histories.forEach(searchHistoryDeleteService::delete);
+    }
+
+    public void createSearchHistory(User user, String keyword) {
+        searchHistoryCreateService.create(user, keyword);
     }
 }
