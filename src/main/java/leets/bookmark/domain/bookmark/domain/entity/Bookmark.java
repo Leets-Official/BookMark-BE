@@ -1,8 +1,8 @@
 package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
-import leets.bookmark.domain.entity.Category;
 import jakarta.persistence.CascadeType;
+import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
