@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SearchHistoryResponseMessage {
 
-    GET_SUCCESS("검색 기록 조회 성공"),
-    DELETE_SUCCESS("검색 기록 삭제 성공");
+    GET_SUCCESS("검색 기록 조회에 성공했습니다."),
+    DELETE_SUCCESS("검색 기록 삭제에 성공했습니다.");
 
     private final String message;
 
