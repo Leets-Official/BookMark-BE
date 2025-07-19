@@ -32,7 +32,7 @@ public class CategoryController {
         return CommonResponse.createSuccess(GET_ALL_CATEGORIES_SUCCESS.getMessage(), response);
     }
 
-    @GetMapping("/tags")
+    @GetMapping("/with-tags")
     @Operation(summary = "전체 카테고리 및 태그 조회 API", description = "전체 카테고리를 하위 태그와 함께 조회할 수 있는 API입니다.")
     public CommonResponse<List<CategoryWithTagResponse>> getAllCategoriesWithTags(@CurrentUser Long userId) {
         List<CategoryWithTagResponse> response = categoryUseCase.getAllCategoriesWithTags(userId);
