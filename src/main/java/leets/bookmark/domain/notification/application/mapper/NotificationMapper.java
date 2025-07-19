@@ -16,6 +16,7 @@ public class NotificationMapper {
                 .description("description") // Todo : bookmark.get로 수정
                 .fileId(fileId)
                 .notifyAt(request.notifyAt())
+                .isNotified(false)
                 .build();
 
     }
@@ -24,6 +25,7 @@ public class NotificationMapper {
         return NotificationResponse.builder()
                 .notificationId(notification.getId())
                 .notifyAt(notification.getNotifyAt())
+                .isNotified(notification.isNotified())
                 .createdAt(notification.getCreatedAt())
                 .updatedAt(notification.getUpdatedAt())
                 .build();

@@ -34,4 +34,6 @@ public class Notification extends BaseTimeEntity {
 
     LocalDateTime notifyAt;
 
+    boolean isNotified;
+
 }

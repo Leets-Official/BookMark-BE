@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record NotificationResponse(
         Long notificationId,
         LocalDateTime notifyAt,
+        boolean isNotified,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}
