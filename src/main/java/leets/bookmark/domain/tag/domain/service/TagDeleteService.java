@@ -1,5 +1,6 @@
 package leets.bookmark.domain.tag.domain.service;
 
+import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,5 +14,9 @@ public class TagDeleteService {
 
     public void delete(Tag tag) {
         tagRepository.delete(tag);
+    }
+
+    public void deleteAllByCategory(Category category) {
+        tagRepository.deleteAllByCategory(category);
     }
 }

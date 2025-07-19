@@ -11,6 +11,7 @@ import leets.bookmark.domain.category.domain.service.CategoryGetService;
 import leets.bookmark.domain.category.domain.service.CategorySaveService;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryUpdateService;
+import leets.bookmark.domain.tag.domain.service.TagDeleteService;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private final CategoryGetService categoryGetService;
     private final CategoryDeleteService categoryDeleteService;
     private final CategoryUpdateService categoryUpdateService;
+    private final TagDeleteService tagDeleteService;
 
     @Transactional
     @Override
@@ -72,6 +74,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
         // TODO: 해당 카테고리 내에 컨텐츠(북마크DB)가 존재하면 삭제 불가능하도록 로직 추가
 
+        tagDeleteService.deleteAllByCategory(category);
         categoryDeleteService.delete(categoryId);
     }
 

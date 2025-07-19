@@ -11,4 +11,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     boolean existsByCategoryAndTagName(Category category, String tagName);
 
     List<Tag> findAllByCategory(Category category);
+
+    void deleteAllByCategory(Category category);
 }
