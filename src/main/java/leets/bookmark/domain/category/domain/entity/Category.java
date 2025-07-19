@@ -11,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "categories")
-@AllArgsConstructor
 @SuperBuilder
 public class Category extends BaseTimeEntity {
 
