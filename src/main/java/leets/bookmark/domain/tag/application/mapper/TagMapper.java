@@ -20,6 +20,7 @@ public class TagMapper {
 
     public static TagResponse toTagResponse(Tag tag) {
         return TagResponse.builder()
+                .tagId(tag.getId())
                 .categoryId(tag.getCategory().getId())
                 .tagName(tag.getTagName())
                 .build();

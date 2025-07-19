@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record TagResponse(
+        Long tagId,
         Long categoryId,
         String tagName
 ) {

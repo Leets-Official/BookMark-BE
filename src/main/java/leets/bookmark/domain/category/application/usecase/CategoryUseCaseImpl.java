@@ -3,6 +3,7 @@ package leets.bookmark.domain.category.application.usecase;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
+import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
 import leets.bookmark.domain.category.application.mapper.CategoryMapper;
@@ -11,7 +12,9 @@ import leets.bookmark.domain.category.domain.service.CategoryGetService;
 import leets.bookmark.domain.category.domain.service.CategorySaveService;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryUpdateService;
+import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.service.TagDeleteService;
+import leets.bookmark.domain.tag.domain.service.TagGetService;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private final CategoryDeleteService categoryDeleteService;
     private final CategoryUpdateService categoryUpdateService;
     private final TagDeleteService tagDeleteService;
+    private final TagGetService tagGetService;
 
     @Transactional
     @Override
@@ -50,6 +54,17 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
         List<Category> categories = categoryGetService.getAllByUser(user);
         return categoryMapper.toCategoryResponseList(categories);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CategoryWithTagResponse> getAllCategoriesWithTags(Long userId) {
+        User user = userGetService.findById(userId);
+
+        List<Category> categories = categoryGetService.getAllByUser(user);
+        List<Tag> tags = tagGetService.findAllByUser(user);
+
+        return categoryMapper.toCategoryWithTagResponseList(categories, tags);
     }
 
     @Transactional

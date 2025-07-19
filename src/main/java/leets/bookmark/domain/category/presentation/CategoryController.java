@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
+import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
 import leets.bookmark.domain.category.application.usecase.CategoryUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,13 @@ public class CategoryController {
     public CommonResponse<List<CategoryResponse>> getAllCategories(@CurrentUser Long userId) {
         List<CategoryResponse> response = categoryUseCase.getAllCategories(userId);
         return CommonResponse.createSuccess(GET_ALL_CATEGORIES_SUCCESS.getMessage(), response);
+    }
+
+    @GetMapping("/tags")
+    @Operation(summary = "전체 카테고리 및 태그 조회 API", description = "전체 카테고리를 하위 태그와 함께 조회할 수 있는 API입니다.")
+    public CommonResponse<List<CategoryWithTagResponse>> getAllCategoriesWithTags(@CurrentUser Long userId) {
+        List<CategoryWithTagResponse> response = categoryUseCase.getAllCategoriesWithTags(userId);
+        return CommonResponse.createSuccess(GET_ALL_CATEGORIES_WITH_TAGS_SUCCESS.getMessage(), response);
     }
 
     @PostMapping

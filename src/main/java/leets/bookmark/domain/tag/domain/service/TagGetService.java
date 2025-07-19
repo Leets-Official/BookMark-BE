@@ -4,6 +4,7 @@ import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
+import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,9 @@ public class TagGetService {
 
     public List<Tag> findAllByCategory(Category category) {
         return tagRepository.findAllByCategory(category);
+    }
+
+    public List<Tag> findAllByUser(User user) {
+        return tagRepository.findAllByCategory_User(user);
     }
 }
