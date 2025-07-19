@@ -56,7 +56,7 @@ public class TagUseCaseImpl implements TagUseCase {
         validateCategoryOwner(category, user);
         validateTagName(category, request.tagName());
 
-        Tag tag = tagMapper.toTagEntity(category, request);
+        Tag tag = tagMapper.toTag(category, request);
         tagSaveService.save(tag);
     }
 

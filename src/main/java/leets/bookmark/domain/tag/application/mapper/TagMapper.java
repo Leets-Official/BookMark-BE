@@ -7,12 +7,11 @@ import leets.bookmark.domain.tag.domain.entity.Tag;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class TagMapper {
 
-    public Tag toTagEntity(Category category, TagCreateRequest request) {
+    public Tag toTag(Category category, TagCreateRequest request) {
         return Tag.builder()
                 .category(category)
                 .tagName(request.tagName())
