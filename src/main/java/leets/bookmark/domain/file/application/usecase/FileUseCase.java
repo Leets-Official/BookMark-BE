@@ -1,0 +1,88 @@
+package leets.bookmark.domain.file.application.usecase;
+
+import jakarta.validation.Valid;
+import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
+import leets.bookmark.domain.file.application.dto.response.FileResponse;
+import leets.bookmark.domain.file.application.dto.response.PresignedUrlResponse;
+import leets.bookmark.domain.file.application.exception.FileOwnerMismatchException;
+import leets.bookmark.domain.file.application.exception.InvalidFileExtensionException;
+import leets.bookmark.domain.file.application.mapper.FileMapper;
+import leets.bookmark.domain.file.application.mapper.PreSignedMapper;
+import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.file.domain.entity.enums.FileType;
+import leets.bookmark.domain.file.domain.service.*;
+import leets.bookmark.domain.user.domain.entity.User;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
+@Validated
+@Service
+@RequiredArgsConstructor
+public class FileUseCase {
+
+    private final PreSignedService preSignedService;
+    private final FileSaveService fileSaveService;
+    private final FileGetService fileGetService;
+    private final FileUpdateService fileUpdateService;
+    private final FileDeleteService fileDeleteService;
+
+    private final FileMapper fileMapper;
+    private final PreSignedMapper preSignedMapper;
+
+    public PresignedUrlResponse getPreSignedUrl(String fileName) {
+        return preSignedMapper.toResponse(fileName, preSignedService.createPresignedUrl(fileName));
+    }
+
+    @Transactional
+    public void saveFile(User user, long bookmarkId, @Valid FileSaveRequest fileSaveRequest) {
+        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest,
+                getValidatedFileType(fileSaveRequest.fileName()));
+        fileSaveService.save(file);
+    }
+
+    @Transactional(readOnly = true)
+    public FileResponse getFile(Long bookmarkId) {
+        File file = fileGetService.findByBookmarkId(bookmarkId);
+        return fileMapper.toFileResponse(file);
+    }
+
+    @Transactional
+    public void updateFile(User user, long bookmarkId, @Valid FileUpdateRequest fileUpdateRequest) {
+        File file = fileGetService.findByBookmarkId(bookmarkId);
+        validateFileOwner(user, file);
+
+        fileUpdateService.update(file, fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(),
+                getValidatedFileType(fileUpdateRequest.fileName()));
+    }
+
+    @Transactional
+    public void deleteFile(User user, long bookmarkId) {
+        File file = fileGetService.findByBookmarkId(bookmarkId);
+        validateFileOwner(user, file);
+
+        fileDeleteService.delete(file);
+    }
+
+    private void validateFileOwner(User user, File file){
+        if(!(user.getId().equals(file.getUser().getId()))){
+            throw new FileOwnerMismatchException();
+        }
+    }
+
+    private String getExtension(String fileName){
+        if(fileName == null || !fileName.contains(".")){
+            throw new InvalidFileExtensionException();
+        }
+        return fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+    }
+
+    private FileType getValidatedFileType(String fileName){
+       return FileType.fromExtension(getExtension(getExtension(fileName)))
+                .orElseThrow(InvalidFileExtensionException::new);
+    }
+
+}

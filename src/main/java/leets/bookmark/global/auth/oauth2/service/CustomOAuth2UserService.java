@@ -1,7 +1,7 @@
 package leets.bookmark.global.auth.oauth2.service;
 
 import leets.bookmark.domain.user.domain.entity.User;
-import leets.bookmark.global.auth.oauth2.usecase.UserOAuth2UseCase;
+import leets.bookmark.global.auth.oauth2.application.usecase.UserOAuth2UseCase;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

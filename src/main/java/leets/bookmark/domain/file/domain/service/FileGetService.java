@@ -12,7 +12,8 @@ public class FileGetService {
 
     private final FileRepository fileRepository;
 
-    public File findById(Long id){
-        return fileRepository.findById(id).orElseThrow(FileNotFoundException::new);
+    public File findByBookmarkId(long bookmarkId) {
+        return fileRepository.findByBookmarkId(bookmarkId)
+                .orElseThrow(FileNotFoundException::new);
     }
 }

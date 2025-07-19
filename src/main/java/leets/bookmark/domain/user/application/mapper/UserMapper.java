@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public User toUserEntity(KakaoOAuth2UserInfo userInfo) {
+    public User toUser(KakaoOAuth2UserInfo userInfo) {
         return User.builder()
                 .kakaoId(userInfo.getProviderId())
                 .email(userInfo.getEmail())

@@ -2,7 +2,7 @@ package leets.bookmark.global.auth.jwt.service;
 
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.repository.UserRepository;
-import leets.bookmark.global.auth.jwt.exception.UnauthorizedException;
+import leets.bookmark.global.auth.jwt.application.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

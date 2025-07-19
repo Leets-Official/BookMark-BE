@@ -1,6 +1,6 @@
 package leets.bookmark.global.auth.oauth2.userinfo;
 
-import leets.bookmark.global.auth.oauth2.exception.OAuth2UserInfoException;
+import leets.bookmark.global.auth.oauth2.application.exception.OAuth2UserInfoException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
