@@ -8,6 +8,6 @@ public class BusinessException extends RuntimeException{
 
     public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
-        this.statusCode = errorCode.getStatusCode();
+        this.statusCode = errorCode.getErrorCode();
     }
 }
