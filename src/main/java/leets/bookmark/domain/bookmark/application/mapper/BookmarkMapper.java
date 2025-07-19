@@ -1,6 +1,6 @@
-package leets.bookmark.application.mapper;
+package leets.bookmark.domain.bookmark.application.mapper;
 
-import leets.bookmark.application.dto.response.BookmarkResponse;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.entity.Bookmark;
 
 public class BookmarkMapper {

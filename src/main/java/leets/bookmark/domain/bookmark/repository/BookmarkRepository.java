@@ -1,4 +1,4 @@
-package leets.bookmark.domain.repository;
+package leets.bookmark.domain.bookmark.repository;
 
 import leets.bookmark.domain.entity.Bookmark;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,12 +1,11 @@
-package leets.bookmark.application.usecase;
+package leets.bookmark.domain.bookmark.application.usecase;
 
-import leets.bookmark.application.dto.response.BookmarkResponse;
-import leets.bookmark.application.mapper.BookmarkMapper;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
+import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.service.BookmarkGetService;
+import leets.bookmark.domain.bookmark.service.BookmarkGetService;
 import leets.bookmark.global.common.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

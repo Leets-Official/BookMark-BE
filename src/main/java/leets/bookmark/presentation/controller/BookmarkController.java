@@ -2,8 +2,8 @@ package leets.bookmark.presentation.controller;
 
 import leets.bookmark.global.common.response.CommonResponse;
 
-import leets.bookmark.application.dto.response.BookmarkResponse;
-import leets.bookmark.application.usecase.GetByMemoContainingUseCase;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
+import leets.bookmark.domain.bookmark.application.usecase.GetByMemoContainingUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
