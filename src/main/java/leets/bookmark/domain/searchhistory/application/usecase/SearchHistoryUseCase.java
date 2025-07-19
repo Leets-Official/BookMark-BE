@@ -21,7 +21,9 @@ public class SearchHistoryUseCase {
 
     public List<SearchHistoryResponse> getSearchHistory(User user) {
         return searchHistoryGetService.getSearchHistoriesByUser(user)
-            .stream().map(searchHistoryMapper::toResponse).toList();
+            .stream()
+            .map(searchHistoryMapper::toResponse)
+            .toList();
     }
 
     public void deleteSearchHistory(User user) {
