@@ -12,7 +12,7 @@ public class BookmarkMapper {
                 bookmark.getTitle(),
                 bookmark.getMemo(),
                 bookmark.getThumbnailUrl(),
-                null, // or bookmark.getCategory().getName() if available
+                bookmark.getCategory() != null ? bookmark.getCategory().getCategoryName() : null,
                 bookmark.getCreatedAt(),
                 bookmark.getUpdatedAt()
         );
