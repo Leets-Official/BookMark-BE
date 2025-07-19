@@ -29,6 +29,6 @@ public class TagMapper {
     public List<TagResponse> toTagResponseList(List<Tag> tags) {
         return tags.stream()
                 .map(TagMapper::toTagResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

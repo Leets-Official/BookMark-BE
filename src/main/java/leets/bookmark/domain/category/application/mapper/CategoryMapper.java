@@ -7,7 +7,6 @@ import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CategoryMapper {
@@ -31,6 +30,6 @@ public class CategoryMapper {
     public List<CategoryResponse> toCategoryResponseList(List<Category> categories) {
         return categories.stream()
                 .map(CategoryMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
