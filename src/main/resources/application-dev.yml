@@ -35,3 +35,7 @@ cloud:
       auto: false
     stack:
       auto: false
+
+security:
+  aes:
+    key: ${AES_KEY}

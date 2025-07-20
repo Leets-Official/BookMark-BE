@@ -3,6 +3,7 @@ package leets.bookmark.domain.notification.domain.service;
 import leets.bookmark.global.auth.oauth2.application.dto.request.NotificationItemRequest;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.oauth2.service.KakaoTokenRefreshService;
+import leets.bookmark.global.auth.jwt.service.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ public class KakaoNotificationService {
     private String messageSendUri;
 
     private final RestClient kakaoRestClient;
+    private final AesEncryptor aesEncryptor;
 
     private final KakaoTokenRefreshService kakaoTokenRefreshService;
 
@@ -91,7 +93,7 @@ public class KakaoNotificationService {
         String response = kakaoRestClient.post()
                 .uri(messageSendUri)
                 .headers(headers -> {
-                    headers.setBearerAuth(user.getKakaoAccessToken());
+                    headers.setBearerAuth(aesEncryptor.decrypt(user.getKakaoAccessToken()));
                     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
                 })
                 .body(formBody)
