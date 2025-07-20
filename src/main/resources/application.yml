@@ -3,9 +3,6 @@ spring:
     active: local
   jackson:
     time-zone: Asia/Seoul
-  jpa:
-    hibernate:
-      ddl-auto: update
   security:
     oauth2:
       client:
@@ -21,12 +18,18 @@ spring:
               - profile_nickname
               - profile_image
               - account_email
+              - talk_message
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             token-uri: ${KAKAO_TOKEN_URI}
             user-info-uri: ${KAKAO_USER_INFO_URI}
             user-name-attribute: id
+
+kakao:
+  linked-url: ${KAKAO_LINKED_URL}
+  message-send-uri: /v2/api/talk/memo/default/send
+  notification-title : ${KAKAO_NOTIFICATION_TITLE}
 
 springdoc:
   swagger-ui:
