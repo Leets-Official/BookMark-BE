@@ -37,13 +37,13 @@ public class SearchHistoryUseCase {
             .toList();
     }
 
-    public void deleteSearchHistory(Long userId) {
+    public void deleteSearchHistory(Long userId, Long searchHistoryId) {
         User user = userGetService.findById(userId);
-        List<SearchHistory> histories = searchHistoryGetService.getSearchHistoriesByUser(user);
-        if (histories.isEmpty()) {
+        SearchHistory history = searchHistoryGetService.findById(searchHistoryId);
+        if (!history.getUser().equals(user)) {
             throw new SearchHistoryNotFoundException();
         }
-        histories.forEach(searchHistoryDeleteService::delete);
+        searchHistoryDeleteService.delete(history);
     }
 
     public void saveSearchHistory(Long userId, SearchHistoryRequest request) {
