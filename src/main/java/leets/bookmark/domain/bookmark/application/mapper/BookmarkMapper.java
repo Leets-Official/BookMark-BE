@@ -33,7 +33,7 @@ public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMap
         .title(bookmark.getTitle())
         .memo(bookmark.getMemo())
         .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
-        .categories(List.of(tagInfo))
+        .categoryTagInfos(List.of(tagInfo))
         .createdAt(bookmark.getCreatedAt())
         .updatedAt(bookmark.getUpdatedAt())
         .build();
@@ -56,7 +56,7 @@ public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMap
             .title(bookmark.getTitle())
             .memo(bookmark.getMemo())
             .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
-            .categories(List.of(categoryTagResponse))
+            .categoryTagInfos(List.of(categoryTagResponse))
             .createdAt(bookmark.getCreatedAt())
             .updatedAt(bookmark.getUpdatedAt())
             .build();
