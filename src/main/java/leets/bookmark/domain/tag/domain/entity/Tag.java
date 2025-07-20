@@ -28,10 +28,6 @@ public class Tag extends BaseTimeEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookmark_id")
-    private Bookmark bookmark;
-
     private String tagName;
 
     public void updateTagName(String tagName) {

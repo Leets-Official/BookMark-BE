@@ -5,5 +5,5 @@ import lombok.Builder;
 @Builder
 public record BookmarkCategoryTagResponse(
         String categoryName,
-        List<String> tagNames
+        List<String> tagId
 ) {}

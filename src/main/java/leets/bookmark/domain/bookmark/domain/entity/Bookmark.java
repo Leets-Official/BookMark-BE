@@ -2,8 +2,8 @@ package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
-import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
@@ -31,10 +31,6 @@ public class Bookmark extends BaseTimeEntity {
     private String memo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private File file;
 
@@ -42,4 +38,6 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
 }
