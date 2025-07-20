@@ -11,7 +11,7 @@ public record BookmarkResponse(
         String title,
         String memo,
         String thumbnailUrl,
-        List<BookmarkCategoryTagResponse> categories,
+        List<BookmarkTagInfoResponse> categories,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}

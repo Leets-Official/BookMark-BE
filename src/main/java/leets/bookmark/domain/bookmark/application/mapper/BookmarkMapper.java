@@ -3,7 +3,7 @@ package leets.bookmark.domain.bookmark.application.mapper;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.bookmark.application.dto.response.BookmarkCategoryTagResponse;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
@@ -18,7 +18,7 @@ public class BookmarkMapper {
             .toList();
 
         Category category = bookmarkTagMappings.isEmpty() ? null : bookmarkTagMappings.get(0).getTag().getCategory();
-        BookmarkCategoryTagResponse categoryTagResponse = BookmarkCategoryTagResponse.builder()
+        BookmarkTagInfoResponse categoryTagResponse = BookmarkTagInfoResponse.builder()
             .categoryName(category != null ? category.getCategoryName() : null)
             .tagId(tagIds)
             .build();
@@ -41,7 +41,7 @@ public class BookmarkMapper {
             .toList();
 
         Category category = tags.isEmpty() ? null : tags.get(0).getCategory();
-        BookmarkCategoryTagResponse categoryTagResponse = BookmarkCategoryTagResponse.builder()
+        BookmarkTagInfoResponse categoryTagResponse = BookmarkTagInfoResponse.builder()
             .categoryName(category != null ? category.getCategoryName() : null)
             .tagId(tagIds)
             .build();
