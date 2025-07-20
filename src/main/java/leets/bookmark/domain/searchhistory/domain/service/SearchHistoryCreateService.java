@@ -3,6 +3,7 @@ package leets.bookmark.domain.searchhistory.domain.service;
 import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.repository.SearchHistoryRepository;
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Service;
 public class SearchHistoryCreateService {
 
     private final SearchHistoryRepository searchHistoryRepository;
+    private final UserGetService userGetService;
 
-    public void create(User user, String keyword) {
+    public void create(Long userId, String keyword) {
+        User user = userGetService.findById(userId);
         SearchHistory history = SearchHistory.builder()
             .user(user)
             .keyword(keyword)
