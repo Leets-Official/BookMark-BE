@@ -6,6 +6,7 @@ import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,10 +38,7 @@ public class BookmarkController {
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) List<String> tagNames
     ) {
-        BookmarkFilterRequest request = BookmarkFilterRequest.builder()
-                .categoryId(categoryId)
-                .tagNames(tagNames)
-                .build();
+        BookmarkFilterRequest request = BookmarkMapper.toFilterRequest(categoryId, tagNames);
         List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }

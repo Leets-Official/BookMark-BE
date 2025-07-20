@@ -1,5 +1,6 @@
 package leets.bookmark.domain.bookmark.application.mapper;
 
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkCategoryTagResponse;
@@ -29,6 +30,12 @@ public class BookmarkMapper {
                 .categories(categories)
                 .createdAt(bookmark.getCreatedAt())
                 .updatedAt(bookmark.getUpdatedAt())
+                .build();
+    }
+    public static BookmarkFilterRequest toFilterRequest(Long categoryId, List<String> tagNames) {
+        return BookmarkFilterRequest.builder()
+                .categoryId(categoryId)
+                .tagNames(tagNames)
                 .build();
     }
 }
