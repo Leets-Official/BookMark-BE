@@ -16,10 +16,12 @@ public class KakaoTokenRefreshService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
 
+    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
+    private String tokenUrl;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void refreshAccessToken(User user) {
-        String tokenUrl = "https://kauth.kakao.com/oauth/token";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

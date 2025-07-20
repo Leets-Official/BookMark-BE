@@ -17,11 +17,14 @@ import java.util.List;
 @Service
 public class KakaoNotificationService {
 
-    @Value("${kakao.base-url}")
-    private String baseUrl;
+    @Value("${kakao.linked-url}")
+    private String linkedUrl;
 
     @Value("${kakao.notification-title}")
     private String notificationTitle;
+
+    @Value("${kakao.message-send-uri}")
+    private String messageSendUri;
 
     private final RestClient kakaoRestClient;
 
@@ -51,8 +54,8 @@ public class KakaoNotificationService {
                     escapeJson(item.title()),
                     escapeJson(item.description()),
                     escapeJson(item.imageUrl()),
-                    baseUrl,
-                    baseUrl
+                    linkedUrl,
+                    linkedUrl
             ));
 
             if (i < notificationItemRequests.size() - 1) {
@@ -81,12 +84,12 @@ public class KakaoNotificationService {
                     }
                 ]
             }
-        """.formatted(notificationTitle, baseUrl, baseUrl, contentsJson.toString(), baseUrl, baseUrl);
+        """.formatted(notificationTitle, linkedUrl, linkedUrl, contentsJson.toString(), linkedUrl, linkedUrl);
 
         String formBody = "template_object=" + URLEncoder.encode(templateJson, StandardCharsets.UTF_8);
 
         String response = kakaoRestClient.post()
-                .uri("/v2/api/talk/memo/default/send")
+                .uri(messageSendUri)
                 .headers(headers -> {
                     headers.setBearerAuth(user.getKakaoAccessToken());
                     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

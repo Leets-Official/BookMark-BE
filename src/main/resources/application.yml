@@ -27,7 +27,8 @@ spring:
             user-name-attribute: id
 
 kakao:
-  base-url: ${KAKAO_BASE_URL}
+  linked-url: ${KAKAO_LINKED_URL}
+  message-send-uri: /v2/api/talk/memo/default/send
   notification-title : ${KAKAO_NOTIFICATION_TITLE}
 
 springdoc:
