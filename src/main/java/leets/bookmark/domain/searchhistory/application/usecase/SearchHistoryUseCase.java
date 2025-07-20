@@ -52,7 +52,7 @@ public class SearchHistoryUseCase {
         if (exists) {
             throw new DuplicatedSearchHistoryNameException();
         }
-        SearchHistory history = searchHistoryMapper.toEntity(user, request);
+        SearchHistory history = searchHistoryMapper.toSearchHistory(user, request);
         searchHistorySaveService.save(history);
     }
 }

@@ -17,7 +17,7 @@ public class SearchHistoryMapper {
             .build();
     }
 
-    public SearchHistory toEntity(User user, SearchHistoryRequest request) {
+    public SearchHistory toSearchHistory(User user, SearchHistoryRequest request) {
         return SearchHistory.builder()
             .user(user)
             .keyword(request.keyword())
