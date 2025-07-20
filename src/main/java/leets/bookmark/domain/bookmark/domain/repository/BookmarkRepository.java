@@ -27,5 +27,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         @Param("tagIds") List<Long> tagIds
     );
 
-    List<Bookmark> findAllByCategoryId(Long attr0, Long attr1);
+    List<Bookmark> findAllByUserIdAndBookmarkTagMappings_Tag_Category_Id(Long userId, Long categoryId);
 }
