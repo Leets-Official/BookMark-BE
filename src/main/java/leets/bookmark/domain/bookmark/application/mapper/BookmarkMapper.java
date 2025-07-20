@@ -12,27 +12,31 @@ import java.util.List;
 
 public class BookmarkMapper {
 
-    public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
-        List<Long> tagIds = bookmarkTagMappings.stream()
-            .map(mapping -> mapping.getTag().getId())
-            .toList();
+public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
+    List<Long> tagIds = bookmarkTagMappings.stream()
+        .map(mapping -> mapping.getTag().getId())
+        .toList();
 
-        Category category = bookmarkTagMappings.isEmpty() ? null : bookmarkTagMappings.get(0).getTag().getCategory();
-        BookmarkTagInfoResponse categoryTagResponse = BookmarkTagInfoResponse.builder()
-            .categoryName(category != null ? category.getCategoryName() : null)
-            .tagId(tagIds)
-            .build();
+    Category category = bookmarkTagMappings.stream()
+        .findFirst()
+        .map(mapping -> mapping.getTag().getCategory())
+        .orElse(null);
 
-        return BookmarkResponse.builder()
-            .id(bookmark.getId())
-            .url(bookmark.getUrl())
-            .title(bookmark.getTitle())
-            .memo(bookmark.getMemo())
-            .thumbnailUrl(null)
-            .categories(List.of(categoryTagResponse))
-            .createdAt(bookmark.getCreatedAt())
-            .updatedAt(bookmark.getUpdatedAt())
-            .build();
+    BookmarkTagInfoResponse tagInfo = BookmarkTagInfoResponse.builder()
+        .categoryName(category != null ? category.getCategoryName() : null)
+        .tagId(tagIds)
+        .build();
+
+    return BookmarkResponse.builder()
+        .id(bookmark.getId())
+        .url(bookmark.getUrl())
+        .title(bookmark.getTitle())
+        .memo(bookmark.getMemo())
+        .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
+        .categories(List.of(tagInfo))
+        .createdAt(bookmark.getCreatedAt())
+        .updatedAt(bookmark.getUpdatedAt())
+        .build();
     }
 
     public static BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
@@ -51,7 +55,7 @@ public class BookmarkMapper {
             .url(bookmark.getUrl())
             .title(bookmark.getTitle())
             .memo(bookmark.getMemo())
-            .thumbnailUrl(null)
+            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
             .categories(List.of(categoryTagResponse))
             .createdAt(bookmark.getCreatedAt())
             .updatedAt(bookmark.getUpdatedAt())
