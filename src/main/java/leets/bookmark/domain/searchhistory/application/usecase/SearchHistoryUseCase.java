@@ -8,6 +8,7 @@ import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryGetServic
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryDeleteService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistorySaveService;
 import leets.bookmark.domain.searchhistory.application.exception.SearchHistoryNotFoundException;
+import leets.bookmark.domain.searchhistory.application.exception.DuplicatedSearchHistoryNameException;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,11 @@ public class SearchHistoryUseCase {
 
     public void saveSearchHistory(Long userId, SearchHistoryRequest request) {
         User user = userGetService.findById(userId);
-        SearchHistory history = searchHistoryMapper.toEntity(user, request.keyword());
+        boolean exists = searchHistoryGetService.existsByUserAndKeyword(user, request.keyword());
+        if (exists) {
+            throw new DuplicatedSearchHistoryNameException();
+        }
+        SearchHistory history = searchHistoryMapper.toEntity(user, request);
         searchHistorySaveService.save(history);
     }
 }

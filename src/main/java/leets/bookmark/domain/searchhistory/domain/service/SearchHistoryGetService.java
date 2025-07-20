@@ -17,4 +17,7 @@ public class SearchHistoryGetService {
     public List<SearchHistory> getSearchHistoriesByUser(User user) {
         return searchHistoryRepository.findByUser(user);
     }
+    public boolean existsByUserAndKeyword(User user, String keyword) {
+        return searchHistoryRepository.existsByUserAndKeyword(user, keyword);
+    }
 }
