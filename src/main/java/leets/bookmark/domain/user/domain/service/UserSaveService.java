@@ -18,4 +18,8 @@ public class UserSaveService {
         return userRepository.findByKakaoId(userInfo.getProviderId())
                 .orElseGet(() -> userRepository.save(userMapper.toUser(userInfo)));
     }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

@@ -10,7 +10,8 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public enum AuthJwtErrorCode implements ErrorCode {
 
-    UNAUTHORIZED_EXCEPTION(UNAUTHORIZED.value(), "인증되지 않은 사용자입니다.");
+    UNAUTHORIZED_EXCEPTION(UNAUTHORIZED.value(), "인증되지 않은 사용자입니다."),
+    JWT_TOKEN_INVALID_EXCEPTION(401, "유효하지 않은 토큰입니다.");
 
     private final int errorCode;
     private final String message;
