@@ -29,9 +29,6 @@ public class SearchHistoryUseCase {
     public List<SearchHistoryResponse> getSearchHistory(Long userId) {
         User user = userGetService.findById(userId);
         List<SearchHistory> histories = searchHistoryGetService.getSearchHistoriesByUser(user);
-        if (histories.isEmpty()) {
-            throw new SearchHistoryNotFoundException();
-        }
         return histories.stream()
             .map(searchHistoryMapper::toResponse)
             .toList();
