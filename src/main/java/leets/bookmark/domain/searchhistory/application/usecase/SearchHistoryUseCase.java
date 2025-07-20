@@ -38,6 +38,7 @@ public class SearchHistoryUseCase {
     }
 
     public void createSearchHistory(Long userId, String keyword) {
-        searchHistoryCreateService.create(userId, keyword);
+        User user = userGetService.findById(userId);
+        searchHistoryCreateService.create(user, keyword);
     }
 }
