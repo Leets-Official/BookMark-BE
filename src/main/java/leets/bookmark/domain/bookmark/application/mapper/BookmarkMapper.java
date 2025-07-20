@@ -13,8 +13,8 @@ import java.util.List;
 public class BookmarkMapper {
 
     public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
-        List<String> tagIds = bookmarkTagMappings.stream()
-            .map(mapping -> String.valueOf(mapping.getTag().getId()))
+        List<Long> tagIds = bookmarkTagMappings.stream()
+            .map(mapping -> mapping.getTag().getId())
             .toList();
 
         Category category = bookmarkTagMappings.isEmpty() ? null : bookmarkTagMappings.get(0).getTag().getCategory();
@@ -36,8 +36,8 @@ public class BookmarkMapper {
     }
 
     public static BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
-        List<String> tagIds = tags.stream()
-            .map(tag -> String.valueOf(tag.getId()))
+        List<Long> tagIds = tags.stream()
+            .map(Tag::getId)
             .toList();
 
         Category category = tags.isEmpty() ? null : tags.get(0).getCategory();

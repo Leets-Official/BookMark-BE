@@ -14,16 +14,18 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     List<Bookmark> findAllByUserId(Long userId);
 
     @Query("""
-    SELECT DISTINCT b FROM BookmarkTagMapping m
-    JOIN m.bookmark b
-    JOIN m.tag t
-    WHERE t.category.id = :categoryId
-      AND (:tagIds IS NULL OR t.id IN :tagIds)
-      AND b.user.id = :userId
-""")
+        SELECT DISTINCT b FROM Bookmark b
+        JOIN b.bookmarkTagMappings m
+        JOIN m.tag t
+        WHERE b.user.id = :userId
+        AND (:categoryId IS NULL OR t.category.id = :categoryId)
+        AND (:tagIds IS NULL OR t.id IN (:tagIds))
+    """)
     List<Bookmark> findAllWithFilter(
         @Param("userId") Long userId,
         @Param("categoryId") Long categoryId,
         @Param("tagIds") List<Long> tagIds
     );
+
+    List<Bookmark> findAllByCategoryId(Long attr0, Long attr1);
 }

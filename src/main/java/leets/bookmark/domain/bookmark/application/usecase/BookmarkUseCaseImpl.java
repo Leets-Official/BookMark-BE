@@ -35,7 +35,12 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        List<Bookmark> bookmarks = bookmarkRepository.findAllWithFilter(userId, request.categoryId(), request.tagId());
+        List<Bookmark> bookmarks;
+        if (request.tagId() == null) {
+            bookmarks = bookmarkRepository.findAllByCategoryId(userId, request.categoryId());
+        } else {
+            bookmarks = bookmarkRepository.findAllWithFilter(userId, request.categoryId(), request.tagId());
+        }
         return bookmarks.stream()
             .map(bookmark -> {
                 List<BookmarkTagMapping> mappings = bookmarkTagMappingRepository.findAllByBookmark(bookmark);
