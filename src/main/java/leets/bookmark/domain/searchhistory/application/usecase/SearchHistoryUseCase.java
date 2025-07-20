@@ -1,11 +1,13 @@
 package leets.bookmark.domain.searchhistory.application.usecase;
 
+import leets.bookmark.domain.searchhistory.application.dto.request.SearchHistoryRequest;
 import leets.bookmark.domain.searchhistory.application.dto.response.SearchHistoryResponse;
 import leets.bookmark.domain.searchhistory.application.mapper.SearchHistoryMapper;
 import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryGetService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryDeleteService;
-import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryCreateService;
+import leets.bookmark.domain.searchhistory.domain.service.SearchHistorySaveService;
+import leets.bookmark.domain.searchhistory.application.exception.SearchHistoryNotFoundException;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +21,17 @@ public class SearchHistoryUseCase {
 
     private final SearchHistoryGetService searchHistoryGetService;
     private final SearchHistoryDeleteService searchHistoryDeleteService;
-    private final SearchHistoryCreateService searchHistoryCreateService;
+    private final SearchHistorySaveService searchHistorySaveService;
     private final SearchHistoryMapper searchHistoryMapper;
     private final UserGetService userGetService;
 
     public List<SearchHistoryResponse> getSearchHistory(Long userId) {
         User user = userGetService.findById(userId);
-        return searchHistoryGetService.getSearchHistoriesByUser(user)
-            .stream()
+        List<SearchHistory> histories = searchHistoryGetService.getSearchHistoriesByUser(user);
+        if (histories.isEmpty()) {
+            throw new SearchHistoryNotFoundException();
+        }
+        return histories.stream()
             .map(searchHistoryMapper::toResponse)
             .toList();
     }
@@ -34,11 +39,15 @@ public class SearchHistoryUseCase {
     public void deleteSearchHistory(Long userId) {
         User user = userGetService.findById(userId);
         List<SearchHistory> histories = searchHistoryGetService.getSearchHistoriesByUser(user);
+        if (histories.isEmpty()) {
+            throw new SearchHistoryNotFoundException();
+        }
         histories.forEach(searchHistoryDeleteService::delete);
     }
 
-    public void createSearchHistory(Long userId, String keyword) {
+    public void saveSearchHistory(Long userId, SearchHistoryRequest request) {
         User user = userGetService.findById(userId);
-        searchHistoryCreateService.create(user, keyword);
+        SearchHistory history = searchHistoryMapper.toEntity(user, request.keyword());
+        searchHistorySaveService.save(history);
     }
 }

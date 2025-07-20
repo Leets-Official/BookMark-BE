@@ -20,18 +20,18 @@ public class SearchHistoryController {
     @GetMapping
     public CommonResponse<List<SearchHistoryResponse>> getSearchHistories(@CurrentUser Long userId) {
         List<SearchHistoryResponse> histories = searchHistoryUseCase.getSearchHistory(userId);
-        return CommonResponse.createSuccess(SearchHistoryResponseMessage.GET_SUCCESS.getMessage(), histories);
+        return CommonResponse.createSuccess(SearchHistoryResponseMessage.GET_SEARCH_HISTORY_SUCCESS.getMessage(), histories);
     }
 
     @PostMapping
-    public CommonResponse<Void> createSearchHistory(@CurrentUser Long userId, @RequestBody SearchHistoryRequest request) {
-        searchHistoryUseCase.createSearchHistory(userId, request.keyword());
-        return CommonResponse.createSuccess(SearchHistoryResponseMessage.CREATE_SUCCESS.getMessage(), null);
+    public CommonResponse<Void> saveSearchHistory(@CurrentUser Long userId, @RequestBody SearchHistoryRequest request) {
+        searchHistoryUseCase.saveSearchHistory(userId, request);
+        return CommonResponse.createSuccess(SearchHistoryResponseMessage.SAVE_SEARCH_HISTORY_SUCCESS.getMessage());
     }
 
     @DeleteMapping
     public CommonResponse<Void> deleteSearchHistories(@CurrentUser Long userId) {
         searchHistoryUseCase.deleteSearchHistory(userId);
-        return CommonResponse.createSuccess(SearchHistoryResponseMessage.DELETE_SUCCESS.getMessage(), null);
+        return CommonResponse.createSuccess(SearchHistoryResponseMessage.DELETE_SEARCH_HISTORY_SUCCESS.getMessage(), null);
     }
 }
