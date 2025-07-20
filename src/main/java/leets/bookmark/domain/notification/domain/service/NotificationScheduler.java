@@ -1,6 +1,6 @@
 package leets.bookmark.domain.notification.domain.service;
 
-import leets.bookmark.domain.notification.application.dto.request.NotificationItem;
+import leets.bookmark.global.auth.oauth2.application.dto.request.NotificationItemRequest;
 import leets.bookmark.domain.notification.application.mapper.NotificationItemMapper;
 import leets.bookmark.domain.notification.domain.entity.Notification;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -42,7 +42,7 @@ public class NotificationScheduler {
             User user = entry.getKey();
             List<Notification> userNotifications = entry.getValue();
 
-            List<NotificationItem> items = userNotifications.stream()
+            List<NotificationItemRequest> items = userNotifications.stream()
                     .map(notificationItemMapper::toNotificationItem)
                     .toList();
 
