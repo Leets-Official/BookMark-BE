@@ -4,38 +4,52 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequ
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkCategoryTagResponse;
+import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.tag.domain.entity.Tag;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookmarkMapper {
 
-    public static BookmarkResponse toResponse(Bookmark bookmark) {
-        List<BookmarkCategoryTagResponse> categories = new ArrayList<>();
-        for (var category : bookmark.getBookmarkCategories()) {
-            List<String> tagNames = category.getTags().stream()
-                    .map(tag -> tag.getTagName())
+    public static BookmarkResponse toResponse(Bookmark bookmark, List<Category> categories) {
+        List<BookmarkCategoryTagResponse> categoryResponses = categories.stream()
+            .map(category -> {
+                List<String> tagNames = category.getTags().stream()
+                    .map(Tag::getTagName)
                     .toList();
-            categories.add(BookmarkCategoryTagResponse.builder()
+                return BookmarkCategoryTagResponse.builder()
                     .categoryName(category.getCategoryName())
                     .tagNames(tagNames)
-                    .build());
-        }
+                    .build();
+            })
+            .toList();
 
         return BookmarkResponse.builder()
-                .id(bookmark.getId())
-                .url(bookmark.getUrl())
-                .title(bookmark.getTitle())
-                .memo(bookmark.getMemo())
-                .thumbnailUrl(bookmark.getThumbnailUrl())
-                .categories(categories)
-                .createdAt(bookmark.getCreatedAt())
-                .updatedAt(bookmark.getUpdatedAt())
-                .build();
+            .id(bookmark.getId())
+            .url(bookmark.getUrl())
+            .title(bookmark.getTitle())
+            .memo(bookmark.getMemo())
+            .categories(categoryResponses)
+            .createdAt(bookmark.getCreatedAt())
+            .updatedAt(bookmark.getUpdatedAt())
+            .build();
     }
     public static BookmarkFilterRequest toFilterRequest(Long categoryId, List<String> tagNames) {
         return BookmarkFilterRequest.builder()
                 .categoryId(categoryId)
                 .tagNames(tagNames)
                 .build();
+    }
+    public static BookmarkResponse toResponse(Bookmark bookmark) {
+        return BookmarkResponse.builder()
+            .id(bookmark.getId())
+            .url(bookmark.getUrl())
+            .title(bookmark.getTitle())
+            .memo(bookmark.getMemo())
+            .categories(new ArrayList<>())
+            .createdAt(bookmark.getCreatedAt())
+            .updatedAt(bookmark.getUpdatedAt())
+            .build();
     }
 }

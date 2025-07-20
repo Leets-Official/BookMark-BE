@@ -1,7 +1,8 @@
 package leets.bookmark.domain.tag.domain.entity;
 
-import jakarta.persistence.*;
 import leets.bookmark.domain.category.domain.entity.Category;
+
+import jakarta.persistence.*;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

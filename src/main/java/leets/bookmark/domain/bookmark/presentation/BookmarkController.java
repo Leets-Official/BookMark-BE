@@ -32,12 +32,13 @@ public class BookmarkController {
     }
 
     @GetMapping
-    @Operation(summary = "북마크 필터링 API", description = "카테고리 ID 또는 태그 이름 목록으로 북마크를 필터링합니다.")
+    @Operation(summary = "북마크 필터링 API", description = "카테고리 ID는 필수이며, 태그 이름 목록으로 북마크를 추가 필터링합니다.")
     public CommonResponse<List<BookmarkResponse>> getFilteredBookmarks(
             @CurrentUser Long userId,
-            @RequestParam(required = false) Long categoryId,
+            @RequestParam Long categoryId,
             @RequestParam(required = false) List<String> tagNames
     ) {
+        System.out.println(">>> userId = " + userId);
         BookmarkFilterRequest request = BookmarkMapper.toFilterRequest(categoryId, tagNames);
         List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
