@@ -14,7 +14,10 @@ public class BookmarkMapper {
             List<String> tagNames = category.getTags().stream()
                     .map(tag -> tag.getTagName())
                     .toList();
-            categories.add(new BookmarkCategoryTagResponse(category.getCategoryName(), tagNames));
+            categories.add(BookmarkCategoryTagResponse.builder()
+                    .categoryName(category.getCategoryName())
+                    .tagNames(tagNames)
+                    .build());
         }
 
         return BookmarkResponse.builder()
