@@ -7,10 +7,7 @@ import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
-import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
-import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
-import leets.bookmark.domain.tag.domain.entity.Tag;
-import leets.bookmark.domain.tag.domain.repository.TagRepository;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -18,16 +15,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
-    private final BookmarkRepository bookmarkRepository;
-    private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
-    private final TagRepository tagRepository;
+    private final BookmarkGetService bookmarkGetService;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
-        List<Bookmark> bookmarks = bookmarkRepository.findByMemoContainingAndUserId(keyword, userId);
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemoContaining(keyword, userId);
         return bookmarks.stream()
             .map(bookmark -> {
-                List<BookmarkTagMapping> mappings = bookmarkTagMappingRepository.findAllByBookmark(bookmark);
+                List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
                 return BookmarkMapper.toResponse(bookmark, mappings);
             })
             .toList();
@@ -35,15 +30,10 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        List<Bookmark> bookmarks;
-        if (request.tagId() == null) {
-            bookmarks = bookmarkRepository.findAllByUserIdAndBookmarkTagMappings_Tag_Category_Id(userId, request.categoryId());
-        } else {
-            bookmarks = bookmarkRepository.findAllWithFilter(userId, request.categoryId(), request.tagId());
-        }
+        List<Bookmark> bookmarks = bookmarkGetService.getFilteredBookmarks(userId, request);
         return bookmarks.stream()
             .map(bookmark -> {
-                List<BookmarkTagMapping> mappings = bookmarkTagMappingRepository.findAllByBookmark(bookmark);
+                List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
                 return BookmarkMapper.toResponse(bookmark, mappings);
             })
             .toList();
@@ -51,20 +41,13 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public List<BookmarkResponse> getAllBookmarks(Long userId) {
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserId(userId);
+        List<Bookmark> bookmarks = bookmarkGetService.getAllBookmarks(userId);
         return bookmarks.stream()
             .map(bookmark -> {
-                List<BookmarkTagMapping> mappings = bookmarkTagMappingRepository.findAllByBookmark(bookmark);
+                List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
                 return BookmarkMapper.toResponse(bookmark, mappings);
             })
             .toList();
     }
 
-    @Override
-    public List<Long> getTagIdsByBookmarkId(Long bookmarkId) {
-        List<BookmarkTagMapping> mappings = bookmarkTagMappingRepository.findAllByBookmark_Id(bookmarkId);
-        return mappings.stream()
-            .map(mapping -> mapping.getTag().getId())
-            .toList();
-    }
 }
