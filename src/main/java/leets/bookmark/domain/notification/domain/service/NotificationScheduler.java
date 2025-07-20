@@ -48,11 +48,10 @@ public class NotificationScheduler {
 
             try{
                 kakaoNotificationService.sendListTemplate(user, items);
+                userNotifications.forEach(Notification::setNotified);
             } catch (Exception e){
                 log.error(e.getMessage());
             }
-
-            userNotifications.forEach(Notification::setNotified);
         }
     }
 }
