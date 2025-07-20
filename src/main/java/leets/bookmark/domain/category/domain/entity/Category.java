@@ -30,8 +30,6 @@ public class Category extends BaseTimeEntity {
     @Column(length = 100, nullable = false)
     private String categoryName;
 
-
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "category_id")
     private List<Tag> tags = new ArrayList<>();

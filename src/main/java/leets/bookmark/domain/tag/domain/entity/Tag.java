@@ -1,6 +1,7 @@
 package leets.bookmark.domain.tag.domain.entity;
 
 import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 
 import jakarta.persistence.*;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
@@ -26,6 +27,10 @@ public class Tag extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookmark_id")
+    private Bookmark bookmark;
 
     private String tagName;
 
