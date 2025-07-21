@@ -39,3 +39,4 @@ springdoc:
 
 server:
   forward-headers-strategy: native
+  cors: ${CORS_ALLOWED}
