@@ -5,6 +5,7 @@ import leets.bookmark.domain.user.domain.service.UserGetService;
 import leets.bookmark.domain.user.domain.service.UserSaveService;
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
 import leets.bookmark.global.auth.jwt.application.exception.JwtTokenInvalidException;
+import leets.bookmark.global.auth.jwt.application.mapper.JwtMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class JwtService {
     @Value("${jwt.refresh.reissue-threshold}")
     private Long refreshReissueThreshold;
 
+    private final JwtMapper jwtMapper;
     private final JwtProvider jwtProvider;
     private final UserGetService userGetService;
     private final UserSaveService userSaveService;
@@ -44,11 +46,7 @@ public class JwtService {
         }
 
         userSaveService.save(user);
-
-        return JwtTokenDto.builder()
-                .accessToken(reissuedAccessToken)
-                .refreshToken(user.getJwtRefreshToken())
-                .build();
+        return jwtMapper.toJwtTokenDto(user);
     }
 
     private void validateRefreshTokenOwner(String refreshToken, User user) {

@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
+import leets.bookmark.global.auth.jwt.application.mapper.JwtMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,8 @@ public class JwtProvider {
     public static final String SUBJECT_ACCESS_TOKEN = "accessToken";
     public static final String SUBJECT_REFRESH_TOKEN = "refreshToken";
 
+    private final JwtMapper jwtMapper;
+
     @Value("${jwt.key}")
     private String key;
 
@@ -38,7 +41,7 @@ public class JwtProvider {
         String accessToken = createAccessToken(user);
         String refreshToken = createRefreshToken(user);
 
-        return new JwtTokenDto(accessToken, refreshToken);
+        return jwtMapper.toJwtTokenDto(accessToken, refreshToken);
     }
 
     public String createAccessToken(Object payload) {
