@@ -34,10 +34,18 @@ public class JwtProvider {
 
     public JwtTokenDto createToken(Object payload) {
         User user = (User) payload;
+
+        String accessToken = createAccessToken(user);
+        String refreshToken = createRefreshToken(user);
+
+        return new JwtTokenDto(accessToken, refreshToken);
+    }
+
+    public String createAccessToken(Object payload) {
+        User user = (User) payload;
         long now = new Date().getTime();
 
-        // Access Token 생성
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .claim(CLAIM_ID, user.getId())
                 .claim(CLAIM_EMAIL, user.getEmail())
                 .claim(CLAIM_ROLE, user.getRole())
@@ -45,16 +53,18 @@ public class JwtProvider {
                 .setExpiration(new Date(now + accessTokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
+    }
 
-        // Refresh Token 생성
-        String refreshToken = Jwts.builder()
+    public String createRefreshToken(Object payload) {
+        User user = (User) payload;
+        long now = new Date().getTime();
+
+        return Jwts.builder()
                 .claim(CLAIM_ID, user.getId())
                 .setSubject(SUBJECT_REFRESH_TOKEN)
                 .setExpiration(new Date(now + refreshTokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
-
-        return new JwtTokenDto(accessToken, refreshToken);
     }
 
     public boolean validateToken(String token) {
