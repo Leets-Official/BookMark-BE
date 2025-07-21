@@ -61,7 +61,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         // JWT 토큰 발급 및 저장
         JwtTokenDto token = jwtProvider.createToken(user);
-        user.updateTokens(token.accessToken(), token.refreshToken());
+        user.updateJwtTokens(token.accessToken(), token.refreshToken());
 
         userRepository.save(user);
 

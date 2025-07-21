@@ -38,7 +38,7 @@ public class JwtService {
 
         if (refreshTokenRemainingTime >= 0 && refreshTokenRemainingTime < refreshReissueThreshold) {
             String reissuedRefreshToken = jwtProvider.createRefreshToken(user);
-            user.updateTokens(reissuedAccessToken, reissuedRefreshToken);
+            user.updateJwtTokens(reissuedAccessToken, reissuedRefreshToken);
         } else {
             user.updateJwtAccessToken(reissuedAccessToken);
         }

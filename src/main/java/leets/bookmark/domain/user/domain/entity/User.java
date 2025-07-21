@@ -40,7 +40,7 @@ public class User extends BaseTimeEntity {
 
     private String kakaoRefreshToken;
 
-    public void updateTokens(String jwtAccessToken, String jwtRefreshToken) {
+    public void updateJwtTokens(String jwtAccessToken, String jwtRefreshToken) {
         this.jwtAccessToken = jwtAccessToken;
         this.jwtRefreshToken = jwtRefreshToken;
     }
