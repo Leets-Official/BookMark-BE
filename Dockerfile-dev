@@ -1,0 +1,8 @@
+FROM openjdk:21-jdk
+
+# build/libs - gradle로 빌드했을 때 jar 파일이 생성되는 경로
+ARG JAR_FILE=build/libs/*.jar
+
+COPY ${JAR_FILE} docker-springboot.jar
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev",  "-jar", "/docker-springboot.jar"]
