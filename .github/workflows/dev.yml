@@ -62,6 +62,9 @@ jobs:
           script: |
             cd /home/ubuntu/compose
             
+            echo "===== Docker Hub 로그인 중 ====="
+            docker login -u "${{ secrets.DOCKER_USER_NAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+            
             echo "===== 최신 Docker 이미지 가져오는 중 ====="
             docker pull ${{ secrets.DOCKER_USER_NAME }}/bookmark-dev
             
