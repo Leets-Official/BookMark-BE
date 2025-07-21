@@ -26,10 +26,18 @@ public class JwtService {
         Long userId = jwtProvider.extractUserId(refreshToken);
         User user = userGetService.findById(userId);
 
+        validateRefreshTokenOwner(refreshToken, user);
+
         JwtTokenDto reissuedToken = jwtProvider.createToken(user);
         user.updateTokens(reissuedToken.accessToken(), reissuedToken.refreshToken());
         userSaveService.save(user);
 
         return reissuedToken;
+    }
+
+    private void validateRefreshTokenOwner(String refreshToken, User user) {
+        if (!refreshToken.equals(user.getJwtRefreshToken())) {
+            throw new JwtTokenInvalidException();
+        }
     }
 }
