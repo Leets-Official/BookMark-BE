@@ -88,4 +88,19 @@ public class JwtProvider {
                 .getBody()
                 .get(CLAIM_ID, Long.class);
     }
+
+    public long extractTokenRemainingTime(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration()
+                    .getTime() - System.currentTimeMillis();
+        } catch (JwtException | IllegalArgumentException e) {
+            log.warn("Cannot get remaining time: {}", e.getMessage());
+            return -1;
+        }
+    }
 }

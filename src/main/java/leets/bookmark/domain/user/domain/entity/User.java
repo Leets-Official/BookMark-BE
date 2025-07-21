@@ -45,6 +45,10 @@ public class User extends BaseTimeEntity {
         this.jwtRefreshToken = jwtRefreshToken;
     }
 
+    public void updateJwtAccessToken(String jwtAccessToken) {
+        this.jwtAccessToken = jwtAccessToken;
+    }
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
