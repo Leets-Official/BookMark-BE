@@ -75,7 +75,7 @@ public class JwtProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            log.warn("Invalid JWT Token: {}", e.getMessage());
+            log.warn("유효하지 않은 JWT 토큰입니다: {}", e.getMessage());
         }
         return false;
     }
@@ -99,7 +99,7 @@ public class JwtProvider {
                     .getExpiration()
                     .getTime() - System.currentTimeMillis();
         } catch (JwtException | IllegalArgumentException e) {
-            log.warn("Cannot get remaining time: {}", e.getMessage());
+            log.warn("유효기간을 추출하지 못했습니다: {}", e.getMessage());
             return -1;
         }
     }
