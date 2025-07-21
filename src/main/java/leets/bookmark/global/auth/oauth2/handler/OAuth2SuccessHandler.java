@@ -9,6 +9,7 @@ import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
 import leets.bookmark.global.auth.jwt.service.JwtProvider;
 import leets.bookmark.global.auth.oauth2.application.exception.KakaoUserNotFoundException;
 import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
+import leets.bookmark.global.auth.jwt.service.AesEncryptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final ObjectMapper objectMapper;
     private final JwtProvider jwtProvider;
     private final OAuth2AuthorizedClientService authorizedClientService;
+    private final AesEncryptor aesEncryptor;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -48,11 +50,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 authToken.getName()
         );
 
-        String kakaoAccessToken = client.getAccessToken().getTokenValue();
-        String kakaoRefreshToken = client.getRefreshToken() != null ?
-                client.getRefreshToken().getTokenValue() : null;
+        String accessToken = aesEncryptor.encrypt(client.getAccessToken().getTokenValue());
 
-        user.updateKakaoTokens(kakaoAccessToken, kakaoRefreshToken);
+        if (client.getRefreshToken() != null) {
+            String refreshToken = aesEncryptor.encrypt(client.getRefreshToken().getTokenValue());
+            user.updateKakaoTokens(accessToken, refreshToken);
+        } else {
+            user.updateKakaoAccessToken(accessToken);
+        }
 
         // JWT 토큰 발급 및 저장
         JwtTokenDto token = jwtProvider.createToken(user);
