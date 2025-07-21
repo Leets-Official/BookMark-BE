@@ -7,6 +7,12 @@ import lombok.Builder;
 public record BookmarkTagInfoResponse(
     Long categoryId,
     String categoryName,
-    List<Long> tagId,
-    List<String> tagNames
-) {}
+    List<TagInfo> tags
+) {
+    @Builder
+    public record TagInfo(
+            Long tagId,
+            String tagName
+    ) {}
+}
+
