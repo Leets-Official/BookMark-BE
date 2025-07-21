@@ -35,10 +35,9 @@ public class JwtService {
         validateRefreshTokenOwner(refreshToken, user);
 
         String reissuedAccessToken = jwtProvider.createAccessToken(user);
-
         long refreshTokenRemainingTime = jwtProvider.extractTokenRemainingTime(refreshToken);
 
-        if (refreshTokenRemainingTime >= 0 && refreshTokenRemainingTime < refreshReissueThreshold) {
+        if (shouldReissueRefreshToken(refreshTokenRemainingTime)) {
             String reissuedRefreshToken = jwtProvider.createRefreshToken(user);
             user.updateJwtTokens(reissuedAccessToken, reissuedRefreshToken);
         } else {
@@ -47,6 +46,10 @@ public class JwtService {
 
         userSaveService.save(user);
         return jwtMapper.toJwtTokenDto(user);
+    }
+
+    private boolean shouldReissueRefreshToken(long refreshTokenRemainingTime) {
+        return refreshTokenRemainingTime >= 0 && refreshTokenRemainingTime < refreshReissueThreshold;
     }
 
     private void validateRefreshTokenOwner(String refreshToken, User user) {
