@@ -1,6 +1,7 @@
 package leets.bookmark.domain.searchhistory.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Lo
     List<SearchHistory> findByUser(User user);
 
     boolean existsByUserAndKeyword(User user, String keyword);
+
+    Optional<SearchHistory> findByUserAndKeyword(User user, String keyword);
 }

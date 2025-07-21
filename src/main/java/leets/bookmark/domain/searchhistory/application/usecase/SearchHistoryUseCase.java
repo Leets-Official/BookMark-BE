@@ -8,12 +8,12 @@ import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryGetServic
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryDeleteService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistorySaveService;
 import leets.bookmark.domain.searchhistory.application.exception.SearchHistoryNotFoundException;
-import leets.bookmark.domain.searchhistory.application.exception.DuplicatedSearchHistoryNameException;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -43,13 +43,9 @@ public class SearchHistoryUseCase {
         searchHistoryDeleteService.delete(history);
     }
 
+    @Transactional
     public void saveSearchHistory(Long userId, SearchHistoryRequest request) {
         User user = userGetService.findById(userId);
-        boolean exists = searchHistoryGetService.existsByUserAndKeyword(user, request.keyword());
-        if (exists) {
-            throw new DuplicatedSearchHistoryNameException();
-        }
-        SearchHistory history = searchHistoryMapper.toSearchHistory(user, request);
-        searchHistorySaveService.save(history);
+        searchHistorySaveService.save(user, request.keyword());
     }
 }
