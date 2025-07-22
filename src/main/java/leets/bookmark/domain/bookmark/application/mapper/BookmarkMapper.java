@@ -12,43 +12,23 @@ import java.util.List;
 
 public class BookmarkMapper {
 
-public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
-    List<Long> tagIds = bookmarkTagMappings.stream()
-        .map(mapping -> mapping.getTag().getId())
-        .toList();
+    public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
+        BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
-    Category category = bookmarkTagMappings.stream()
-        .findFirst()
-        .map(mapping -> mapping.getTag().getCategory())
-        .orElse(null);
-
-    BookmarkTagInfoResponse tagInfo = BookmarkTagInfoResponse.builder()
-        .categoryName(category != null ? category.getCategoryName() : null)
-        .tagId(tagIds)
-        .build();
-
-    return BookmarkResponse.builder()
-        .id(bookmark.getId())
-        .url(bookmark.getUrl())
-        .title(bookmark.getTitle())
-        .memo(bookmark.getMemo())
-        .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
-        .categoryTagInfos(List.of(tagInfo))
-        .createdAt(bookmark.getCreatedAt())
-        .updatedAt(bookmark.getUpdatedAt())
-        .build();
+        return BookmarkResponse.builder()
+            .id(bookmark.getId())
+            .url(bookmark.getUrl())
+            .title(bookmark.getTitle())
+            .memo(bookmark.getMemo())
+            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
+            .categoryTagInfos(List.of(tagInfo))
+            .createdAt(bookmark.getCreatedAt())
+            .updatedAt(bookmark.getUpdatedAt())
+            .build();
     }
 
     public static BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
-        List<Long> tagIds = tags.stream()
-            .map(Tag::getId)
-            .toList();
-
-        Category category = tags.isEmpty() ? null : tags.get(0).getCategory();
-        BookmarkTagInfoResponse categoryTagResponse = BookmarkTagInfoResponse.builder()
-            .categoryName(category != null ? category.getCategoryName() : null)
-            .tagId(tagIds)
-            .build();
+        BookmarkTagInfoResponse categoryTagResponse = toBookmarkTagInfoResponseFromTags(tags);
 
         return BookmarkResponse.builder()
             .id(bookmark.getId())
@@ -66,6 +46,46 @@ public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMap
         return BookmarkFilterRequest.builder()
             .categoryId(categoryId)
             .tagId(tagId)
+            .build();
+    }
+
+    private static BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
+        List<BookmarkTagInfoResponse.TagInfo> tags = bookmarkTagMappings.stream()
+            .map(mapping -> {
+                Tag tag = mapping.getTag();
+                return BookmarkTagInfoResponse.TagInfo.builder()
+                    .tagId(tag.getId())
+                    .tagName(tag.getTagName())
+                    .build();
+            })
+            .toList();
+
+        Category category = bookmarkTagMappings.stream()
+            .findFirst()
+            .map(mapping -> mapping.getTag().getCategory())
+            .orElse(null);
+
+        return BookmarkTagInfoResponse.builder()
+            .categoryId(category != null ? category.getId() : null)
+            .categoryName(category != null ? category.getCategoryName() : null)
+            .tags(tags)
+            .build();
+    }
+
+    private static BookmarkTagInfoResponse toBookmarkTagInfoResponseFromTags(List<Tag> tags) {
+        List<BookmarkTagInfoResponse.TagInfo> tagInfos = tags.stream()
+            .map(tag -> BookmarkTagInfoResponse.TagInfo.builder()
+                .tagId(tag.getId())
+                .tagName(tag.getTagName())
+                .build())
+            .toList();
+
+        Category category = tags.isEmpty() ? null : tags.get(0).getCategory();
+
+        return BookmarkTagInfoResponse.builder()
+            .categoryId(category != null ? category.getId() : null)
+            .categoryName(category != null ? category.getCategoryName() : null)
+            .tags(tagInfos)
             .build();
     }
 }

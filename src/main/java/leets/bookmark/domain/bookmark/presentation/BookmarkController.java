@@ -42,6 +42,7 @@ public class BookmarkController {
         List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
+
     @GetMapping("/all")
     @Operation(summary = "전체 북마크 조회 API", description = "모든 북마크를 조회합니다.")
     public CommonResponse<List<BookmarkResponse>> getAllBookmarks(@CurrentUser Long userId) {
