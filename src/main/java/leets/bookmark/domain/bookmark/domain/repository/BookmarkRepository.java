@@ -41,4 +41,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         @Param("categoryId") Long categoryId,
         @Param("tagIds") List<Long> tagIds
     );
+
+    void deleteAllByUserId(Long userId);
 }

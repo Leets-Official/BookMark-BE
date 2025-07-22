@@ -41,4 +41,9 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public void updateBookmark(String title, String memo) {
+        this.title = title;
+        this.memo = memo;
+    }
+
 }

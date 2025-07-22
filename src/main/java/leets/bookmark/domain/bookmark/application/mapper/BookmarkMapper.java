@@ -1,6 +1,7 @@
 package leets.bookmark.domain.bookmark.application.mapper;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
@@ -8,6 +9,7 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
 
+import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
@@ -95,5 +97,14 @@ public class BookmarkMapper {
             .createdAt(bookmark.getCreatedAt())
             .updatedAt(bookmark.getUpdatedAt())
             .build();
+    }
+
+    public Bookmark toEntity(Long userId, BookmarkSaveRequest request) {
+        return Bookmark.builder()
+                .user(User.builder().id(userId).build())
+                .title(request.title())
+                .url(request.url())
+                .memo(request.memo())
+                .build();
     }
 }

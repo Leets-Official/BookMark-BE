@@ -1,6 +1,7 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
@@ -45,5 +46,10 @@ public class BookmarkGetService {
 
     public List<Bookmark> getAllBookmarks(Long userId) {
         return bookmarkRepository.findAllByUserId(userId);
+    }
+
+    public Bookmark getBookmarkById(Long bookmarkId) {
+        return bookmarkRepository.findById(bookmarkId)
+                .orElseThrow(() -> new BookmarkNotFoundException());
     }
 }

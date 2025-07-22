@@ -6,6 +6,7 @@ import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -56,5 +62,26 @@ public class BookmarkController {
     public CommonResponse<List<BookmarkResponse>> getAllBookmarks(@CurrentUser Long userId) {
         List<BookmarkResponse> result = bookmarkUseCase.getAllBookmarks(userId);
         return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), result);
+    }
+
+    @DeleteMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 삭제 API", description = "본인의 북마크를 삭제할 수 있는 API입니다.")
+    public CommonResponse<Void> deleteBookmark(
+            @CurrentUser Long userId,
+            @PathVariable Long bookmarkId
+    ) {
+        bookmarkUseCase.delete(userId, bookmarkId);
+        return CommonResponse.createSuccess(BOOKMARK_DELETE_SUCCESS.getMessage());
+    }
+
+    @PatchMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 수정 API", description = "북마크를 수정할 수 있는 API입니다.")
+    public CommonResponse<Void> updateBookmark(
+            @CurrentUser Long userId,
+            @PathVariable Long bookmarkId,
+            @RequestBody @Validated BookmarkUpdateRequest request
+    ) {
+        bookmarkUseCase.update(userId, bookmarkId, request);
+        return CommonResponse.createSuccess(BOOKMARK_UPDATE_SUCCESS.getMessage());
     }
 }
