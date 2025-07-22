@@ -8,6 +8,13 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
 jwt:
   key: ${JWT_KEY}
@@ -15,6 +22,7 @@ jwt:
     expiration: ${ACCESS_EXP}
   refresh:
     expiration: ${REFRESH_EXP}
+    reissue-threshold: ${REFRESH_REISSUE_THRESHOLD}
 
 cloud:
   aws:
@@ -28,3 +36,7 @@ cloud:
       auto: false
     stack:
       auto: false
+
+security:
+  aes:
+    key: ${AES_KEY}

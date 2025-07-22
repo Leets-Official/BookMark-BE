@@ -1,0 +1,117 @@
+name: Build Job (Dev)
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*gradle*','**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER_NAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER_NAME }}/bookmark-dev -f ./Dockerfile-dev .
+          docker push ${{ secrets.DOCKER_USER_NAME }}/bookmark-dev
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Deploy on EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_EC2_USER }}
+          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/compose
+            
+            echo "===== Docker Hub 로그인 중 ====="
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER_NAME }}" --password-stdin
+            
+            echo "===== 최신 Docker 이미지 가져오는 중 ====="
+            docker pull ${{ secrets.DOCKER_USER_NAME }}/bookmark-dev
+            
+            EXIST_BLUE=$(docker inspect -f '{{.State.Running}}' spring-blue 2>/dev/null)
+            
+            if [ "$EXIST_BLUE" != "true" ]; then
+              docker compose up -d spring-blue
+              BEFORE_COLOR="green"
+              AFTER_COLOR="blue"
+              BEFORE_PORT=8081
+              AFTER_PORT=8080
+            else
+              docker compose up -d spring-green
+              BEFORE_COLOR="blue"
+              AFTER_COLOR="green"
+              BEFORE_PORT=8080
+              AFTER_PORT=8081
+            fi
+            
+            echo "===== ${AFTER_COLOR} server upc(port:${AFTER_PORT}) ====="
+            
+            for cnt in {1..10}
+            do
+              echo "===== 서버 응답 확인중(${cnt}/10) =====";
+              UP=$(curl -s http://localhost:${AFTER_PORT}/health-check)
+              if [ "$UP" != "OK" ]; then
+                  sleep 10
+                  continue
+                else
+                  break
+              fi
+            done
+            
+            if [ $cnt -eq 10 ]; then
+              echo "===== 서버 실행 실패 ====="
+              exit 1
+            fi
+            
+            echo "===== Caddy 설정 변경 ====="
+            sudo sed -i "s/${BEFORE_PORT}/${AFTER_PORT}/g" /etc/caddy/Caddyfile
+            
+            sudo caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
+            
+            echo "$BEFORE_COLOR server down(port:${BEFORE_PORT})"
+            docker compose stop spring-${BEFORE_COLOR} || true
+            docker compose rm -f spring-${BEFORE_COLOR} || true
+            
+            echo "===== 사용하지 않는 Docker 이미지 정리 중 ====="
+            sudo docker image prune -f
+
+          debug: true

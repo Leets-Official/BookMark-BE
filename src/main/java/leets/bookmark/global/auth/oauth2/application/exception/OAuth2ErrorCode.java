@@ -14,7 +14,8 @@ public enum OAuth2ErrorCode implements ErrorCode {
     OAUTH2_USER_INFO_EXCEPTION(BAD_REQUEST.value(), "email 정보가 없습니다."),
 
     // Kakao 관련
-    KAKAO_USER_NOT_FOUND_EXCEPTION(NOT_FOUND.value(), "해당 Kakao 사용자를 찾을 수 없습니다.");
+    KAKAO_USER_NOT_FOUND_EXCEPTION(NOT_FOUND.value(), "해당 Kakao 사용자를 찾을 수 없습니다."),
+    KAKAO_TOKEN_REFRESH_EXCEPTION(400, "카카오 토큰 갱신을 실패하였습니다");
 
     private final int errorCode;
     private final String message;

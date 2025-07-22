@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
+import leets.bookmark.global.auth.jwt.application.mapper.JwtMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,8 @@ public class JwtProvider {
     public static final String SUBJECT_ACCESS_TOKEN = "accessToken";
     public static final String SUBJECT_REFRESH_TOKEN = "refreshToken";
 
+    private final JwtMapper jwtMapper;
+
     @Value("${jwt.key}")
     private String key;
 
@@ -34,10 +37,18 @@ public class JwtProvider {
 
     public JwtTokenDto createToken(Object payload) {
         User user = (User) payload;
+
+        String accessToken = createAccessToken(user);
+        String refreshToken = createRefreshToken(user);
+
+        return jwtMapper.toJwtTokenDto(accessToken, refreshToken);
+    }
+
+    public String createAccessToken(Object payload) {
+        User user = (User) payload;
         long now = new Date().getTime();
 
-        // Access Token 생성
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .claim(CLAIM_ID, user.getId())
                 .claim(CLAIM_EMAIL, user.getEmail())
                 .claim(CLAIM_ROLE, user.getRole())
@@ -45,16 +56,18 @@ public class JwtProvider {
                 .setExpiration(new Date(now + accessTokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
+    }
 
-        // Refresh Token 생성
-        String refreshToken = Jwts.builder()
+    public String createRefreshToken(Object payload) {
+        User user = (User) payload;
+        long now = new Date().getTime();
+
+        return Jwts.builder()
                 .claim(CLAIM_ID, user.getId())
                 .setSubject(SUBJECT_REFRESH_TOKEN)
                 .setExpiration(new Date(now + refreshTokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
-
-        return new JwtTokenDto(accessToken, refreshToken);
     }
 
     public boolean validateToken(String token) {
@@ -65,7 +78,7 @@ public class JwtProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            log.warn("Invalid JWT Token: {}", e.getMessage());
+            log.warn("유효하지 않은 JWT 토큰입니다: {}", e.getMessage());
         }
         return false;
     }
@@ -77,5 +90,20 @@ public class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .get(CLAIM_ID, Long.class);
+    }
+
+    public long extractTokenRemainingTime(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration()
+                    .getTime() - System.currentTimeMillis();
+        } catch (JwtException | IllegalArgumentException e) {
+            log.warn("유효기간을 추출하지 못했습니다: {}", e.getMessage());
+            return -1;
+        }
     }
 }

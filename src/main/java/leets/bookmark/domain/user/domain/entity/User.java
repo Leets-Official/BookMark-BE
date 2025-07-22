@@ -40,9 +40,13 @@ public class User extends BaseTimeEntity {
 
     private String kakaoRefreshToken;
 
-    public void updateTokens(String jwtAccessToken, String jwtRefreshToken) {
+    public void updateJwtTokens(String jwtAccessToken, String jwtRefreshToken) {
         this.jwtAccessToken = jwtAccessToken;
         this.jwtRefreshToken = jwtRefreshToken;
+    }
+
+    public void updateJwtAccessToken(String jwtAccessToken) {
+        this.jwtAccessToken = jwtAccessToken;
     }
 
     public void updateNickname(String nickname) {
@@ -52,5 +56,9 @@ public class User extends BaseTimeEntity {
     public void updateKakaoTokens(String kakaoAccessToken, String kakaoRefreshToken) {
         this.kakaoAccessToken = kakaoAccessToken;
         this.kakaoRefreshToken = kakaoRefreshToken;
+    }
+
+    public void updateKakaoAccessToken(String kakaoAccessToken) {
+        this.kakaoAccessToken = kakaoAccessToken;
     }
 }
