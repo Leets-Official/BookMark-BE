@@ -64,10 +64,14 @@ public class BookmarkMapper {
 
         Category category = tags.isEmpty() ? null : tags.get(0).getCategory();
 
+        return buildBookmarkTagInfoResponse(category, tagInfos);
+    }
+
+    private static BookmarkTagInfoResponse buildBookmarkTagInfoResponse(Category category, List<BookmarkTagInfoResponse.TagInfo> tags) {
         return BookmarkTagInfoResponse.builder()
             .categoryId(category != null ? category.getId() : null)
             .categoryName(category != null ? category.getCategoryName() : null)
-            .tags(tagInfos)
+            .tags(tags)
             .build();
     }
 
