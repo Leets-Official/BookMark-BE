@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     private final BookmarkGetService bookmarkGetService;
+    private final BookmarkMapper bookmarkMapper;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
@@ -39,7 +40,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         return bookmarks.stream()
             .map(bookmark -> {
                 List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-                return BookmarkMapper.toResponse(bookmark, mappings);
+                return bookmarkMapper.toResponse(bookmark, mappings);
             })
             .toList();
     }
@@ -50,7 +51,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         return bookmarks.stream()
                 .map(bookmark -> {
                     List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-                    return BookmarkMapper.toResponse(bookmark, mappings);
+                    return bookmarkMapper.toResponse(bookmark, mappings);
                 })
                 .toList();
     }

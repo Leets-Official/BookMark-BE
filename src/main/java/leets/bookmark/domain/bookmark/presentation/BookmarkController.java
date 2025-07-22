@@ -23,6 +23,7 @@ import java.util.List;
 public class BookmarkController {
 
     private final BookmarkUseCase bookmarkUseCase;
+    private final BookmarkMapper bookmarkMapper;
 
     @GetMapping("/search")
     @Operation(summary = "북마크 메모 검색 API", description = "키워드를 포함하는 메모를 가진 북마크 목록을 조회합니다.")
@@ -42,7 +43,7 @@ public class BookmarkController {
             List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarksByCategory(userId, categoryId);
             return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
         }
-        BookmarkFilterRequest request = BookmarkMapper.toFilterRequest(
+        BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(
             categoryId,
             List.of(tagId)
         );

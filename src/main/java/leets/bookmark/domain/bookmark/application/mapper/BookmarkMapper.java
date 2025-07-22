@@ -8,30 +8,35 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
 
+import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class BookmarkMapper {
 
-    public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
+    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
         return buildBookmarkResponse(bookmark, tagInfo);
     }
 
-    public static BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
+    public BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
         BookmarkTagInfoResponse categoryTagResponse = toBookmarkTagInfoResponseFromTags(tags);
 
         return buildBookmarkResponse(bookmark, categoryTagResponse);
     }
 
-    public static BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
+    public BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
         return BookmarkFilterRequest.builder()
             .categoryId(categoryId)
             .tagId(tagId)
             .build();
     }
 
-    private static BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
+    private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
         if (bookmarkTagMappings.isEmpty()) {
             return BookmarkTagInfoResponse.builder()
                 .categoryId(null)
@@ -58,7 +63,7 @@ public class BookmarkMapper {
         return buildBookmarkTagInfoResponse(category, tags);
     }
 
-    private static BookmarkTagInfoResponse toBookmarkTagInfoResponseFromTags(List<Tag> tags) {
+    private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromTags(List<Tag> tags) {
         List<BookmarkTagInfoResponse.TagInfo> tagInfos = tags.stream()
             .map(tag -> BookmarkTagInfoResponse.TagInfo.builder()
                 .tagId(tag.getId())
@@ -71,7 +76,7 @@ public class BookmarkMapper {
         return buildBookmarkTagInfoResponse(category, tagInfos);
     }
 
-    private static BookmarkTagInfoResponse buildBookmarkTagInfoResponse(Category category, List<BookmarkTagInfoResponse.TagInfo> tags) {
+    private BookmarkTagInfoResponse buildBookmarkTagInfoResponse(Category category, List<BookmarkTagInfoResponse.TagInfo> tags) {
         return BookmarkTagInfoResponse.builder()
             .categoryId(category != null ? category.getId() : null)
             .categoryName(category != null ? category.getCategoryName() : null)
@@ -79,7 +84,7 @@ public class BookmarkMapper {
             .build();
     }
 
-    private static BookmarkResponse buildBookmarkResponse(Bookmark bookmark, BookmarkTagInfoResponse tagInfo) {
+    private BookmarkResponse buildBookmarkResponse(Bookmark bookmark, BookmarkTagInfoResponse tagInfo) {
         return BookmarkResponse.builder()
             .id(bookmark.getId())
             .url(bookmark.getUrl())
