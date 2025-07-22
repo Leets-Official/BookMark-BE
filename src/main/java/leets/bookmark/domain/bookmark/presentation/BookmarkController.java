@@ -7,6 +7,7 @@ import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -93,5 +97,16 @@ public class BookmarkController {
     ) {
         BookmarkResponse response = bookmarkUseCase.getById(userId, bookmarkId);
         return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), response);
+    }
+
+    @PostMapping(consumes = {"multipart/form-data"})
+    @Operation(summary = "북마크 저장 API", description = "파일과 함께 북마크를 저장할 수 있는 API입니다.")
+    public CommonResponse<Void> saveBookmark(
+            @CurrentUser Long userId,
+            @RequestPart("request") @Validated BookmarkSaveRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        bookmarkUseCase.save(userId, request, file);
+        return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 }

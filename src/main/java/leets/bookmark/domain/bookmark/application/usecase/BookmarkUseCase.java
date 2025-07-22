@@ -9,6 +9,8 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequ
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.global.common.response.CommonResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @Service
@@ -27,5 +29,5 @@ public interface BookmarkUseCase {
 
     void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request);
 
-    void save(Long userId, BookmarkSaveRequest request);
+    void save(Long userId, BookmarkSaveRequest request, MultipartFile file);
 }

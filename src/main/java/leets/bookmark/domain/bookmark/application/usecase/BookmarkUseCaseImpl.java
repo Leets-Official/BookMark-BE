@@ -14,6 +14,7 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkSaveService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkUpdateService;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -88,7 +89,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public void save(Long userId, BookmarkSaveRequest request) {
+    public void save(Long userId, BookmarkSaveRequest request, MultipartFile file) {
         Bookmark bookmark = bookmarkMapper.toEntity(userId, request);
         bookmarkSaveService.save(bookmark);
     }
