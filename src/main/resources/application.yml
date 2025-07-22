@@ -36,3 +36,7 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
     display-request-duration: true
+
+server:
+  forward-headers-strategy: native
+  cors: ${CORS_ALLOWED}
