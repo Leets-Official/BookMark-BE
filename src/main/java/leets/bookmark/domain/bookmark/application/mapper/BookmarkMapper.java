@@ -47,11 +47,7 @@ public class BookmarkMapper {
             .map(mapping -> mapping.getTag().getCategory())
             .orElse(null);
 
-        return BookmarkTagInfoResponse.builder()
-            .categoryId(category != null ? category.getId() : null)
-            .categoryName(category != null ? category.getCategoryName() : null)
-            .tags(tags)
-            .build();
+        return buildBookmarkTagInfoResponse(category, tags);
     }
 
     private static BookmarkTagInfoResponse toBookmarkTagInfoResponseFromTags(List<Tag> tags) {
