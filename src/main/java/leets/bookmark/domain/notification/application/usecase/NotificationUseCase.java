@@ -1,5 +1,7 @@
 package leets.bookmark.domain.notification.application.usecase;
 
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
 import leets.bookmark.domain.notification.application.dto.response.NotificationResponse;
 import leets.bookmark.domain.notification.application.exception.NotificationOwnerMismatchException;
@@ -25,6 +27,8 @@ public class NotificationUseCase {
 
     private final UserGetService userGetService;
 
+    private final BookmarkGetService bookmarkGetService;
+
     public NotificationResponse getNotification(Long bookmarkId) {
         return notificationGetService.findByBookmarkId(bookmarkId)
                 .map(notificationMapper::toNotificationResponse)
@@ -32,8 +36,8 @@ public class NotificationUseCase {
     }
 
     public void saveNotification(User user, long bookmarkId, String fileUrl, NotificationSaveRequest request){
-        Notification notification = notificationMapper.toNotification(request, user, bookmarkId, fileUrl);
-
+        Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
+        Notification notification = notificationMapper.toNotification(request, user, bookmark, fileUrl);
         notificationSaveService.save(notification);
     }
 
