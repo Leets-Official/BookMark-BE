@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record BookmarkSaveRequest(
     @NotBlank String title,
-    @NotBlank String url,
+    @NotBlank String fileUrl,
     String memo
-) {
-}
+) {}

@@ -3,6 +3,7 @@ package leets.bookmark.domain.bookmark.domain.entity;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.notification.domain.entity.Notification;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
@@ -45,5 +46,8 @@ public class Bookmark extends BaseTimeEntity {
         this.title = title;
         this.memo = memo;
     }
+
+    @OneToOne(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Notification notification;
 
 }

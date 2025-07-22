@@ -5,7 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 public record BookmarkUpdateRequest(
         @NotBlank String title,
         @NotBlank String memo,
-        String url,
-        String thumbnailUrl
-) {
-}
+        String fileUrl
+) {}

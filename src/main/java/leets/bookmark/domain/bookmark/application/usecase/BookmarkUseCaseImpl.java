@@ -2,6 +2,10 @@ package leets.bookmark.domain.bookmark.application.usecase;
 
 import java.util.List;
 
+import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
+import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
+import java.time.LocalDateTime;
+
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
@@ -27,6 +31,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final BookmarkDeleteService bookmarkDeleteService;
     private final BookmarkSaveService bookmarkSaveService;
     private final BookmarkUpdateService bookmarkUpdateService;
+    private final NotificationUseCase notificationUseCase;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
@@ -75,6 +80,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
 
         bookmarkDeleteService.delete(bookmark);
+        notificationUseCase.deleteNotification(userId, bookmark.getNotification().getId());
     }
 
     @Override
@@ -86,12 +92,16 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
 
         bookmarkUpdateService.update(bookmark, request);
+        NotificationSaveRequest notificationRequest = new NotificationSaveRequest(LocalDateTime.now());
+        notificationUseCase.saveNotification(bookmark.getUser(), bookmark.getId(), request.fileUrl(), notificationRequest);
     }
 
     @Override
     public void save(Long userId, BookmarkSaveRequest request, MultipartFile file) {
         Bookmark bookmark = bookmarkMapper.toEntity(userId, request);
         bookmarkSaveService.save(bookmark);
+        NotificationSaveRequest notificationRequest = new NotificationSaveRequest(LocalDateTime.now());
+        notificationUseCase.saveNotification(bookmark.getUser(), bookmark.getId(), request.fileUrl(), notificationRequest);
     }
 
     @Override

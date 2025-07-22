@@ -103,7 +103,7 @@ public class BookmarkMapper {
         return Bookmark.builder()
                 .user(User.builder().id(userId).build())
                 .title(request.title())
-                .url(request.url())
+                .url(request.fileUrl())
                 .memo(request.memo())
                 .build();
     }
