@@ -1,9 +1,5 @@
 package leets.bookmark.domain.category.domain.entity;
 
-import leets.bookmark.domain.tag.domain.entity.Tag;
-import java.util.ArrayList;
-import java.util.List;
-
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
@@ -29,12 +25,6 @@ public class Category extends BaseTimeEntity {
 
     @Column(length = 100, nullable = false)
     private String categoryName;
-
-    @Builder
-    public Category(User user, String categoryName) {
-        this.user = user;
-        this.categoryName = categoryName;
-    }
 
     public void updateCategoryName(String newCategoryName) {
         this.categoryName = newCategoryName;
