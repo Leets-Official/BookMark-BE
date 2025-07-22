@@ -22,7 +22,11 @@ public class BookmarkGetService {
     }
 
     public List<BookmarkTagMapping> getMappingsByBookmark(Bookmark bookmark) {
-        return bookmarkTagMappingRepository.findAllByBookmark(bookmark);
+        return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
+    }
+
+    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, Long categoryId) {
+        return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId);
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, Long categoryId, List<Long> tagIds) {
@@ -30,7 +34,13 @@ public class BookmarkGetService {
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        return bookmarkRepository.findAllWithFilter(userId, request.categoryId(), request.tagId());
+        Long categoryId = request.categoryId();
+        List<Long> tagIds = request.tagId();
+
+        if (tagIds == null || tagIds.isEmpty()) {
+            return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId);
+        }
+        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds);
     }
 
     public List<Bookmark> getAllBookmarks(Long userId) {

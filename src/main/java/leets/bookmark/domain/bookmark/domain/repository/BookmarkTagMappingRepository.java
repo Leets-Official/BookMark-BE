@@ -12,4 +12,5 @@ public interface BookmarkTagMappingRepository extends JpaRepository<BookmarkTagM
     List<BookmarkTagMapping> findAllByBookmark(Bookmark bookmark);
     List<BookmarkTagMapping> findAllByTag(Tag tag);
     List<BookmarkTagMapping> findAllByBookmark_Id(Long bookmarkId);
+    List<BookmarkTagMapping> findAllByBookmarkId(Long bookmarkId);
 }

@@ -32,6 +32,14 @@ public class BookmarkMapper {
     }
 
     private static BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
+        if (bookmarkTagMappings.isEmpty()) {
+            return BookmarkTagInfoResponse.builder()
+                .categoryId(null)
+                .categoryName(null)
+                .tags(List.of())
+                .build();
+        }
+
         List<BookmarkTagInfoResponse.TagInfo> tags = bookmarkTagMappings.stream()
             .map(mapping -> {
                 Tag tag = mapping.getTag();

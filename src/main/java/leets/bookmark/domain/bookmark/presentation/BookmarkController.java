@@ -38,7 +38,14 @@ public class BookmarkController {
             @RequestParam Long categoryId,
             @RequestParam(required = false) Long tagId
     ) {
-        BookmarkFilterRequest request = BookmarkMapper.toFilterRequest(categoryId, List.of(tagId));
+        if (tagId == null) {
+            List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarksByCategory(userId, categoryId);
+            return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
+        }
+        BookmarkFilterRequest request = BookmarkMapper.toFilterRequest(
+            categoryId,
+            List.of(tagId)
+        );
         List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }

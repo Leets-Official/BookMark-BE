@@ -44,4 +44,15 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             .toList();
     }
 
+    @Override
+    public List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId) {
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategoryIncludingUntagged(userId, categoryId);
+        return bookmarks.stream()
+                .map(bookmark -> {
+                    List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
+                    return BookmarkMapper.toResponse(bookmark, mappings);
+                })
+                .toList();
+    }
+
 }
