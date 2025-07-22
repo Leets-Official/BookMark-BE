@@ -84,4 +84,14 @@ public class BookmarkController {
         bookmarkUseCase.update(userId, bookmarkId, request);
         return CommonResponse.createSuccess(BOOKMARK_UPDATE_SUCCESS.getMessage());
     }
+
+    @GetMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 단건 조회 API", description = "특정 북마크를 조회합니다.")
+    public CommonResponse<BookmarkResponse> getBookmarkById(
+            @CurrentUser Long userId,
+            @PathVariable Long bookmarkId
+    ) {
+        BookmarkResponse response = bookmarkUseCase.getById(userId, bookmarkId);
+        return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), response);
+    }
 }

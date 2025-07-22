@@ -93,4 +93,16 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         bookmarkSaveService.save(bookmark);
     }
 
+    @Override
+    public BookmarkResponse getById(Long userId, Long bookmarkId) {
+        Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
+
+        if (!bookmark.getUser().getId().equals(userId)) {
+            throw new NoBookmarkPermissionException();
+        }
+
+        List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
+        return bookmarkMapper.toResponse(bookmark, mappings);
+    }
+
 }

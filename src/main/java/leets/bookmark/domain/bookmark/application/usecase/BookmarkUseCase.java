@@ -21,6 +21,8 @@ public interface BookmarkUseCase {
 
     List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId);
 
+    BookmarkResponse getById(Long userId, Long bookmarkId);
+
     void delete(Long userId, Long bookmarkId);
 
     void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request);
