@@ -18,6 +18,7 @@ jwt:
     expiration: ${ACCESS_EXP}
   refresh:
     expiration: ${REFRESH_EXP}
+    reissue-threshold: ${REFRESH_REISSUE_THRESHOLD}
 
 cloud:
   aws:
