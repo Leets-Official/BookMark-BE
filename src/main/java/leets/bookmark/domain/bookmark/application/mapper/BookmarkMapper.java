@@ -15,31 +15,13 @@ public class BookmarkMapper {
     public static BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
-        return BookmarkResponse.builder()
-            .id(bookmark.getId())
-            .url(bookmark.getUrl())
-            .title(bookmark.getTitle())
-            .memo(bookmark.getMemo())
-            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
-            .categoryTagInfos(List.of(tagInfo))
-            .createdAt(bookmark.getCreatedAt())
-            .updatedAt(bookmark.getUpdatedAt())
-            .build();
+        return buildBookmarkResponse(bookmark, tagInfo);
     }
 
     public static BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
         BookmarkTagInfoResponse categoryTagResponse = toBookmarkTagInfoResponseFromTags(tags);
 
-        return BookmarkResponse.builder()
-            .id(bookmark.getId())
-            .url(bookmark.getUrl())
-            .title(bookmark.getTitle())
-            .memo(bookmark.getMemo())
-            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
-            .categoryTagInfos(List.of(categoryTagResponse))
-            .createdAt(bookmark.getCreatedAt())
-            .updatedAt(bookmark.getUpdatedAt())
-            .build();
+        return buildBookmarkResponse(bookmark, categoryTagResponse);
     }
 
     public static BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
@@ -86,6 +68,19 @@ public class BookmarkMapper {
             .categoryId(category != null ? category.getId() : null)
             .categoryName(category != null ? category.getCategoryName() : null)
             .tags(tagInfos)
+            .build();
+    }
+
+    private static BookmarkResponse buildBookmarkResponse(Bookmark bookmark, BookmarkTagInfoResponse tagInfo) {
+        return BookmarkResponse.builder()
+            .id(bookmark.getId())
+            .url(bookmark.getUrl())
+            .title(bookmark.getTitle())
+            .memo(bookmark.getMemo())
+            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
+            .categoryTagInfos(List.of(tagInfo))
+            .createdAt(bookmark.getCreatedAt())
+            .updatedAt(bookmark.getUpdatedAt())
             .build();
     }
 }
