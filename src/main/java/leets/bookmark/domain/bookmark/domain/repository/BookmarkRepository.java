@@ -15,8 +15,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     @Query("""
         SELECT DISTINCT b FROM Bookmark b
-        JOIN b.bookmarkTagMappings m
-        JOIN m.tag t
+        JOIN BookmarkTagMapping m ON m.bookmark = b
+        JOIN Tag t ON t = m.tag
         WHERE b.user.id = :userId
         AND (:categoryId IS NULL OR t.category.id = :categoryId)
         AND (:tagIds IS NULL OR t.id IN (:tagIds))
@@ -26,6 +26,4 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         @Param("categoryId") Long categoryId,
         @Param("tagIds") List<Long> tagIds
     );
-
-    List<Bookmark> findAllByUserIdAndBookmarkTagMappings_Tag_Category_Id(Long userId, Long categoryId);
 }
