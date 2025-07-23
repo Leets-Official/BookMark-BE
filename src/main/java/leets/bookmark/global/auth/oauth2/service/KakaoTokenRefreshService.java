@@ -1,6 +1,6 @@
 package leets.bookmark.global.auth.oauth2.service;
 
-import leets.bookmark.domain.notification.application.dto.response.KakaoTokenResponse;
+import leets.bookmark.global.auth.oauth2.application.dto.response.KakaoTokenResponse;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.oauth2.application.exception.KakaoTokenRefreshException;
 import leets.bookmark.global.auth.jwt.service.AesEncryptor;
