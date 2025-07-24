@@ -1,9 +1,8 @@
 package leets.bookmark.global.auth.oauth2.application.usecase;
 
-import leets.bookmark.domain.user.domain.entity.User;
-import leets.bookmark.global.auth.oauth2.userinfo.KakaoOAuth2UserInfo;
+import leets.bookmark.domain.user.application.dto.response.UserKakaoLoginResponse;
 
 public interface UserOAuth2UseCase {
 
-    User oAuth2Login(KakaoOAuth2UserInfo userInfo);
+    UserKakaoLoginResponse kakaoLogin(String code);
 }
