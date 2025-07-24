@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Long> {
     List<SearchHistory> findByUser(User user);
 
-    boolean existsByUserAndKeyword(User user, String keyword);
-
     Optional<SearchHistory> findByUserAndKeyword(User user, String keyword);
+
+    Optional<SearchHistory> findByIdAndUserId(Long id, Long userId);
 }

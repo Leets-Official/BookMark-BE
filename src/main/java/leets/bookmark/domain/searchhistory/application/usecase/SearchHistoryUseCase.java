@@ -35,11 +35,8 @@ public class SearchHistoryUseCase {
     }
 
     public void deleteSearchHistory(Long userId, Long searchHistoryId) {
-        User user = userGetService.findById(userId);
-        SearchHistory history = searchHistoryGetService.findById(searchHistoryId);
-        if (!history.getUser().equals(user)) {
-            throw new SearchHistoryNotFoundException();
-        }
+        SearchHistory history = searchHistoryGetService.findByIdAndUser(searchHistoryId, userId)
+            .orElseThrow(SearchHistoryNotFoundException::new);
         searchHistoryDeleteService.delete(history);
     }
 
