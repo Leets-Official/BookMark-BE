@@ -34,6 +34,8 @@ public class Bookmark extends BaseTimeEntity {
 
     private String platform;
 
+    @Column(name = "is_saved", nullable = false)
+    private boolean isSaved = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
@@ -50,6 +52,14 @@ public class Bookmark extends BaseTimeEntity {
             this.file.updateFile(this.file.getFileName(), fileUrl, fileType);
         }
         this.platform = platform;
+    }
+
+    public void markAsSaved() {
+        this.isSaved = true;
+    }
+
+    public void markAsUnsaved() {
+        this.isSaved = false;
     }
 
 }
