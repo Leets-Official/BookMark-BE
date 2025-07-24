@@ -34,8 +34,6 @@ public class Bookmark extends BaseTimeEntity {
 
     private String platform;
 
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
