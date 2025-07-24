@@ -38,7 +38,7 @@ public class NotificationUseCase {
 public void saveNotification(User user, Bookmark bookmark, String fileUrl, NotificationSaveRequest request){
     Notification notification = notificationMapper.toNotification(request, user, bookmark, fileUrl);
     notificationSaveService.save(notification);
-}
+    }
 
     public void deleteNotification(Long userId, long notificationId) {
         User user = userGetService.findById(userId);
