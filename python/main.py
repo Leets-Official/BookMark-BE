@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 app = FastAPI()
 
-@app.post("/api/v1/general/preview")
+@app.post("/api/v1/preview")
 def general_preview(payload: dict = Body(...)):
     url = payload.get("url")
 
