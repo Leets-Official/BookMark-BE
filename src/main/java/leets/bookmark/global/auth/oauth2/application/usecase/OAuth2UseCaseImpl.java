@@ -11,11 +11,9 @@ import leets.bookmark.global.auth.oauth2.application.dto.response.KakaoTokenResp
 import leets.bookmark.global.auth.oauth2.application.dto.response.KakaoUserInfoResponse;
 import leets.bookmark.global.auth.oauth2.service.KakaoGetService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2UseCaseImpl implements OAuth2UseCase {
