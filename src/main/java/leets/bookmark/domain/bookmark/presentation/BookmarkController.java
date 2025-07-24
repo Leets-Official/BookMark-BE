@@ -3,6 +3,7 @@ package leets.bookmark.domain.bookmark.presentation;
 import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessage.*;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
+import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -26,6 +27,7 @@ public class BookmarkController {
 
     private final BookmarkUseCase bookmarkUseCase;
     private final BookmarkMapper bookmarkMapper;
+    private final NotificationUseCase notificationUseCase;
 
     @GetMapping("/search")
     @Operation(summary = "북마크 메모 검색 API", description = "키워드를 포함하는 메모를 가진 북마크 목록을 조회합니다.")
@@ -97,6 +99,15 @@ public class BookmarkController {
     ) {
         BookmarkSaveRequest modifiedRequest = bookmarkMapper.toSaveRequestWithFile(request, file);
         bookmarkUseCase.save(userId, modifiedRequest);
+        String notificationMessage = modifiedRequest.notification() != null
+            ? String.valueOf(modifiedRequest.notification())
+            : BOOKMARK_SAVE_SUCCESS.getMessage();
+        notificationUseCase.saveNotification(
+            modifiedRequest.user(),
+            null,
+            null,
+            null
+        );
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 }

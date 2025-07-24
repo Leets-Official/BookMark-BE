@@ -3,6 +3,7 @@ package leets.bookmark.domain.bookmark.application.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
+import leets.bookmark.domain.user.domain.entity.User;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,5 +18,6 @@ public record BookmarkSaveRequest(
     @NotNull NotificationSaveRequest notification,
     @NotNull String platform,
     Long categoryId,
-    List<Long> tagIds
+    List<Long> tagIds,
+    User user
 ) {}
