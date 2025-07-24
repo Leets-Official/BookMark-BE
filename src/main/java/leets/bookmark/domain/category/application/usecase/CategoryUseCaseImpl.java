@@ -4,6 +4,7 @@ import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequ
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
+import leets.bookmark.domain.category.application.exception.CategoryLimitExceedException;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
 import leets.bookmark.domain.category.application.mapper.CategoryMapper;
@@ -41,6 +42,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     public void save(Long userId, CategoryCreateRequest request) {
         User user = userGetService.findById(userId);
 
+        checkExceededCategoryLimit(user);
         checkDuplicateCategoryName(user, request.categoryName());
 
         Category category = categoryMapper.toCategory(user, request);
@@ -102,6 +104,13 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private void checkDuplicateCategoryName(User user, String categoryName) {
         if (categoryGetService.existsByUserIdAndCategoryName(user.getId(), categoryName)) {
             throw new DuplicatedCategoryNameException();
+        }
+    }
+
+    private void checkExceededCategoryLimit(User user) {
+        List<Category> categories = categoryGetService.getAllByUser(user);
+        if (categories.size() >= 15) {
+            throw new CategoryLimitExceedException();
         }
     }
 }
