@@ -26,4 +26,8 @@ public class BookmarkTagMapping extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
+
+    public void setBookmark(Bookmark bookmark) {
+        this.bookmark = bookmark;
+    }
 }

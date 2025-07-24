@@ -12,6 +12,7 @@ import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.*;
 import java.util.List;
 import java.util.ArrayList;
+import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 
 @Entity
 @Table(name = "bookmarks")
@@ -60,6 +61,14 @@ public class Bookmark extends BaseTimeEntity {
 
     public void markAsUnsaved() {
         this.isSaved = false;
+    }
+
+    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
+
+    public void addTagMapping(BookmarkTagMapping mapping) {
+        bookmarkTagMappings.add(mapping);
+        mapping.setBookmark(this);
     }
 
 }
