@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Long> {
-    List<SearchHistory> findByUser(User user);
+    List<SearchHistory> findByUserOrderByCreatedAtDesc(User user);
 
     Optional<SearchHistory> findByUserAndKeyword(User user, String keyword);
 

@@ -32,6 +32,6 @@ public class SearchHistoryController {
     @DeleteMapping("/{searchHistoryId}")
     public CommonResponse<Void> deleteSearchHistory(@CurrentUser Long userId, @PathVariable Long searchHistoryId) {
         searchHistoryUseCase.deleteSearchHistory(userId, searchHistoryId);
-        return CommonResponse.createSuccess(SearchHistoryResponseMessage.DELETE_SEARCH_HISTORY_SUCCESS.getMessage(), null);
+        return CommonResponse.createSuccess(SearchHistoryResponseMessage.DELETE_SEARCH_HISTORY_SUCCESS.getMessage());
     }
 }

@@ -16,7 +16,7 @@ public class SearchHistoryGetService {
     private final SearchHistoryRepository searchHistoryRepository;
 
     public List<SearchHistory> getSearchHistoriesByUser(User user) {
-        return searchHistoryRepository.findByUser(user);
+        return searchHistoryRepository.findByUserOrderByCreatedAtDesc(user);
     }
 
     public Optional<SearchHistory> findByIdAndUser(Long id, Long userId) {
