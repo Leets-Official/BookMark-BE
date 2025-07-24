@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserOAuth2UseCaseImpl implements UserOAuth2UseCase {
+public class OAuth2UseCaseImpl implements OAuth2UseCase {
 
     private final UserSaveService userSaveService;
     private final KakaoGetService kakaoGetService;

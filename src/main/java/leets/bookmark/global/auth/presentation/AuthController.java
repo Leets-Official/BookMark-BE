@@ -5,7 +5,7 @@ import leets.bookmark.domain.user.application.dto.response.UserKakaoLoginRespons
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenDto;
 import leets.bookmark.global.auth.jwt.application.dto.JwtTokenReissueRequest;
 import leets.bookmark.global.auth.jwt.service.JwtService;
-import leets.bookmark.global.auth.oauth2.application.usecase.UserOAuth2UseCase;
+import leets.bookmark.global.auth.oauth2.application.usecase.OAuth2UseCase;
 import leets.bookmark.global.common.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ import static leets.bookmark.global.auth.presentation.AuthResponseMessage.*;
 public class AuthController {
 
     private final JwtService jwtService;
-    private final UserOAuth2UseCase userOAuth2UseCase;
+    private final OAuth2UseCase oAuth2UseCase;
 
     @PostMapping("/reissue")
     public CommonResponse<JwtTokenDto> reissue(@Validated @RequestBody JwtTokenReissueRequest request) {
@@ -30,7 +30,7 @@ public class AuthController {
 
     @GetMapping("/login/kakao")
     public CommonResponse<?> kakaoLogin(@RequestParam("code") String code) {
-        UserKakaoLoginResponse response = userOAuth2UseCase.kakaoLogin(code);
+        UserKakaoLoginResponse response = oAuth2UseCase.kakaoLogin(code);
         return CommonResponse.createSuccess(KAKAO_LOGIN_SUCCESS.getMessage(), response);
     }
 }
