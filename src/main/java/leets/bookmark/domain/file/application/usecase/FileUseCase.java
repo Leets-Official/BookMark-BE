@@ -39,8 +39,7 @@ public class FileUseCase {
 
     @Transactional
     public void saveFile(User user, long bookmarkId, @Valid FileSaveRequest fileSaveRequest) {
-        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest,
-                getValidatedFileType(fileSaveRequest.fileName()));
+        File file = fileMapper.toFile(fileSaveRequest);
         fileSaveService.save(file);
     }
 

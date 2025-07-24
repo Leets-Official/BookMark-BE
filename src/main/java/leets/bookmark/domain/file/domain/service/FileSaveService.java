@@ -1,6 +1,7 @@
 package leets.bookmark.domain.file.domain.service;
 
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 
@@ -25,6 +26,7 @@ public class FileSaveService {
 
     private final FileRepository fileRepository;
     private final S3Client s3Client;
+    private final FileMapper fileMapper;
 
     @Value("${S3_BUCKET}")
     private String bucketName;
@@ -38,13 +40,7 @@ public class FileSaveService {
             throw new IllegalArgumentException("userId and bookmarkId must not be null");
         }
 
-        File file = File.builder()
-                .user(User.builder().id(request.userId()).build())
-                .bookmark(Bookmark.builder().id(request.bookmarkId()).build())
-                .fileName(request.fileName())
-                .fileUrl(request.fileUrl())
-                .fileType(request.fileType())
-                .build();
+        File file = fileMapper.toFile(request);
 
         fileRepository.save(file);
         return request.fileUrl();

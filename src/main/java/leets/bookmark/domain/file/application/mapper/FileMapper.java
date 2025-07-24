@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileMapper {
 
-    public File toFile(User user, long bookmarkId, FileSaveRequest fileSaveRequest, FileType fileType){
+    public File toFile(FileSaveRequest request) {
         return File.builder()
-                .user(user)
-                .bookmark(Bookmark.builder().id(bookmarkId).build())
-                .fileName(fileSaveRequest.fileName())
-                .fileUrl(fileSaveRequest.fileUrl())
-                .fileType(fileType)
+                .user(User.builder().id(request.userId()).build())
+                .bookmark(Bookmark.builder().id(request.bookmarkId()).build())
+                .fileName(request.fileName())
+                .fileUrl(request.fileUrl())
+                .fileType(request.fileType())
                 .build();
     }
 
