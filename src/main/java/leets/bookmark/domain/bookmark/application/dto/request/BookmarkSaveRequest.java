@@ -6,6 +6,8 @@ import leets.bookmark.domain.notification.application.dto.request.NotificationSa
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Builder
 public record BookmarkSaveRequest(
     @NotBlank String title,
@@ -13,5 +15,7 @@ public record BookmarkSaveRequest(
     String memo,
     MultipartFile file,
     @NotNull NotificationSaveRequest notification,
-    @NotNull String platform
+    @NotNull String platform,
+    Long categoryId,
+    List<Long> tagIds
 ) {}

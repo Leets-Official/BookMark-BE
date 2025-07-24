@@ -1,6 +1,9 @@
 package leets.bookmark.domain.bookmark.application.usecase;
 
 import java.util.List;
+
+import leets.bookmark.domain.bookmark.application.exception.BookmarkTagCountExceededException;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkTagMinimumRequiredException;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Pageable;
 
@@ -14,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import leets.bookmark.domain.file.domain.service.FileSaveService;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.exception.NoBookmarkPermissionException;
+import leets.bookmark.domain.bookmark.application.exception.InvalidBookmarkCategoryException;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkTagCountExceededException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
@@ -106,6 +111,16 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     public void save(Long userId, BookmarkSaveRequest request) {
         MultipartFile multipartFile = request.file();
         String fileUrl = fileSaveService.upload(multipartFile);
+
+        if (request.categoryId() == null) {
+            throw new InvalidBookmarkCategoryException();
+        }
+        if (request.tagIds() == null || request.tagIds().isEmpty()) {
+            throw new BookmarkTagMinimumRequiredException();
+        }
+        if (request.tagIds().size() > 3) {
+            throw new BookmarkTagCountExceededException();
+        }
 
         Bookmark bookmark = bookmarkMapper.toBookmark(userId, request);
         bookmarkSaveService.save(bookmark);
