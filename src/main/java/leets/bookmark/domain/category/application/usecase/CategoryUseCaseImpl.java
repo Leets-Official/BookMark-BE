@@ -28,14 +28,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryUseCaseImpl implements CategoryUseCase {
 
-    private final CategorySaveService categorySaveService;
-    private final CategoryMapper categoryMapper;
+    public static final int CATEGORY_LIMIT = 15;
+
     private final UserGetService userGetService;
     private final CategoryGetService categoryGetService;
+    private final CategorySaveService categorySaveService;
     private final CategoryDeleteService categoryDeleteService;
     private final CategoryUpdateService categoryUpdateService;
-    private final TagDeleteService tagDeleteService;
     private final TagGetService tagGetService;
+    private final TagDeleteService tagDeleteService;
+
+    private final CategoryMapper categoryMapper;
 
     @Transactional
     @Override
@@ -109,7 +112,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
     private void checkExceededCategoryLimit(User user) {
         List<Category> categories = categoryGetService.getAllByUser(user);
-        if (categories.size() >= 15) {
+        if (categories.size() >= CATEGORY_LIMIT) {
             throw new CategoryLimitExceedException();
         }
     }

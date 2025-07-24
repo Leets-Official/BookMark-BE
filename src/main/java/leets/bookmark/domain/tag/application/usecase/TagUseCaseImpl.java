@@ -27,14 +27,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagUseCaseImpl implements TagUseCase {
 
-    private final CategoryGetService categoryGetService;
+    public static final int TAG_LIMIT = 10;
+
     private final UserGetService userGetService;
+    private final CategoryGetService categoryGetService;
     private final TagGetService tagGetService;
     private final TagSaveService tagSaveService;
+    private final TagUpdateService tagUpdateService;
+    private final TagDeleteService tagDeleteService;
 
     private final TagMapper tagMapper;
-    private final TagDeleteService tagDeleteService;
-    private final TagUpdateService tagUpdateService;
 
     @Transactional(readOnly = true)
     @Override
@@ -105,7 +107,7 @@ public class TagUseCaseImpl implements TagUseCase {
 
     private void checkExceededTagLimit(Category category) {
         List<Tag> tags = tagGetService.findAllByCategory(category);
-        if (tags.size() >= 10) {
+        if (tags.size() >= TAG_LIMIT) {
             throw new TagLimitExceedException();
         }
     }
