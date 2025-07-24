@@ -99,14 +99,13 @@ public class BookmarkController {
         return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), response);
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
-    @Operation(summary = "북마크 저장 API", description = "파일과 함께 북마크를 저장할 수 있는 API입니다.")
+    @PostMapping
+    @Operation(summary = "북마크 저장 API", description = "파일 및 알림 정보와 함께 북마크를 저장할 수 있는 API입니다.")
     public CommonResponse<Void> saveBookmark(
             @CurrentUser Long userId,
-            @RequestPart("request") @Validated BookmarkSaveRequest request,
-            @RequestPart(value = "file", required = false) MultipartFile file
+            @RequestBody @Validated BookmarkSaveRequest request
     ) {
-        bookmarkUseCase.save(userId, request, file);
+        bookmarkUseCase.save(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 }

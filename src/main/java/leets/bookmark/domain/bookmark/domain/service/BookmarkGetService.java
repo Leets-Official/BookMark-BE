@@ -50,6 +50,6 @@ public class BookmarkGetService {
 
     public Bookmark getBookmarkById(Long bookmarkId) {
         return bookmarkRepository.findById(bookmarkId)
-                .orElseThrow(() -> new BookmarkNotFoundException());
+                .orElseThrow(BookmarkNotFoundException::new);
     }
 }

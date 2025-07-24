@@ -29,5 +29,5 @@ public interface BookmarkUseCase {
 
     void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request);
 
-    void save(Long userId, BookmarkSaveRequest request, MultipartFile file);
+    void save(Long userId, BookmarkSaveRequest request);
 }

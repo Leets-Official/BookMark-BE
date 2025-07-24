@@ -47,7 +47,4 @@ public class Bookmark extends BaseTimeEntity {
         this.memo = memo;
     }
 
-    @OneToOne(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Notification notification;
-
 }

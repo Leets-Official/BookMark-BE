@@ -26,7 +26,7 @@ public class Notification extends BaseTimeEntity {
     User user;
 
     @OneToOne
-    @JoinColumn(name = "bookmark_id")
+    @JoinColumn(name = "bookmark_id", nullable = false)
     private Bookmark bookmark;
 
     private String title;

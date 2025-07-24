@@ -99,11 +99,11 @@ public class BookmarkMapper {
             .build();
     }
 
-    public Bookmark toEntity(Long userId, BookmarkSaveRequest request) {
+    public Bookmark toBookmark(Long userId, BookmarkSaveRequest request) {
         return Bookmark.builder()
                 .user(User.builder().id(userId).build())
                 .title(request.title())
-                .url(request.fileUrl())
+                .url(request.file().fileUrl())
                 .memo(request.memo())
                 .build();
     }

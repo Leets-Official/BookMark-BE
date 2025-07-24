@@ -15,4 +15,3 @@ public record BookmarkTagInfoResponse(
             String tagName
     ) {}
 }
-
