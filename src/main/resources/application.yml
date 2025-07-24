@@ -40,3 +40,7 @@ springdoc:
 server:
   forward-headers-strategy: native
   cors: ${CORS_ALLOWED}
+
+preview:
+  api:
+    url: http://localhost:8000/api/v1/preview
