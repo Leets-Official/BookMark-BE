@@ -19,7 +19,7 @@ public class UserSaveService {
                 .orElseGet(() -> userRepository.save(userMapper.toUser(userInfo)));
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public void save(User user) {
+        userRepository.save(user);
     }
 }
