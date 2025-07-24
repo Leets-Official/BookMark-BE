@@ -17,6 +17,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.io.IOException;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +25,9 @@ public class FileSaveService {
 
     private final FileRepository fileRepository;
     private final S3Client s3Client;
-    private final String bucketName = "your-bucket-name";
+
+    @Value("${S3_BUCKET}")
+    private String bucketName;
 
     public void save(File file){
         fileRepository.save(file);

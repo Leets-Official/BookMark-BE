@@ -9,7 +9,7 @@ public record BookmarkSaveRequest(
     @NotBlank String title,
     @NotBlank String url,
     String memo,
-    @NotNull MultipartFile file,
+    MultipartFile file,
     @NotNull NotificationSaveRequest notification,
     @NotNull String platform
 ) {}

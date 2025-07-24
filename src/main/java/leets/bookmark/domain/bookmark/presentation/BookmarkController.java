@@ -93,9 +93,17 @@ public class BookmarkController {
     public CommonResponse<Void> saveBookmark(
             @CurrentUser Long userId,
             @RequestPart("request") @Validated BookmarkSaveRequest request,
-            @RequestPart("file") MultipartFile file
+            @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        bookmarkUseCase.save(userId, request);
+        BookmarkSaveRequest modifiedRequest = new BookmarkSaveRequest(
+            request.title(),
+            request.url(),
+            request.memo(),
+            file,
+            request.notification(),
+            request.platform()
+        );
+        bookmarkUseCase.save(userId, modifiedRequest);
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 }
