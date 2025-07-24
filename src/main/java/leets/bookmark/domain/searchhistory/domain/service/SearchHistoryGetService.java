@@ -1,9 +1,9 @@
 package leets.bookmark.domain.searchhistory.domain.service;
 
-import java.util.Optional;
 import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.repository.SearchHistoryRepository;
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.searchhistory.application.exception.SearchHistoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,8 @@ public class SearchHistoryGetService {
         return searchHistoryRepository.findByUserOrderByCreatedAtDesc(user);
     }
 
-    public Optional<SearchHistory> findByIdAndUser(Long id, Long userId) {
-        return searchHistoryRepository.findByIdAndUserId(id, userId);
+    public SearchHistory findByIdAndUser(Long id, Long userId) {
+        return searchHistoryRepository.findByIdAndUserId(id, userId)
+            .orElseThrow(SearchHistoryNotFoundException::new);
     }
 }

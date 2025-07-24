@@ -7,7 +7,6 @@ import leets.bookmark.domain.searchhistory.domain.entity.SearchHistory;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryGetService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistoryDeleteService;
 import leets.bookmark.domain.searchhistory.domain.service.SearchHistorySaveService;
-import leets.bookmark.domain.searchhistory.application.exception.SearchHistoryNotFoundException;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 
@@ -35,8 +34,7 @@ public class SearchHistoryUseCase {
     }
 
     public void deleteSearchHistory(Long userId, Long searchHistoryId) {
-        SearchHistory history = searchHistoryGetService.findByIdAndUser(searchHistoryId, userId)
-            .orElseThrow(SearchHistoryNotFoundException::new);
+        SearchHistory history = searchHistoryGetService.findByIdAndUser(searchHistoryId, userId);
         searchHistoryDeleteService.delete(history);
     }
 
