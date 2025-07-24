@@ -12,6 +12,8 @@ public class BookmarkDeleteService {
 
     private final BookmarkRepository bookmarkRepository;
 
-    public void delete(final Bookmark bookmark) {bookmarkRepository.delete(bookmark);}
+    public void delete(final Bookmark bookmark) {
+        bookmarkRepository.delete(bookmark);
+    }
 
 }
