@@ -32,7 +32,7 @@ public class KakaoGetService {
     public static final String BEARER = "Bearer ";
     public static final String APPLICATION_X_WWW_FORM_URLENCODED_CHARSET_UTF_8 = "application/x-www-form-urlencoded;charset=utf-8";
 
-    public KakaoTokenResponse getAccessTokenFromKakao(String code) {
+    public KakaoTokenResponse getTokenFromKakao(String code) {
         return WebClient.create(tokenUri).post()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("grant_type", "authorization_code")
