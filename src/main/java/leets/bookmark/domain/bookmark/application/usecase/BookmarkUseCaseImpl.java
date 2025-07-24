@@ -8,6 +8,7 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveReques
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import org.springframework.web.multipart.MultipartFile;
 import leets.bookmark.domain.file.domain.service.FileSaveService;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.exception.NoBookmarkPermissionException;
@@ -66,8 +67,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId) {
-        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategoryIncludingUntagged(userId, categoryId);
+    public List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId, String platform) {
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategoryIncludingUntagged(userId, categoryId, platform);
         return mapToResponses(bookmarks);
     }
 
@@ -81,17 +82,30 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     public void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request) {
         Bookmark bookmark = getAuthorizedBookmark(userId, bookmarkId);
 
-        String fileUrl = fileSaveService.upload(request.file());
-        bookmark.updateBookmark(request.title(), request.memo());
+        FileSaveRequest fileRequest = request.file();
+        String fileUrl = fileRequest.fileUrl();
+        bookmark.updateBookmark(
+            request.title(),
+            request.memo(),
+            fileUrl,
+            fileRequest.fileType(),
+            request.platform()
+        );
 
-        notificationUseCase.saveNotification(bookmark.getUser(), bookmark, fileUrl, request.notification());
+        notificationUseCase.saveNotification(
+            bookmark.getUser(),
+            bookmark,
+            fileUrl,
+            request.notification()
+        );
     }
 
     @Override
     public void save(Long userId, BookmarkSaveRequest request) {
-        String fileUrl = fileSaveService.upload(request.file());
+        MultipartFile multipartFile = request.file();
+        String fileUrl = fileSaveService.upload(multipartFile);
 
-        Bookmark bookmark = bookmarkMapper.toBookmark(userId, request);
+        Bookmark bookmark = bookmarkMapper.toBookmark(userId, request, fileUrl);
         bookmarkSaveService.save(bookmark);
 
         notificationUseCase.saveNotification(bookmark.getUser(), bookmark, fileUrl, request.notification());

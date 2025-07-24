@@ -2,6 +2,7 @@ package leets.bookmark.domain.file.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
+import software.amazon.awssdk.annotations.NotNull;
 
 public record FileSaveRequest(
         Long userId,
@@ -10,6 +11,6 @@ public record FileSaveRequest(
         String fileName,
         @NotBlank
         String fileUrl,
-        @NotBlank
+        @NotNull
         FileType fileType
 ) {}

@@ -5,6 +5,7 @@ import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,7 @@ public class FileMapper {
     public File toFile(User user, long bookmarkId, FileSaveRequest fileSaveRequest, FileType fileType){
         return File.builder()
                 .user(user)
-                .bookmarkId(bookmarkId)
+                .bookmark(Bookmark.builder().id(bookmarkId).build())
                 .fileName(fileSaveRequest.fileName())
                 .fileUrl(fileSaveRequest.fileUrl())
                 .fileType(fileType)

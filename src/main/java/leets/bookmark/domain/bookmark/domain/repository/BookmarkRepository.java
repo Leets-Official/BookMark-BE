@@ -22,10 +22,12 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
             t.category.id = :categoryId
             OR (m.id IS NULL AND b.categoryId = :categoryId)
         )
+        AND (:platform IS NULL OR b.platform = :platform)
     """)
     List<Bookmark> findAllByUserIdAndCategoryId(
         @Param("userId") Long userId,
-        @Param("categoryId") Long categoryId
+        @Param("categoryId") Long categoryId,
+        @Param("platform") String platform
     );
 
     @Query("""
@@ -35,11 +37,13 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         WHERE b.user.id = :userId
         AND (:categoryId IS NULL OR t.category.id = :categoryId)
         AND (:tagIds IS NULL OR t.id IN (:tagIds))
+        AND (:platform IS NULL OR b.platform = :platform)
     """)
     List<Bookmark> findAllWithFilter(
         @Param("userId") Long userId,
         @Param("categoryId") Long categoryId,
-        @Param("tagIds") List<Long> tagIds
+        @Param("tagIds") List<Long> tagIds,
+        @Param("platform") String platform
     );
 
     void deleteAllByUserId(Long userId);

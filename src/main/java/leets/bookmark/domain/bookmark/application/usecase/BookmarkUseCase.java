@@ -21,7 +21,7 @@ public interface BookmarkUseCase {
 
     List<BookmarkResponse> getAllBookmarks(Long userId);
 
-    List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId);
+    List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId, String platform);
 
     BookmarkResponse getById(Long userId, Long bookmarkId);
 

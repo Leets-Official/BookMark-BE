@@ -99,12 +99,13 @@ public class BookmarkMapper {
             .build();
     }
 
-    public Bookmark toBookmark(Long userId, BookmarkSaveRequest request) {
+    public Bookmark toBookmark(Long userId, BookmarkSaveRequest request,String fieUrl) {
         return Bookmark.builder()
                 .user(User.builder().id(userId).build())
                 .title(request.title())
-                .url(request.file().fileUrl())
+                .url(request.url())
                 .memo(request.memo())
+                .platform(request.platform())
                 .build();
     }
 }

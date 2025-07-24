@@ -26,22 +26,23 @@ public class BookmarkGetService {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
     }
 
-    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, Long categoryId) {
-        return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId);
+    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, Long categoryId, String platform) {
+        return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId, platform);
     }
 
-    public List<Bookmark> getFilteredBookmarks(Long userId, Long categoryId, List<Long> tagIds) {
-        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds);
+    public List<Bookmark> getFilteredBookmarks(Long userId, Long categoryId, List<Long> tagIds, String platform) {
+        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds, platform);
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
         Long categoryId = request.categoryId();
         List<Long> tagIds = request.tagId();
+        String platform = request.platform();
 
         if (tagIds == null || tagIds.isEmpty()) {
-            return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId);
+            return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId, platform);
         }
-        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds);
+        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds, platform);
     }
 
     public List<Bookmark> getAllBookmarks(Long userId) {

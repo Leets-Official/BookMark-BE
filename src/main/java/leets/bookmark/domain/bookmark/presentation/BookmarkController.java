@@ -50,7 +50,11 @@ public class BookmarkController {
             @RequestParam(required = false) Long tagId
     ) {
         if (tagId == null) {
-            List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarksByCategory(userId, categoryId);
+            BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(
+                categoryId,
+                List.of()
+            );
+            List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarksByCategory(userId, categoryId, request.platform());
             return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
         }
         BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(
@@ -99,13 +103,22 @@ public class BookmarkController {
         return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), response);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "multipart/form-data")
     @Operation(summary = "북마크 저장 API", description = "파일 및 알림 정보와 함께 북마크를 저장할 수 있는 API입니다.")
     public CommonResponse<Void> saveBookmark(
             @CurrentUser Long userId,
-            @RequestBody @Validated BookmarkSaveRequest request
+            @RequestPart("request") @Validated BookmarkSaveRequest request,
+            @RequestPart("file") MultipartFile file
     ) {
-        bookmarkUseCase.save(userId, request);
+        BookmarkSaveRequest newRequest = new BookmarkSaveRequest(
+            request.title(),
+            request.url(),
+            request.memo(),
+            file,
+            request.notification(),
+            request.platform()
+        );
+        bookmarkUseCase.save(userId, newRequest);
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 }
