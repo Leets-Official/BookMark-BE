@@ -1,17 +1,26 @@
 package leets.bookmark.domain.bookmark.domain.repository;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
+
+import org.springframework.data.domain.Slice;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     List<Bookmark> findByMemoContainingAndUserId(String keyword, Long userId);
 
     List<Bookmark> findAllByUserId(Long userId);
+
+    Slice<Bookmark> findTopByUserIdAndPlatformOrderByIdDesc(Long userId, String platform, Pageable pageable);
+
+    Slice<Bookmark> findByUserIdAndPlatformAndIdLessThanOrderByIdDesc(Long userId, String platform, Long lastBookmarkId, Pageable pageable);
+
+    Slice<Bookmark> findByUserIdAndPlatformAndIsSavedTrue(Long userId, String platform, org.springframework.data.domain.Pageable pageable);
 
     @Query("""
         SELECT DISTINCT b FROM Bookmark b
@@ -47,4 +56,18 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     );
 
     void deleteAllByUserId(Long userId);
+
+    @Query("""
+        SELECT b FROM Bookmark b
+        WHERE b.user.id = :userId
+        AND (:platform IS NULL OR b.platform = :platform)
+        ORDER BY b.createdAt DESC
+    """)
+    List<Bookmark> findRecentBookmarksByPlatform(
+        @Param("userId") Long userId,
+        @Param("platform") String platform,
+        org.springframework.data.domain.Pageable pageable
+    );
+
+    Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, String platform, org.springframework.data.domain.Pageable pageable);
 }

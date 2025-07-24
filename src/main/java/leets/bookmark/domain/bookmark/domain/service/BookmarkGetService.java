@@ -7,9 +7,12 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.data.domain.Slice;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +55,22 @@ public class BookmarkGetService {
     public Bookmark getBookmarkById(Long bookmarkId) {
         return bookmarkRepository.findById(bookmarkId)
                 .orElseThrow(BookmarkNotFoundException::new);
+    }
+
+    public Slice<Bookmark> getRecentBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(userId, platform, pageable);
+    }
+
+    public Slice<Bookmark> getBookmarksByPlatformWithSlice(Long userId, String platform, Long lastBookmarkId, Pageable pageable) {
+        if (lastBookmarkId == null) {
+            return bookmarkRepository.findTopByUserIdAndPlatformOrderByIdDesc(userId, platform, pageable);
+        } else {
+            return bookmarkRepository.findByUserIdAndPlatformAndIdLessThanOrderByIdDesc(
+                userId, platform, lastBookmarkId, pageable);
+        }
+    }
+
+    public Slice<Bookmark> getSavedBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformAndIsSavedTrue(userId, platform, pageable);
     }
 }

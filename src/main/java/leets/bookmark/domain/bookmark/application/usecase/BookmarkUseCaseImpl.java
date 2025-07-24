@@ -1,6 +1,8 @@
 package leets.bookmark.domain.bookmark.application.usecase;
 
 import java.util.List;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Pageable;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
@@ -117,5 +119,23 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             throw new NoBookmarkPermissionException();
         }
         return bookmark;
+    }
+
+    @Override
+    public Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
+        return bookmarkGetService.getSavedBookmarksByPlatform(userId, platform, pageable)
+            .map(this::toResponseWithMappings);
+    }
+
+    @Override
+    public Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
+        return bookmarkGetService.getRecentBookmarksByPlatform(userId, platform, pageable)
+            .map(this::toResponseWithMappings);
+    }
+
+
+    private BookmarkResponse toResponseWithMappings(Bookmark bookmark) {
+        List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
+        return bookmarkMapper.toResponse(bookmark, mappings);
     }
 }

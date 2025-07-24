@@ -4,12 +4,14 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveReques
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.tag.domain.entity.Tag;
-
+import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.global.common.response.CommonResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -30,4 +32,8 @@ public interface BookmarkUseCase {
     void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request);
 
     void save(Long userId, BookmarkSaveRequest request);
+
+    Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, String platform, Pageable pageable);
+
+    Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, String platform, Pageable pageable);
 }

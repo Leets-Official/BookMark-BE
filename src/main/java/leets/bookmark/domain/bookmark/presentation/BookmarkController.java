@@ -24,6 +24,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -101,6 +103,30 @@ public class BookmarkController {
     ) {
         BookmarkResponse response = bookmarkUseCase.getById(userId, bookmarkId);
         return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), response);
+    }
+
+    @GetMapping("/saved")
+    @Operation(summary = "저장 북마크 리스트 조회 API", description = "모바일/PC 플랫폼 구분 후 최근순으로 n개씩 조회합니다.")
+    public CommonResponse<Slice<BookmarkResponse>> getSavedBookmarksByPlatform(
+            @CurrentUser Long userId,
+            @RequestParam String platform,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        Slice<BookmarkResponse> result = bookmarkUseCase.getSavedBookmarksByPlatform(userId, platform, PageRequest.of(page, size));
+        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
+    }
+
+    @GetMapping("/recent")
+    @Operation(summary = "저장 북마크 무한스크롤 API", description = "모바일/PC 플랫폼에 따라 북마크를 최근순으로 slice하여 무한스크롤합니다.")
+    public CommonResponse<Slice<BookmarkResponse>> getRecentBookmarksByPlatform(
+            @CurrentUser Long userId,
+            @RequestParam String platform,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        Slice<BookmarkResponse> result = bookmarkUseCase.getRecentBookmarksByPlatform(userId, platform, PageRequest.of(page, size));
+        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 
     @PostMapping(consumes = "multipart/form-data")
