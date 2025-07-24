@@ -107,7 +107,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         MultipartFile multipartFile = request.file();
         String fileUrl = fileSaveService.upload(multipartFile);
 
-        Bookmark bookmark = bookmarkMapper.toBookmark(userId, request, fileUrl);
+        Bookmark bookmark = bookmarkMapper.toBookmark(userId, request);
         bookmarkSaveService.save(bookmark);
 
         notificationUseCase.saveNotification(bookmark.getUser(), bookmark, fileUrl, request.notification());

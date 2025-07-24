@@ -54,17 +54,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     void deleteAllByUserId(Long userId);
 
-    @Query("""
-        SELECT b FROM Bookmark b
-        WHERE b.user.id = :userId
-        AND (:platform IS NULL OR b.platform = :platform)
-        ORDER BY b.createdAt DESC
-    """)
-    List<Bookmark> findRecentBookmarksByPlatform(
-        @Param("userId") Long userId,
-        @Param("platform") String platform,
-        org.springframework.data.domain.Pageable pageable
-    );
-
-    Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, String platform, org.springframework.data.domain.Pageable pageable);
+    Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, String platform, Pageable pageable);
 }

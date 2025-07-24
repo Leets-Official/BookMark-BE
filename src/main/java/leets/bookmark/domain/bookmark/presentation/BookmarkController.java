@@ -95,14 +95,7 @@ public class BookmarkController {
             @RequestPart("request") @Validated BookmarkSaveRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        BookmarkSaveRequest modifiedRequest = new BookmarkSaveRequest(
-            request.title(),
-            request.url(),
-            request.memo(),
-            file,
-            request.notification(),
-            request.platform()
-        );
+        BookmarkSaveRequest modifiedRequest = bookmarkMapper.toSaveRequestWithFile(request, file);
         bookmarkUseCase.save(userId, modifiedRequest);
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }

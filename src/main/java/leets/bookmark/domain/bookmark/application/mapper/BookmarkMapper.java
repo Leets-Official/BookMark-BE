@@ -1,4 +1,5 @@
 package leets.bookmark.domain.bookmark.application.mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
@@ -99,7 +100,7 @@ public class BookmarkMapper {
             .build();
     }
 
-    public Bookmark toBookmark(Long userId, BookmarkSaveRequest request,String fieUrl) {
+    public Bookmark toBookmark(Long userId, BookmarkSaveRequest request) {
         return Bookmark.builder()
                 .user(User.builder().id(userId).build())
                 .title(request.title())
@@ -107,5 +108,16 @@ public class BookmarkMapper {
                 .memo(request.memo())
                 .platform(request.platform())
                 .build();
+    }
+
+    public BookmarkSaveRequest toSaveRequestWithFile(BookmarkSaveRequest request, MultipartFile file) {
+        return BookmarkSaveRequest.builder()
+            .title(request.title())
+            .url(request.url())
+            .memo(request.memo())
+            .file(file)
+            .notification(request.notification())
+            .platform(request.platform())
+            .build();
     }
 }
