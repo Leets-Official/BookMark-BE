@@ -7,6 +7,7 @@ import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
 import leets.bookmark.domain.tag.application.dto.request.TagNameUpdateRequest;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.exception.DuplicatedTagNameException;
+import leets.bookmark.domain.tag.application.exception.TagLimitExceedException;
 import leets.bookmark.domain.tag.application.exception.TagOwnerMismatchException;
 import leets.bookmark.domain.tag.application.mapper.TagMapper;
 import leets.bookmark.domain.tag.domain.entity.Tag;
@@ -54,6 +55,7 @@ public class TagUseCaseImpl implements TagUseCase {
         Category category = categoryGetService.findById(request.categoryId());
 
         validateCategoryOwner(category, user);
+        checkExceededTagLimit(category);
         checkDuplicateTagName(category, request.tagName());
 
         Tag tag = tagMapper.toTag(category, request);
@@ -98,6 +100,13 @@ public class TagUseCaseImpl implements TagUseCase {
     private void checkDuplicateTagName(Category category, String tagName) {
         if (tagGetService.existsByCategoryAndTagName(category, tagName)) {
             throw new DuplicatedTagNameException();
+        }
+    }
+
+    private void checkExceededTagLimit(Category category) {
+        List<Tag> tags = tagGetService.findAllByCategory(category);
+        if (tags.size() >= 10) {
+            throw new TagLimitExceedException();
         }
     }
 }
