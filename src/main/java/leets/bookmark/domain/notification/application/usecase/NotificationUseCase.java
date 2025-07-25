@@ -13,6 +13,8 @@ import leets.bookmark.domain.user.domain.service.UserGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class NotificationUseCase {
@@ -25,13 +27,18 @@ public class NotificationUseCase {
 
     private final UserGetService userGetService;
 
-    public NotificationResponse getNotification(Long bookmarkId) {
-        return notificationGetService.findByBookmarkId(bookmarkId)
+    public NotificationResponse getNotification(Long userId, Long notificationId) {
+        User user = userGetService.findById(userId);
+        Optional<Notification> notification = notificationGetService.findByNotificationId(notificationId);
+
+        notification.ifPresent(value -> validateNotificationOwner(user, value));
+        return notification
                 .map(notificationMapper::toNotificationResponse)
                 .orElse(null);
     }
 
     public void saveNotification(User user, long bookmarkId, String fileUrl, NotificationSaveRequest request){
+
         Notification notification = notificationMapper.toNotification(request, user, bookmarkId, fileUrl);
 
         notificationSaveService.save(notification);
