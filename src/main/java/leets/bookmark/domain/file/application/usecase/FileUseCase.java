@@ -45,8 +45,10 @@ public class FileUseCase {
     }
 
     @Transactional(readOnly = true)
-    public FileResponse getFile(Long bookmarkId) {
+    public FileResponse getFile(User user, Long bookmarkId) {
         File file = fileGetService.findByBookmarkId(bookmarkId);
+        validateFileOwner(user, file);
+
         return fileMapper.toFileResponse(file);
     }
 
