@@ -1,6 +1,7 @@
 package leets.bookmark.domain.notification.domain.entity;
 
 import jakarta.persistence.*;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -24,20 +25,29 @@ public class Notification extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     User user;
 
-    Long bookmarkId;    // Bookmark bookmark
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookmark_id")
+    Bookmark bookmark;
 
-    String title;   // bookmark.getTitle()
+    String title;
 
-    String description; // bookmark.getMemo()
+    String description;
 
-    String fileUrl;    // bookmark.getFile.getUrl()
+    String fileUrl;
 
     LocalDateTime notifyAt;
 
     Boolean isNotified;
 
+    public void updateNotifyAt(LocalDateTime notifyAt){
+        this.notifyAt = notifyAt;
+    }
     public void setNotified(){
         this.isNotified = true;
+    }
+
+    public void setUnNotified(){
+        this.isNotified = false;
     }
 
 }
