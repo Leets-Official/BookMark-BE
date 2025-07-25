@@ -27,9 +27,9 @@ public class NotificationUseCase {
 
     private final UserGetService userGetService;
 
-    public NotificationResponse getNotification(Long userId, Long notificationId) {
+    public NotificationResponse getNotification(Long userId, Long bookmarkId) {
         User user = userGetService.findById(userId);
-        Optional<Notification> notification = notificationGetService.findByNotificationId(notificationId);
+        Optional<Notification> notification = notificationGetService.findByBookmarkId(bookmarkId);
 
         notification.ifPresent(value -> validateNotificationOwner(user, value));
         return notification

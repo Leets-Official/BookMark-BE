@@ -15,8 +15,8 @@ public class NotificationController {
     private final NotificationUseCase notificationUseCase;
 
     @GetMapping
-    public CommonResponse<NotificationResponse> getNotification(@CurrentUser Long userId, @RequestParam Long notificationId){
-        NotificationResponse notificationResponse = notificationUseCase.getNotification(userId, notificationId);
+    public CommonResponse<NotificationResponse> getNotification(@CurrentUser Long userId, @RequestParam Long bookmarkId){
+        NotificationResponse notificationResponse = notificationUseCase.getNotification(userId, bookmarkId);
         return CommonResponse.createSuccess(NotificationResponseMessage.GET_NOTIFICATION_SUCCESS.getMessage(), notificationResponse);
     }
 
