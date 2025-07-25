@@ -61,7 +61,9 @@ public class NotificationUseCase {
         validateNotificationBelongsToBookmark(notification, bookmark);
 
         if (request.notifyAt() != null) {
-            notificationUpdateService.update(notification, request);
+            if (!request.notifyAt().equals(notification.getNotifyAt())){
+                notificationUpdateService.update(notification, request);
+            }
         }
         else{
             notificationDeleteService.delete(notification);
