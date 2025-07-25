@@ -20,10 +20,4 @@ public class NotificationController {
         return CommonResponse.createSuccess(NotificationResponseMessage.GET_NOTIFICATION_SUCCESS.getMessage(), notificationResponse);
     }
 
-    @DeleteMapping("{notificationId}")
-    public CommonResponse<Void> deleteNotification(@CurrentUser Long userId, @PathVariable long notificationId){
-        notificationUseCase.deleteNotification(userId, notificationId);
-        return CommonResponse.createSuccess(NotificationResponseMessage.DELETE_NOTIFICATION_SUCCESS.getMessage());
-    }
-
 }
