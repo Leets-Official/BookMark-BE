@@ -1,6 +1,7 @@
 package leets.bookmark.domain.file.application.usecase;
 
 import jakarta.validation.Valid;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
@@ -38,23 +39,23 @@ public class FileUseCase {
     }
 
     @Transactional
-    public void saveFile(User user, long bookmarkId, @Valid FileSaveRequest fileSaveRequest) {
-        File file = fileMapper.toFile(user, bookmarkId, fileSaveRequest,
+    public void saveFile(User user, Bookmark bookmark, @Valid FileSaveRequest fileSaveRequest) {
+        File file = fileMapper.toFile(user, bookmark, fileSaveRequest,
                 getValidatedFileType(fileSaveRequest.fileName()));
         fileSaveService.save(file);
     }
 
     @Transactional(readOnly = true)
-    public FileResponse getFile(User user, Long bookmarkId) {
-        File file = fileGetService.findByBookmarkId(bookmarkId);
+    public FileResponse getFile(User user, Bookmark bookmark) {
+        File file = fileGetService.findByBookmarkId(bookmark.getId());
         validateFileOwner(user, file);
 
         return fileMapper.toFileResponse(file);
     }
 
     @Transactional
-    public void updateFile(User user, long bookmarkId, @Valid FileUpdateRequest fileUpdateRequest) {
-        File file = fileGetService.findByBookmarkId(bookmarkId);
+    public void updateFile(User user, Bookmark bookmark, @Valid FileUpdateRequest fileUpdateRequest) {
+        File file = fileGetService.findByBookmarkId(bookmark.getId());
         validateFileOwner(user, file);
 
         fileUpdateService.update(file, fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(),
@@ -62,8 +63,8 @@ public class FileUseCase {
     }
 
     @Transactional
-    public void deleteFile(User user, long bookmarkId) {
-        File file = fileGetService.findByBookmarkId(bookmarkId);
+    public void deleteFile(User user, Bookmark bookmark) {
+        File file = fileGetService.findByBookmarkId(bookmark.getId());
         validateFileOwner(user, file);
 
         fileDeleteService.delete(file);
