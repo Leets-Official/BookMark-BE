@@ -29,12 +29,6 @@ public class Notification extends BaseTimeEntity {
     @JoinColumn(name = "bookmark_id")
     Bookmark bookmark;
 
-    String title;
-
-    String description;
-
-    String fileUrl;
-
     LocalDateTime notifyAt;
 
     Boolean isNotified;
