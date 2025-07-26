@@ -58,8 +58,7 @@ public class FileUseCase {
         File file = fileGetService.findByBookmarkId(bookmark.getId());
         validateFileOwner(user, file);
 
-        fileUpdateService.update(file, fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(),
-                getValidatedFileType(fileUpdateRequest.fileName()));
+        fileUpdateService.update(file, fileUpdateRequest, getValidatedFileType(fileUpdateRequest.fileName()));
     }
 
     @Transactional
