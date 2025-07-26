@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkPreviewException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkPreviewMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,14 @@ public class BookmarkPreviewService {
   }
 
   private BookmarkPreviewResponse callPreviewApi(String url, String endpoint) {
-    return restTemplate.postForObject(
-        endpoint,
-        Map.of("url", url),
-        BookmarkPreviewResponse.class
-    );
+    try {
+        return restTemplate.postForObject(
+            endpoint,
+            Map.of("url", url),
+            BookmarkPreviewResponse.class
+        );
+    } catch (Exception e) {
+        throw new BookmarkPreviewException();
+    }
   }
 }

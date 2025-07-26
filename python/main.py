@@ -12,7 +12,16 @@ class PreviewRequest(BaseModel):
 @router.post("/api/v1/preview")
 def preview(request: PreviewRequest):
     url = request.url
-    response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        return {
+            "title": "요청 실패",
+            "thumbnailUrl": None,
+            "faviconUrl": None,
+            "error": str(e)
+        }
     soup = BeautifulSoup(response.text, "html.parser")
 
     # 제목
