@@ -28,4 +28,8 @@ public class NotificationGetService {
     public List<Notification> findAllToNotify(LocalDateTime from, LocalDateTime to){
         return notificationRepository.findAllByIsNotifiedFalseAndNotifyAtBetween(from, to);
     }
+
+    public Optional<Notification> findByNotificationId(Long notificationId) {
+        return notificationRepository.findById(notificationId);
+    }
 }

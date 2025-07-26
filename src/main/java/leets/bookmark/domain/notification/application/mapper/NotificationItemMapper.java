@@ -9,9 +9,13 @@ public class NotificationItemMapper {
 
     public NotificationItemRequest toNotificationItem(Notification notification){
         return NotificationItemRequest.builder()
-                .title(notification.getTitle())
-                .description(notification.getDescription())
-                .imageUrl(notification.getFileUrl())    // notification.getBookmark().getFile().getUrl
+                .title(notification.getBookmark().getTitle())
+                .description(notification.getBookmark().getMemo())
+                .imageUrl(
+                        notification.getBookmark().getFile() != null
+                                ? notification.getBookmark().getFile().getFileUrl()
+                                : null
+                )
                 .build();
     }
 }
