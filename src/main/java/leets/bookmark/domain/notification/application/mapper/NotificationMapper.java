@@ -14,8 +14,8 @@ public class NotificationMapper {
                 .user(user)
                 .bookmark(bookmark)
                 .title(bookmark.getTitle())
-                .description(bookmark.getMemo()!=null?bookmark.getMemo():null)
-                .fileUrl(bookmark.getFile().getFileUrl())
+                .description(bookmark.getMemo())
+                .fileUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
                 .notifyAt(request.notifyAt())
                 .isNotified(false)
                 .build();
