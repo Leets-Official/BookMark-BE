@@ -16,4 +16,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     void deleteAllByCategory(Category category);
 
     List<Tag> findAllByCategory_User(User categoryUser);
+
+    long countByCategory(Category category);
 }

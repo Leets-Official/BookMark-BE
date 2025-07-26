@@ -106,8 +106,7 @@ public class TagUseCaseImpl implements TagUseCase {
     }
 
     private void checkExceededTagLimit(Category category) {
-        List<Tag> tags = tagGetService.findAllByCategory(category);
-        if (tags.size() >= TAG_LIMIT) {
+        if (tagGetService.countByCategory(category) >= TAG_LIMIT) {
             throw new TagLimitExceedException();
         }
     }

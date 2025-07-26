@@ -111,8 +111,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     }
 
     private void checkExceededCategoryLimit(User user) {
-        List<Category> categories = categoryGetService.getAllByUser(user);
-        if (categories.size() >= CATEGORY_LIMIT) {
+        if (categoryGetService.countByUser(user) >= CATEGORY_LIMIT) {
             throw new CategoryLimitExceedException();
         }
     }
