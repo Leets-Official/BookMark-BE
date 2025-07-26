@@ -28,8 +28,8 @@ public class File extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookmark_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookmark_id", unique = true)
     Bookmark bookmark;
 
     @NotNull
