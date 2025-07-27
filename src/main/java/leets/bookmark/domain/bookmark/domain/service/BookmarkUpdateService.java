@@ -40,9 +40,9 @@ public class BookmarkUpdateService {
             List<Tag> tags = tagRepository.findAllById(tagIds);
             for (Tag tag : tags) {
                 BookmarkTagMapping mapping = BookmarkTagMapping.builder()
-                        .bookmark(bookmark)
                         .tag(tag)
                         .build();
+                bookmark.addTagMapping(mapping);
                 tagMappingRepository.save(mapping);
             }
         }

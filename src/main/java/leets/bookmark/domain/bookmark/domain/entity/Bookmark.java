@@ -8,6 +8,7 @@ import leets.bookmark.domain.notification.domain.entity.Notification;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
+import leets.bookmark.domain.category.domain.entity.Category;
 
 import lombok.*;
 import java.util.List;
@@ -46,6 +47,10 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public void updateBookmark(String title, String memo, String fileUrl, FileType fileType, String platform) {
         this.title = title;
         this.memo = memo;
@@ -73,6 +78,10 @@ public class Bookmark extends BaseTimeEntity {
 
     public void clearTagMappings() {
         this.bookmarkTagMappings.clear();
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
 }

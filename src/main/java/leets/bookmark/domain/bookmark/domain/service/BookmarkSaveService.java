@@ -8,6 +8,8 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.tag.domain.entity.Tag;
+import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
+import leets.bookmark.domain.tag.application.exception.TagErrorCode;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -33,17 +35,15 @@ public class BookmarkSaveService {
     }
 
     public void updateCategoryAndTags(Bookmark bookmark, Long categoryId, List<Long> tagIds) {
-        List<BookmarkTagMapping> mappings = tagIds.stream()
-            .map(tagId -> {
-                Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(() -> new IllegalArgumentException("Tag not found: " + tagId));
-                return BookmarkTagMapping.builder()
-                    .bookmark(bookmark)
-                    .tag(tag)
-                    .build();
-            })
-            .collect(Collectors.toList());
+        bookmark.clearTagMappings();
 
-        bookmarkTagMappingRepository.saveAll(mappings);
+        for (Long tagId : tagIds) {
+            Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(TagNotFoundException::new);
+            BookmarkTagMapping mapping = BookmarkTagMapping.builder()
+                .tag(tag)
+                .build();
+            bookmark.addTagMapping(mapping);
+        }
     }
 }
