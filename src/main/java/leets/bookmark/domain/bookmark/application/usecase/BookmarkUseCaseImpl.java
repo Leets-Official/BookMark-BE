@@ -102,8 +102,6 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public void save(Long userId, BookmarkSaveRequest request) {
-        MultipartFile multipartFile = request.file();
-        String fileUrl = fileSaveService.upload(multipartFile);
 
         if (request.categoryId() == null) {
             throw new InvalidBookmarkCategoryException();
