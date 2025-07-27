@@ -19,5 +19,6 @@ public record BookmarkSaveRequest(
     @NotNull String platform,
     Long categoryId,
     List<Long> tagIds,
+    Long bookmarkId,
     User user
 ) {}

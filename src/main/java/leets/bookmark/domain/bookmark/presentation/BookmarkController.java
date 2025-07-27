@@ -4,6 +4,8 @@ import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessag
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
@@ -102,9 +104,11 @@ public class BookmarkController {
         bookmarkUseCase.save(userId, modifiedRequest);
 
         if (modifiedRequest.notification() != null) {
+            BookmarkResponse bookmarkResponse = bookmarkUseCase.getById(userId, modifiedRequest.bookmarkId());
             notificationUseCase.saveNotification(
-                modifiedRequest.user(),
-                null, null, null
+                bookmarkResponse.toBookmark().getUser(),
+                bookmarkResponse.toBookmark(),
+                modifiedRequest.notification()
             );
         }
 
@@ -130,8 +134,13 @@ public class BookmarkController {
         bookmarkUseCase.update(userId, bookmarkId, modifiedRequest);
 
         if (modifiedRequest.notification() != null) {
+            FileSaveRequest fileRequest = modifiedRequest.file();
+            BookmarkResponse bookmarkResponse = bookmarkUseCase.getById(userId, bookmarkId);
             notificationUseCase.saveNotification(
-                null, null, null, null
+                bookmarkResponse.toBookmark().getUser(),
+                bookmarkResponse.toBookmark(),
+                //fileRequest != null ? fileRequest.fileUrl() : null,
+                modifiedRequest.notification()
             );
         }
 

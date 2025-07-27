@@ -37,9 +37,8 @@ public class BookmarkUpdateService {
 
         List<Long> tagIds = request.tagIds();
         if (tagIds != null && !tagIds.isEmpty()) {
-            for (Long tagId : tagIds) {
-                Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new RuntimeException("Tag not found"));
+            List<Tag> tags = tagRepository.findAllById(tagIds);
+            for (Tag tag : tags) {
                 BookmarkTagMapping mapping = BookmarkTagMapping.builder()
                         .bookmark(bookmark)
                         .tag(tag)

@@ -96,7 +96,6 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         notificationUseCase.saveNotification(
             bookmark.getUser(),
             bookmark,
-            null,
             request.notification()
         );
     }
@@ -119,7 +118,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         Bookmark bookmark = bookmarkMapper.toBookmark(userId, request);
         bookmarkSaveService.save(bookmark);
 
-        notificationUseCase.saveNotification(bookmark.getUser(), bookmark, fileUrl, request.notification());
+        notificationUseCase.saveNotification(bookmark.getUser(), bookmark, request.notification());
     }
 
     private Bookmark getAuthorizedBookmark(Long userId, Long bookmarkId) {
