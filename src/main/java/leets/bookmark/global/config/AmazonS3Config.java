@@ -36,15 +36,4 @@ public class AmazonS3Config {
                 .build();
     }
 
-    @Bean
-    public S3Client s3Client() {
-        AwsCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(accessKey, secretKey)
-        );
-
-        return S3Client.builder()
-                .region(Region.of(region))
-                .credentialsProvider(credentialsProvider)
-                .build();
-    }
 }
