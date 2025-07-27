@@ -40,10 +40,6 @@ public class Bookmark extends BaseTimeEntity {
     private boolean isSaved = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id")
-    private File file;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -51,11 +47,11 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public void updateBookmark(String title, String memo, String fileUrl, FileType fileType, String platform) {
+    public void updateBookmark(String title, String memo, File file, String fileUrl, FileType fileType, String platform) {
         this.title = title;
         this.memo = memo;
-        if (this.file != null) {
-            this.file.updateFile(this.file.getFileName(), fileUrl, fileType);
+        if (file != null) {
+            file.updateFile(file.getFileName(), fileUrl, fileType);
         }
         this.platform = platform;
     }
@@ -84,4 +80,16 @@ public class Bookmark extends BaseTimeEntity {
         this.category = category;
     }
 
+
+    public File getFile() {
+        return this.bookmarkTagMappings.stream()
+            .map(BookmarkTagMapping::getFile)
+            .findFirst()
+            .orElse(null);
+    }
+
+    public String getThumbnailUrl() {
+        File file = getFile();
+        return file != null ? file.getFileUrl() : null;
+    }
 }

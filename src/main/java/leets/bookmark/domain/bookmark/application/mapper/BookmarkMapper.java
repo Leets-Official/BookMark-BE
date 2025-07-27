@@ -1,4 +1,5 @@
 package leets.bookmark.domain.bookmark.application.mapper;
+import leets.bookmark.domain.file.domain.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
@@ -93,7 +94,7 @@ public class BookmarkMapper {
             .url(bookmark.getUrl())
             .title(bookmark.getTitle())
             .memo(bookmark.getMemo())
-            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
+            .thumbnailUrl(bookmark.getThumbnailUrl())
             .categoryTagInfos(List.of(tagInfo))
             .createdAt(bookmark.getCreatedAt())
             .updatedAt(bookmark.getUpdatedAt())

@@ -6,7 +6,6 @@ import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.user.domain.entity.User;
-import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import org.springframework.stereotype.Component;
 
 @Component
