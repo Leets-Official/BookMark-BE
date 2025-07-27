@@ -27,8 +27,6 @@ public class NotificationUseCase {
 
     private final UserGetService userGetService;
 
-    private final BookmarkGetService bookmarkGetService;
-
     public NotificationResponse getNotification(Long bookmarkId) {
         return notificationGetService.findByBookmarkId(bookmarkId)
                 .map(notificationMapper::toNotificationResponse)

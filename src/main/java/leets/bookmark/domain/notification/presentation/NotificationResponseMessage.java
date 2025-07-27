@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum NotificationResponseMessage {
     DELETE_NOTIFICATION_SUCCESS("알림 삭제에 성공했습니다"),
-    GET_NOTIFICATION_SUCCESS("알림 조회에 성공했습니다."),
-    BOOKMARK_DELETE_SUCCESS("북마크 삭제에 성공했습니다."),
-    BOOKMARK_SAVE_SUCCESS("북마크 저장에 성공했습니다"),
-    BOOKMARK_UPDATE_SUCCESS("북마크 수정에 성공했습니다.");
+    GET_NOTIFICATION_SUCCESS("알림 조회에 성공했습니다.");
 
     private final String message;
 
