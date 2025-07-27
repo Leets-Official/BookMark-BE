@@ -1,7 +1,6 @@
 package leets.bookmark.domain.bookmark.application.mapper;
-import leets.bookmark.domain.file.domain.entity.File;
-import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.web.multipart.MultipartFile;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -25,12 +24,6 @@ public class BookmarkMapper {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
         return buildBookmarkResponse(bookmark, tagInfo);
-    }
-
-    public BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
-        BookmarkTagInfoResponse categoryTagResponse = toBookmarkTagInfoResponseFromTags(tags);
-
-        return buildBookmarkResponse(bookmark, categoryTagResponse);
     }
 
     public BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
@@ -67,18 +60,6 @@ public class BookmarkMapper {
         return buildBookmarkTagInfoResponse(category, tags);
     }
 
-    private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromTags(List<Tag> tags) {
-        List<BookmarkTagInfoResponse.TagInfo> tagInfos = tags.stream()
-            .map(tag -> BookmarkTagInfoResponse.TagInfo.builder()
-                .tagId(tag.getId())
-                .tagName(tag.getTagName())
-                .build())
-            .toList();
-
-        Category category = tags.isEmpty() ? null : tags.get(0).getCategory();
-
-        return buildBookmarkTagInfoResponse(category, tagInfos);
-    }
 
     private BookmarkTagInfoResponse buildBookmarkTagInfoResponse(Category category, List<BookmarkTagInfoResponse.TagInfo> tags) {
         return BookmarkTagInfoResponse.builder()

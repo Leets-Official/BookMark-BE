@@ -52,7 +52,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         @Param("platform") String platform
     );
 
-    void deleteAllByUserId(Long userId);
-
     Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, String platform, Pageable pageable);
 }

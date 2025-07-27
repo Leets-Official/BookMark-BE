@@ -139,7 +139,6 @@ public class BookmarkController {
             notificationUseCase.saveNotification(
                 bookmarkResponse.toBookmark().getUser(),
                 bookmarkResponse.toBookmark(),
-                //fileRequest != null ? fileRequest.fileUrl() : null,
                 modifiedRequest.notification()
             );
         }

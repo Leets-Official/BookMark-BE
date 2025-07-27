@@ -9,9 +9,7 @@ import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
-import leets.bookmark.domain.tag.application.exception.TagErrorCode;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
