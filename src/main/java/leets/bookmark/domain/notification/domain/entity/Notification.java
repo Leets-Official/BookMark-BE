@@ -25,9 +25,9 @@ public class Notification extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     User user;
 
-    @OneToOne
-    @JoinColumn(name = "bookmark_id", nullable = false)
-    private Bookmark bookmark;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookmark_id")
+    Bookmark bookmark;
 
     private String title;
     private String description;
@@ -37,8 +37,15 @@ public class Notification extends BaseTimeEntity {
 
     Boolean isNotified;
 
+    public void updateNotifyAt(LocalDateTime notifyAt){
+        this.notifyAt = notifyAt;
+    }
     public void setNotified(){
         this.isNotified = true;
+    }
+
+    public void setUnNotified(){
+        this.isNotified = false;
     }
 
 }

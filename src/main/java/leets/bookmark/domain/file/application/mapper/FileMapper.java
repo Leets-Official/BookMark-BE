@@ -1,5 +1,6 @@
 package leets.bookmark.domain.file.application.mapper;
 
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.domain.entity.File;
@@ -11,13 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileMapper {
 
-    public File toFile(FileSaveRequest request) {
+    public File toFile(User user, Bookmark bookmark, FileSaveRequest fileSaveRequest, FileType fileType){
         return File.builder()
-                .user(User.builder().id(request.userId()).build())
-                .bookmark(Bookmark.builder().id(request.bookmarkId()).build())
-                .fileName(request.fileName())
-                .fileUrl(request.fileUrl())
-                .fileType(request.fileType())
+                .user(user)
+                .bookmark(bookmark)
+                .fileName(fileSaveRequest.fileName())
+                .fileUrl(fileSaveRequest.fileUrl())
+                .fileType(fileType)
                 .build();
     }
 

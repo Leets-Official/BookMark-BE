@@ -1,4 +1,4 @@
-package leets.bookmark.domain.notification.application.dto.response;
+package leets.bookmark.global.auth.oauth2.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
