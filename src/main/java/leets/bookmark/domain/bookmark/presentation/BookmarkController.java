@@ -3,6 +3,7 @@ package leets.bookmark.domain.bookmark.presentation;
 import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessage.*;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
@@ -99,15 +100,41 @@ public class BookmarkController {
     ) {
         BookmarkSaveRequest modifiedRequest = bookmarkMapper.toSaveRequestWithFile(request, file);
         bookmarkUseCase.save(userId, modifiedRequest);
-        String notificationMessage = modifiedRequest.notification() != null
-            ? String.valueOf(modifiedRequest.notification())
-            : BOOKMARK_SAVE_SUCCESS.getMessage();
-        notificationUseCase.saveNotification(
-            modifiedRequest.user(),
-            null,
-            null,
-            null
-        );
+
+        if (modifiedRequest.notification() != null) {
+            notificationUseCase.saveNotification(
+                modifiedRequest.user(),
+                null, null, null
+            );
+        }
+
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
+    }
+
+    @DeleteMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 삭제 API", description = "북마크를 삭제합니다.")
+    public CommonResponse<Void> deleteBookmark(@CurrentUser Long userId, @PathVariable Long bookmarkId) {
+        bookmarkUseCase.delete(userId, bookmarkId);
+        return CommonResponse.createSuccess(BOOKMARK_DELETE_SUCCESS.getMessage());
+    }
+
+    @PatchMapping(value = "/{bookmarkId}", consumes = "multipart/form-data")
+    @Operation(summary = "북마크 수정 API", description = "파일 및 알림 정보와 함께 북마크를 수정합니다.")
+    public CommonResponse<Void> updateBookmark(
+            @CurrentUser Long userId,
+            @PathVariable Long bookmarkId,
+            @RequestPart("request") @Validated BookmarkUpdateRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        BookmarkUpdateRequest modifiedRequest = request;
+        bookmarkUseCase.update(userId, bookmarkId, modifiedRequest);
+
+        if (modifiedRequest.notification() != null) {
+            notificationUseCase.saveNotification(
+                null, null, null, null
+            );
+        }
+
+        return CommonResponse.createSuccess(BOOKMARK_UPDATE_SUCCESS.getMessage());
     }
 }

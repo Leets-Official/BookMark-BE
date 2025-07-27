@@ -10,4 +10,6 @@ import java.util.List;
 public interface BookmarkTagMappingRepository extends JpaRepository<BookmarkTagMapping, Long> {
 
     List<BookmarkTagMapping> findAllByBookmarkId(Long bookmarkId);
+
+    void deleteByBookmark(Bookmark bookmark);
 }

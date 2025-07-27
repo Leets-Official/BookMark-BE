@@ -25,6 +25,7 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkSaveService;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkUpdateService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +39,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final BookmarkSaveService bookmarkSaveService;
     private final NotificationUseCase notificationUseCase;
     private final FileSaveService fileSaveService;
+    private final BookmarkUpdateService bookmarkUpdateService;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
@@ -89,20 +91,12 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     public void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request) {
         Bookmark bookmark = getAuthorizedBookmark(userId, bookmarkId);
 
-        FileSaveRequest fileRequest = request.file();
-        String fileUrl = fileRequest.fileUrl();
-        bookmark.updateBookmark(
-            request.title(),
-            request.memo(),
-            fileUrl,
-            fileRequest.fileType(),
-            request.platform()
-        );
+        bookmarkUpdateService.update(bookmark, request);
 
         notificationUseCase.saveNotification(
             bookmark.getUser(),
             bookmark,
-            fileUrl,
+            null,
             request.notification()
         );
     }

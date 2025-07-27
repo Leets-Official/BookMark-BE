@@ -71,4 +71,8 @@ public class Bookmark extends BaseTimeEntity {
         mapping.setBookmark(this);
     }
 
+    public void clearTagMappings() {
+        this.bookmarkTagMappings.clear();
+    }
+
 }

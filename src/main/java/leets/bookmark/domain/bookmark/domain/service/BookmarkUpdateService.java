@@ -2,14 +2,23 @@ package leets.bookmark.domain.bookmark.domain.service;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
+import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import leets.bookmark.domain.tag.domain.entity.Tag;
+import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BookmarkUpdateService {
+
+    private final BookmarkTagMappingRepository tagMappingRepository;
+    private final TagRepository tagRepository;
 
     public void update(
             Bookmark bookmark,
@@ -24,5 +33,19 @@ public class BookmarkUpdateService {
                 request.platform()
         );
 
+        tagMappingRepository.deleteByBookmark(bookmark);
+
+        List<Long> tagIds = request.tagIds();
+        if (tagIds != null && !tagIds.isEmpty()) {
+            for (Long tagId : tagIds) {
+                Tag tag = tagRepository.findById(tagId)
+                        .orElseThrow(() -> new RuntimeException("Tag not found"));
+                BookmarkTagMapping mapping = BookmarkTagMapping.builder()
+                        .bookmark(bookmark)
+                        .tag(tag)
+                        .build();
+                tagMappingRepository.save(mapping);
+            }
+        }
     }
 }
