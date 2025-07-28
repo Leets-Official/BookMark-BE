@@ -4,6 +4,7 @@ import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequ
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
+import leets.bookmark.domain.category.application.exception.CategoryLimitExceedException;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
 import leets.bookmark.domain.category.application.mapper.CategoryMapper;
@@ -27,20 +28,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryUseCaseImpl implements CategoryUseCase {
 
-    private final CategorySaveService categorySaveService;
-    private final CategoryMapper categoryMapper;
+    public static final int CATEGORY_LIMIT = 15;
+
     private final UserGetService userGetService;
     private final CategoryGetService categoryGetService;
+    private final CategorySaveService categorySaveService;
     private final CategoryDeleteService categoryDeleteService;
     private final CategoryUpdateService categoryUpdateService;
-    private final TagDeleteService tagDeleteService;
     private final TagGetService tagGetService;
+    private final TagDeleteService tagDeleteService;
+
+    private final CategoryMapper categoryMapper;
 
     @Transactional
     @Override
     public void save(Long userId, CategoryCreateRequest request) {
         User user = userGetService.findById(userId);
 
+        checkExceededCategoryLimit(user);
         checkDuplicateCategoryName(user, request.categoryName());
 
         Category category = categoryMapper.toCategory(user, request);
@@ -102,6 +107,12 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private void checkDuplicateCategoryName(User user, String categoryName) {
         if (categoryGetService.existsByUserIdAndCategoryName(user.getId(), categoryName)) {
             throw new DuplicatedCategoryNameException();
+        }
+    }
+
+    private void checkExceededCategoryLimit(User user) {
+        if (categoryGetService.countByUser(user) >= CATEGORY_LIMIT) {
+            throw new CategoryLimitExceedException();
         }
     }
 }

@@ -7,6 +7,7 @@ import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
 import leets.bookmark.domain.tag.application.dto.request.TagNameUpdateRequest;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.exception.DuplicatedTagNameException;
+import leets.bookmark.domain.tag.application.exception.TagLimitExceedException;
 import leets.bookmark.domain.tag.application.exception.TagOwnerMismatchException;
 import leets.bookmark.domain.tag.application.mapper.TagMapper;
 import leets.bookmark.domain.tag.domain.entity.Tag;
@@ -26,14 +27,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagUseCaseImpl implements TagUseCase {
 
-    private final CategoryGetService categoryGetService;
+    public static final int TAG_LIMIT = 10;
+
     private final UserGetService userGetService;
+    private final CategoryGetService categoryGetService;
     private final TagGetService tagGetService;
     private final TagSaveService tagSaveService;
+    private final TagUpdateService tagUpdateService;
+    private final TagDeleteService tagDeleteService;
 
     private final TagMapper tagMapper;
-    private final TagDeleteService tagDeleteService;
-    private final TagUpdateService tagUpdateService;
 
     @Transactional(readOnly = true)
     @Override
@@ -54,6 +57,7 @@ public class TagUseCaseImpl implements TagUseCase {
         Category category = categoryGetService.findById(request.categoryId());
 
         validateCategoryOwner(category, user);
+        checkExceededTagLimit(category);
         checkDuplicateTagName(category, request.tagName());
 
         Tag tag = tagMapper.toTag(category, request);
@@ -98,6 +102,12 @@ public class TagUseCaseImpl implements TagUseCase {
     private void checkDuplicateTagName(Category category, String tagName) {
         if (tagGetService.existsByCategoryAndTagName(category, tagName)) {
             throw new DuplicatedTagNameException();
+        }
+    }
+
+    private void checkExceededTagLimit(Category category) {
+        if (tagGetService.countByCategory(category) >= TAG_LIMIT) {
+            throw new TagLimitExceedException();
         }
     }
 }

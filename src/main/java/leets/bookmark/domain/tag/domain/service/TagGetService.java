@@ -32,4 +32,8 @@ public class TagGetService {
     public List<Tag> findAllByUser(User user) {
         return tagRepository.findAllByCategory_User(user);
     }
+
+    public long countByCategory(Category category) {
+        return tagRepository.countByCategory(category);
+    }
 }
