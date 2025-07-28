@@ -10,7 +10,7 @@ import java.util.List;
 public record BookmarkUpdateRequest(
         @NotBlank String title,
         String memo,
-        @NotNull FileSaveRequest file,
+        FileSaveRequest file,
         @NotNull NotificationSaveRequest notification,
         String platform,
         Long categoryId,

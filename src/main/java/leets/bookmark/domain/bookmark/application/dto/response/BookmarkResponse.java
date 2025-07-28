@@ -22,7 +22,7 @@ public record BookmarkResponse(
                 .url(url)
                 .title(title)
                 .memo(memo)
-                .url(thumbnailUrl)
+                .thumbnailUrl(thumbnailUrl)
                 .build();
     }
 }

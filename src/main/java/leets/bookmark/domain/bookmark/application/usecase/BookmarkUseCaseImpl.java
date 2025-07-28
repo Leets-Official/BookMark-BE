@@ -99,7 +99,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public Bookmark save(Long userId, BookmarkSaveRequest request) {
+    public BookmarkResponse save(Long userId, BookmarkSaveRequest request) {
 
         if (request.categoryId() == null) {
             throw new InvalidBookmarkCategoryException();
@@ -112,12 +112,12 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
 
         User user = User.builder().id(userId).build();
-        Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
-        bookmarkSaveService.save(bookmark);
+        Bookmark bookmark = bookmarkSaveService.save(request, user);
 
         notificationUseCase.saveNotification(bookmark.getUser(), bookmark, request.notification());
 
-        return bookmark;
+        List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
+        return bookmarkMapper.toResponse(bookmark, mappings);
     }
 
     private Bookmark getAuthorizedBookmark(Long userId, Long bookmarkId) {
