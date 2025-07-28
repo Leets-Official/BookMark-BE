@@ -74,12 +74,6 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId, String platform) {
-        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategoryIncludingUntagged(userId, categoryId, platform);
-        return mapToResponses(bookmarks);
-    }
-
-    @Override
     public void delete(Long userId, Long bookmarkId) {
         Bookmark bookmark = getAuthorizedBookmark(userId, bookmarkId);
         bookmarkDeleteService.delete(bookmark);

@@ -27,27 +27,13 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         LEFT JOIN BookmarkTagMapping m ON m.bookmark = b
         LEFT JOIN Tag t ON t = m.tag
         WHERE b.user.id = :userId
-        AND t.category.id = :categoryId
-        AND (:platform IS NULL OR b.platform = :platform)
-    """)
-    List<Bookmark> findAllByUserIdAndCategoryId(
-        @Param("userId") Long userId,
-        @Param("categoryId") Long categoryId,
-        @Param("platform") String platform
-    );
-
-    @Query("""
-        SELECT DISTINCT b FROM Bookmark b
-        LEFT JOIN BookmarkTagMapping m ON m.bookmark = b
-        LEFT JOIN Tag t ON t = m.tag
-        WHERE b.user.id = :userId
-        AND (:categoryId IS NULL OR t.category.id = :categoryId)
+        AND (:categoryIds IS NULL OR t.category.id IN (:categoryIds))
         AND (:tagIds IS NULL OR t.id IN (:tagIds))
         AND (:platform IS NULL OR b.platform = :platform)
     """)
     List<Bookmark> findAllWithFilter(
         @Param("userId") Long userId,
-        @Param("categoryId") List<Long> categoryIds,
+        @Param("categoryIds") List<Long> categoryIds,
         @Param("tagIds") List<Long> tagIds,
         @Param("platform") String platform
     );

@@ -28,8 +28,8 @@ public class BookmarkGetService {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
     }
 
-    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, Long categoryId, String platform) {
-        return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId, platform);
+    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, List<Long> categoryIds, String platform) {
+        return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, platform);
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
