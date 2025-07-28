@@ -8,7 +8,6 @@ import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +30,6 @@ public class BookmarkGetService {
 
     public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, Long categoryId, String platform) {
         return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId, platform);
-    }
-
-    public List<Bookmark> getFilteredBookmarks(Long userId, Long categoryId, List<Long> tagIds, String platform) {
-        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds, platform);
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {

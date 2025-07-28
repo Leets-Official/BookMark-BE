@@ -49,6 +49,9 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
+
     public void updateBookmark(String title, String memo, String thumbnailUrl, String platform) {
         this.title = title;
         this.memo = memo;
@@ -56,15 +59,15 @@ public class Bookmark extends BaseTimeEntity {
         this.platform = Platform.from(platform);
     }
 
-    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
-
     public void addTagMapping(BookmarkTagMapping mapping) {
         bookmarkTagMappings.add(mapping);
         mapping.setBookmark(this);
     }
 
     public void clearTagMappings() {
+        for (BookmarkTagMapping mapping : new ArrayList<>(bookmarkTagMappings)) {
+            mapping.setBookmark(null);
+        }
         this.bookmarkTagMappings.clear();
     }
 

@@ -4,8 +4,6 @@ import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessag
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
-import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;

@@ -1,7 +1,6 @@
 package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
-import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
@@ -34,5 +33,12 @@ public class BookmarkTagMapping extends BaseTimeEntity {
 
     public void setBookmark(Bookmark bookmark) {
         this.bookmark = bookmark;
+    }
+
+    public static BookmarkTagMapping of(Tag tag, Bookmark bookmark) {
+        return BookmarkTagMapping.builder()
+            .tag(tag)
+            .bookmark(bookmark)
+            .build();
     }
 }
