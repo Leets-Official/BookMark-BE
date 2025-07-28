@@ -10,6 +10,8 @@ import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingReposi
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
 import java.util.List;
+
+import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +28,11 @@ public class BookmarkSaveService {
         bookmarkRepository.save(bookmark);
     }
 
-    public void save(BookmarkSaveRequest request, Long userId) {
-        Bookmark bookmark = bookmarkMapper.toBookmark(userId,request);
+    public Bookmark save(BookmarkSaveRequest request, User user) {
+        Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
         bookmarkRepository.save(bookmark);
         updateCategoryAndTags(bookmark, request.categoryId(), request.tagIds());
+        return bookmark;
     }
 
     public void updateCategoryAndTags(Bookmark bookmark, Long categoryId, List<Long> tagIds) {

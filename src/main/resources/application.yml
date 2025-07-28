@@ -25,10 +25,6 @@ spring:
             token-uri: ${KAKAO_TOKEN_URI}
             user-info-uri: ${KAKAO_USER_INFO_URI}
             user-name-attribute: id
-  servlet:
-    multipart:
-      max-file-size: 20MB
-      max-request-size: 20MB
 
 kakao:
   linked-url: ${KAKAO_LINKED_URL}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import leets.bookmark.domain.bookmark.application.exception.BookmarkTagCountExceededException;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkTagMinimumRequiredException;
+import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Pageable;
 
@@ -11,9 +12,6 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequ
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
-import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
-import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
-import org.springframework.web.multipart.MultipartFile;
 import leets.bookmark.domain.file.domain.service.FileSaveService;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.exception.NoBookmarkPermissionException;
@@ -101,7 +99,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public void save(Long userId, BookmarkSaveRequest request) {
+    public Bookmark save(Long userId, BookmarkSaveRequest request) {
 
         if (request.categoryId() == null) {
             throw new InvalidBookmarkCategoryException();
@@ -113,10 +111,13 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             throw new BookmarkTagCountExceededException();
         }
 
-        Bookmark bookmark = bookmarkMapper.toBookmark(userId, request);
+        User user = User.builder().id(userId).build();
+        Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
         bookmarkSaveService.save(bookmark);
 
         notificationUseCase.saveNotification(bookmark.getUser(), bookmark, request.notification());
+
+        return bookmark;
     }
 
     private Bookmark getAuthorizedBookmark(Long userId, Long bookmarkId) {

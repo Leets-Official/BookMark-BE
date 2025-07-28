@@ -31,7 +31,7 @@ public interface BookmarkUseCase {
 
     void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request);
 
-    void save(Long userId, BookmarkSaveRequest request);
+    Bookmark save(Long userId, BookmarkSaveRequest request);
 
     Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, String platform, Pageable pageable);
 

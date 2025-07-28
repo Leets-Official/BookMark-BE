@@ -100,18 +100,7 @@ public class BookmarkController {
             @RequestPart("request") @Validated BookmarkSaveRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        BookmarkSaveRequest modifiedRequest = bookmarkMapper.toSaveRequestWithFile(request, file);
-        bookmarkUseCase.save(userId, modifiedRequest);
-
-        if (modifiedRequest.notification() != null) {
-            BookmarkResponse bookmarkResponse = bookmarkUseCase.getById(userId, modifiedRequest.bookmarkId());
-            notificationUseCase.saveNotification(
-                bookmarkResponse.toBookmark().getUser(),
-                bookmarkResponse.toBookmark(),
-                modifiedRequest.notification()
-            );
-        }
-
+        bookmarkUseCase.save(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 
@@ -130,16 +119,14 @@ public class BookmarkController {
             @RequestPart("request") @Validated BookmarkUpdateRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        BookmarkUpdateRequest modifiedRequest = request;
-        bookmarkUseCase.update(userId, bookmarkId, modifiedRequest);
+        bookmarkUseCase.update(userId, bookmarkId, request);
 
-        if (modifiedRequest.notification() != null) {
-            FileSaveRequest fileRequest = modifiedRequest.file();
+        if (request.notification() != null) {
             BookmarkResponse bookmarkResponse = bookmarkUseCase.getById(userId, bookmarkId);
             notificationUseCase.saveNotification(
                 bookmarkResponse.toBookmark().getUser(),
                 bookmarkResponse.toBookmark(),
-                modifiedRequest.notification()
+                request.notification()
             );
         }
 

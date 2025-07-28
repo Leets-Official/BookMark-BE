@@ -8,6 +8,8 @@ import leets.bookmark.global.common.entity.BaseTimeEntity;
 import leets.bookmark.domain.category.domain.entity.Category;
 
 import lombok.*;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -30,7 +32,8 @@ public class Bookmark extends BaseTimeEntity {
 
     private String memo;
 
-    private String platform;
+    @Enumerated(EnumType.STRING)
+    private Platform platform;
 
     @Column(name = "is_saved", nullable = false)
     private boolean isSaved = true;
@@ -50,7 +53,7 @@ public class Bookmark extends BaseTimeEntity {
         this.title = title;
         this.memo = memo;
         this.thumbnailUrl = thumbnailUrl;
-        this.platform = platform;
+        this.platform = Platform.from(platform);
     }
 
     @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
