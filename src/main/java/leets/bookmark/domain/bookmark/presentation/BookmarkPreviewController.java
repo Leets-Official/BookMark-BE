@@ -1,7 +1,6 @@
 package leets.bookmark.domain.bookmark.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkPreviewRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import leets.bookmark.global.common.response.CommonResponse;
@@ -17,13 +16,13 @@ public class BookmarkPreviewController {
 
     private final BookmarkUseCase bookmarkUseCase;
 
-    @PostMapping
+    @GetMapping
     @Operation(
         summary = "북마크 미리보기 추출",
         description = "url을 통해 제목, 썸네일, 파비콘 정보를 추출합니다."
     )
-    public CommonResponse<List<BookmarkResponse>> getPreview(@RequestBody BookmarkPreviewRequest request) {
-        List<BookmarkResponse> result = bookmarkUseCase.extractPreviewFromUrl(request.url());
+    public CommonResponse<List<BookmarkResponse>> getPreview(@RequestParam("url") String url) {
+        List<BookmarkResponse> result = bookmarkUseCase.extractPreviewFromUrl(url);
         return CommonResponse.createSuccess(BookmarkResponseMessage.BOOKMARK_PREVIEW_SUCCESS.getMessage(), result);
     }
 }
