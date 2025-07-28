@@ -7,6 +7,7 @@ public enum Platform {
     KAKAO,
     GOOGLE,
     PC,
+    MOBILE,
     ETC;
 
     public static Platform from(String platform) {
