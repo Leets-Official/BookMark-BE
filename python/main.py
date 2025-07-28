@@ -12,15 +12,25 @@ class PreviewRequest(BaseModel):
 @router.post("/api/v1/preview")
 def preview(request: PreviewRequest):
     url = request.url
-    try:
-        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
+    headers_list = [
+        {"User-Agent": "facebookexternalhit/1.1"},
+        {"User-Agent": "Mozilla/5.0"}
+    ]
+    response = None
+    for headers in headers_list:
+        try:
+            response = requests.get(url, headers=headers, timeout=5)
+            response.raise_for_status()
+            break
+        except requests.exceptions.RequestException:
+            continue
+
+    if response is None:
         return {
             "title": "요청 실패",
             "thumbnailUrl": None,
             "faviconUrl": None,
-            "error": str(e)
+            "error": "모든 User-Agent 요청 실패"
         }
     soup = BeautifulSoup(response.text, "html.parser")
 
