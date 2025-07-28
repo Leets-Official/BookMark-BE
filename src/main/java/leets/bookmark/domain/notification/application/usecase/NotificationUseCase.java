@@ -46,7 +46,9 @@ public class NotificationUseCase {
 
     @Transactional
     public void saveNotification(User user, Bookmark bookmark, NotificationSaveRequest request){
-        Notification notification = notificationMapper.toNotification(request, user, bookmark,null);
+
+        Notification notification = notificationMapper.toNotification(request, user, bookmark);
+
         notificationSaveService.save(notification);
     }
 

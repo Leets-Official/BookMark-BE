@@ -1,6 +1,5 @@
 package leets.bookmark.domain.notification.application.mapper;
 
-import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
 import leets.bookmark.domain.notification.application.dto.response.NotificationResponse;
 import leets.bookmark.domain.notification.domain.entity.Notification;
@@ -10,13 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NotificationMapper {
-    public Notification toNotification(NotificationSaveRequest request, User user, Bookmark bookmark, String fileUrl) {
+    public Notification toNotification(NotificationSaveRequest request, User user, Bookmark bookmark) {
         return Notification.builder()
                 .user(user)
                 .bookmark(bookmark)
-                .title(bookmark.getTitle())
-                .description(bookmark.getMemo() == null ? "" : bookmark.getMemo())
-                .fileUrl(fileUrl)
                 .notifyAt(request.notifyAt())
                 .isNotified(false)
                 .build();
