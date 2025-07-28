@@ -27,9 +27,9 @@ public class BookmarkMapper {
         return buildBookmarkResponse(bookmark, tagInfo);
     }
 
-    public BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
+    public BookmarkFilterRequest toFilterRequest(List<Long> categoryId, List<Long> tagId) {
         return BookmarkFilterRequest.builder()
-            .categoryId(categoryId)
+            .categoryIds(categoryId)
             .tagId(tagId)
             .build();
     }

@@ -47,10 +47,25 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     """)
     List<Bookmark> findAllWithFilter(
         @Param("userId") Long userId,
-        @Param("categoryId") Long categoryId,
+        @Param("categoryId") List<Long> categoryIds,
         @Param("tagIds") List<Long> tagIds,
         @Param("platform") String platform
     );
 
+    @Query("""
+        SELECT DISTINCT b FROM Bookmark b
+        LEFT JOIN BookmarkTagMapping m ON m.bookmark = b
+        LEFT JOIN Tag t ON t = m.tag
+        WHERE b.user.id = :userId
+        AND t.category.id IN :categoryIds
+        AND (:platform IS NULL OR b.platform = :platform)
+    """)
+    List<Bookmark> findAllByUserIdAndCategoryIds(
+            @Param("userId") Long userId,
+            @Param("categoryIds") List<Long> categoryIds,
+            @Param("platform") String platform
+    );
+
     Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, String platform, Pageable pageable);
+
 }

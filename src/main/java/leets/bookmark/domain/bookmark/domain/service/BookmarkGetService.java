@@ -33,14 +33,14 @@ public class BookmarkGetService {
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        Long categoryId = request.categoryId();
+        List<Long> categoryIds = request.categoryIds();
         List<Long> tagIds = request.tagId();
         String platform = request.platform();
 
         if (tagIds == null || tagIds.isEmpty()) {
-            return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId, platform);
+            return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, platform);
         }
-        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds, platform);
+        return bookmarkRepository.findAllWithFilter(userId, categoryIds, tagIds, platform);
     }
 
     public List<Bookmark> getAllBookmarks(Long userId) {

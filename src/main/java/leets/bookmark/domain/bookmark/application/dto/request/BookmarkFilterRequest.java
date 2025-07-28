@@ -6,7 +6,7 @@ import java.util.List;
 
 @Builder
 public record BookmarkFilterRequest(
-        Long categoryId,
+        List<Long> categoryIds,
         List<Long> tagId,
         String platform
 ) {}

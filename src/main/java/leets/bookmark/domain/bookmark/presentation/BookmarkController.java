@@ -41,21 +41,10 @@ public class BookmarkController {
     @Operation(summary = "북마크 필터링 API", description = "카테고리 ID는 필수이며, 태그 ID로 북마크를 추가 필터링합니다.")
     public CommonResponse<List<BookmarkResponse>> getFilteredBookmarks(
             @CurrentUser Long userId,
-            @RequestParam Long categoryId,
-            @RequestParam(required = false) Long tagId
+            @RequestParam List<Long> categoryIds,
+            @RequestParam(required = false) List<Long> tagIds
     ) {
-        if (tagId == null) {
-            BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(
-                categoryId,
-                List.of()
-            );
-            List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarksByCategory(userId, categoryId, request.platform());
-            return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
-        }
-        BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(
-            categoryId,
-            List.of(tagId)
-        );
+        BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(categoryIds, tagIds);
         List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
