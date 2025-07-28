@@ -30,9 +30,16 @@ public class BookmarkSaveService {
 
     public Bookmark save(BookmarkSaveRequest request, User user) {
         Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
-        bookmarkRepository.save(bookmark);
-        updateCategoryAndTags(bookmark, request.categoryId(), request.tagIds());
-        return bookmark;
+        Bookmark saved = bookmarkRepository.save(bookmark);
+
+        for (Long tagId : request.tagIds()) {
+            Tag tag = tagRepository.findById(tagId)
+                    .orElseThrow(TagNotFoundException::new);
+            BookmarkTagMapping mapping = BookmarkTagMapping.of(tag, saved);
+            bookmarkTagMappingRepository.save(mapping);
+        }
+
+        return saved;
     }
 
     public void updateCategoryAndTags(Bookmark bookmark, Long categoryId, List<Long> tagIds) {

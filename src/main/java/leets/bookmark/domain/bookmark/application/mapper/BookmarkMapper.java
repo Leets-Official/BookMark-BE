@@ -1,7 +1,6 @@
 package leets.bookmark.domain.bookmark.application.mapper;
 
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
-import org.springframework.web.multipart.MultipartFile;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;

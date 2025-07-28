@@ -2,14 +2,9 @@ package leets.bookmark.domain.bookmark.application.usecase;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
-import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.tag.domain.entity.Tag;
-import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
-import leets.bookmark.global.common.response.CommonResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

@@ -16,7 +16,6 @@ import leets.bookmark.domain.file.domain.service.FileSaveService;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.exception.NoBookmarkPermissionException;
 import leets.bookmark.domain.bookmark.application.exception.InvalidBookmarkCategoryException;
-import leets.bookmark.domain.bookmark.application.exception.BookmarkTagCountExceededException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
