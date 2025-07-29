@@ -21,7 +21,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     Slice<Bookmark> findByUserIdAndPlatformAndIdLessThanOrderByIdDesc(Long userId, DeviceType platform, Long lastBookmarkId, Pageable pageable);
 
-    Slice<Bookmark> findByUserIdAndPlatformAndIsSavedTrue(Long userId, DeviceType platform, org.springframework.data.domain.Pageable pageable);
+    Slice<Bookmark> findByUserIdAndPlatformAndIsSavedTrue(Long userId, DeviceType platform,Pageable pageable);
 
     @Query("""
         SELECT DISTINCT b FROM Bookmark b
