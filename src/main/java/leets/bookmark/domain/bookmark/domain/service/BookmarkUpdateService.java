@@ -9,6 +9,7 @@ import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class BookmarkUpdateService {
     private final BookmarkTagMappingRepository tagMappingRepository;
     private final TagRepository tagRepository;
 
+    @Transactional
     public void update(Bookmark bookmark, BookmarkUpdateRequest request) {
         FileSaveRequest fileRequest = request.file();
         bookmark.updateBookmark(

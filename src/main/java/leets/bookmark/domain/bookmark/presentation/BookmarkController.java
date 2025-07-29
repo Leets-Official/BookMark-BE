@@ -47,9 +47,12 @@ public class BookmarkController {
     public CommonResponse<List<BookmarkResponse>> getFilteredBookmarks(
             @CurrentUser Long userId,
             @RequestParam List<Long> categoryIds,
-            @RequestParam(required = false) List<Long> tagIds
-    ) {
-        BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(categoryIds, tagIds);
+            @RequestParam(required = false) List<Long> tagIds,
+            @RequestParam(required = false, defaultValue = "PC") DeviceType deviceType,
+            @RequestParam(required = false, defaultValue = "KAKAO") Provider provider
+
+            ) {
+        BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(categoryIds, tagIds,deviceType,provider);
         List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }

@@ -28,6 +28,7 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkUpdateService;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -79,6 +80,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         return bookmarkMapper.toResponse(bookmark, mappings);
     }
 
+    @Transactional
     @Override
     public void delete(Long userId, Long bookmarkId) {
         Bookmark bookmark = getAuthorizedBookmark(userId, bookmarkId);
@@ -121,6 +123,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     private Bookmark getAuthorizedBookmark(Long userId, Long bookmarkId) {
+        User user = userGetService.findById(userId);
         Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
         if (!bookmark.getUser().getId().equals(userId)) {
             throw new NoBookmarkPermissionException();

@@ -34,6 +34,15 @@ public class BookmarkMapper {
             .build();
     }
 
+    public BookmarkFilterRequest toFilterRequest(List<Long> categoryId, List<Long> tagId, DeviceType deviceType, Provider provider) {
+        return BookmarkFilterRequest.builder()
+                .categoryIds(categoryId)
+                .tagId(tagId)
+                .deviceType(deviceType)
+                .provider(provider)
+                .build();
+    }
+
     private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
         if (bookmarkTagMappings.isEmpty()) {
             return BookmarkTagInfoResponse.builder()
@@ -72,15 +81,17 @@ public class BookmarkMapper {
 
     private BookmarkResponse buildBookmarkResponse(Bookmark bookmark, BookmarkTagInfoResponse tagInfo) {
         return BookmarkResponse.builder()
-            .id(bookmark.getId())
-            .url(bookmark.getUrl())
-            .title(bookmark.getTitle())
-            .memo(bookmark.getMemo())
-            .thumbnailUrl(bookmark.getThumbnailUrl())
-            .categoryTagInfos(List.of(tagInfo))
-            .createdAt(bookmark.getCreatedAt())
-            .updatedAt(bookmark.getUpdatedAt())
-            .build();
+                .id(bookmark.getId())
+                .url(bookmark.getUrl())
+                .title(bookmark.getTitle())
+                .memo(bookmark.getMemo())
+                .thumbnailUrl(bookmark.getThumbnailUrl())
+                .deviceType(bookmark.getDeviceType() != null ? bookmark.getDeviceType().name() : null)
+                .provider(bookmark.getProvider() != null ? bookmark.getProvider().name() : null)
+                .categoryTagInfos(List.of(tagInfo))
+                .createdAt(bookmark.getCreatedAt())
+                .updatedAt(bookmark.getUpdatedAt())
+                .build();
     }
 
     public Bookmark toBookmark(User user, BookmarkSaveRequest request) {
