@@ -1,17 +1,16 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
-import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkPreviewException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkPreviewMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 @RequiredArgsConstructor
@@ -24,17 +23,20 @@ public class BookmarkPreviewService {
   private String previewApiUrl;
 
 
-  public List<BookmarkResponse> extractPreviewFromUrl(String url) {
+  public List<BookmarkPreviewResponse> extractPreviewFromUrl(String url) {
     BookmarkPreviewResponse response = callPreviewApi(url, previewApiUrl);
-    BookmarkResponse preview = bookmarkPreviewMapper.toResponse(response);
+    BookmarkPreviewResponse preview = bookmarkPreviewMapper.toResponse(response);
     return List.of(preview);
   }
 
+  private static final Logger logger = LoggerFactory.getLogger(BookmarkPreviewService.class);
+
   private BookmarkPreviewResponse callPreviewApi(String url, String endpoint) {
     try {
-      String fullUrl = endpoint + "?url=" + UriUtils.encode(url, StandardCharsets.UTF_8);
+      String fullUrl = endpoint + "?url=" + url;
       return restTemplate.getForObject(fullUrl, BookmarkPreviewResponse.class);
     } catch (Exception e) {
+      logger.error("미리보기 API 호출 실패. url: {}, endpoint: {}, error: {}", url, endpoint, e.getMessage(), e);
       throw new BookmarkPreviewException();
     }
   }
