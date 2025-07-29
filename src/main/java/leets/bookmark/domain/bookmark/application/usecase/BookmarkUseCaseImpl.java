@@ -23,6 +23,7 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkSaveService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkUpdateService;
+import leets.bookmark.domain.user.domain.service.UserGetService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +38,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final NotificationUseCase notificationUseCase;
     private final FileSaveService fileSaveService;
     private final BookmarkUpdateService bookmarkUpdateService;
+    private final UserGetService userGetService;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
@@ -104,7 +106,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             throw new BookmarkTagCountExceededException();
         }
 
-        User user = User.builder().id(userId).build();
+        User user = userGetService.findById(userId);
         Bookmark bookmark = bookmarkSaveService.save(request, user);
 
         notificationUseCase.saveNotification(bookmark.getUser(), bookmark, request.notification());

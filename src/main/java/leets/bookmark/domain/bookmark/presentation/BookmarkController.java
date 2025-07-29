@@ -4,7 +4,10 @@ import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessag
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
+import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.user.domain.service.UserGetService;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class BookmarkController {
     private final BookmarkUseCase bookmarkUseCase;
     private final BookmarkMapper bookmarkMapper;
     private final NotificationUseCase notificationUseCase;
+    private final UserGetService userGetService;
 
     @GetMapping("/search")
     @Operation(summary = "북마크 메모 검색 API", description = "키워드를 포함하는 메모를 가진 북마크 목록을 조회합니다.")
@@ -107,10 +110,9 @@ public class BookmarkController {
         bookmarkUseCase.update(userId, bookmarkId, request);
 
         if (request.notification() != null) {
-            BookmarkResponse bookmarkResponse = bookmarkUseCase.getById(userId, bookmarkId);
             notificationUseCase.saveNotification(
-                bookmarkResponse.toBookmark().getUser(),
-                bookmarkResponse.toBookmark(),
+                userGetService.findById(userId),
+                Bookmark.builder().id(bookmarkId).build(),
                 request.notification()
             );
         }
