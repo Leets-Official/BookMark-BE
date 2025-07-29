@@ -1,5 +1,6 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Map;
+import org.springframework.web.util.UriUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -32,13 +33,10 @@ public class BookmarkPreviewService {
 
   private BookmarkPreviewResponse callPreviewApi(String url, String endpoint) {
     try {
-        return restTemplate.postForObject(
-            endpoint,
-            Map.of("url", url),
-            BookmarkPreviewResponse.class
-        );
+      String fullUrl = endpoint + "?url=" + UriUtils.encode(url, StandardCharsets.UTF_8);
+      return restTemplate.getForObject(fullUrl, BookmarkPreviewResponse.class);
     } catch (Exception e) {
-        throw new BookmarkPreviewException();
+      throw new BookmarkPreviewException();
     }
   }
 }

@@ -1,17 +1,17 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Query
 from pydantic import BaseModel
 from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urljoin
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
 class PreviewRequest(BaseModel):
     url: str
 
-@router.post("/api/v1/preview")
-def preview(request: PreviewRequest):
-    url = request.url
+@router.get("/api/v1/preview")
+def preview(url: str = Query(...)):
     headers_list = [
         {"User-Agent": "facebookexternalhit/1.1"},
         {"User-Agent": "Mozilla/5.0"}
@@ -26,12 +26,12 @@ def preview(request: PreviewRequest):
             continue
 
     if response is None:
-        return {
+        return JSONResponse(content={
             "title": "요청 실패",
             "thumbnailUrl": None,
             "faviconUrl": None,
             "error": "모든 User-Agent 요청 실패"
-        }
+        })
     soup = BeautifulSoup(response.text, "html.parser")
 
     # 제목
@@ -51,11 +51,11 @@ def preview(request: PreviewRequest):
     # 썸네일이 없으면 파비콘으로 대체
     thumbnail_to_use = thumbnail or favicon_url
 
-    return {
+    return JSONResponse(content={
         "title": title,
         "thumbnailUrl": thumbnail_to_use,
         "faviconUrl": favicon_url
-    }
+    })
 
 app = FastAPI()
 app.include_router(router)
