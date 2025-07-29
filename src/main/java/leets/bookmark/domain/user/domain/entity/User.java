@@ -61,4 +61,11 @@ public class User extends BaseTimeEntity {
     public void updateKakaoAccessToken(String kakaoAccessToken) {
         this.kakaoAccessToken = kakaoAccessToken;
     }
+
+    public void deleteAllTokens() {
+        this.jwtAccessToken = null;
+        this.jwtRefreshToken = null;
+        this.kakaoAccessToken = null;
+        this.kakaoRefreshToken = null;
+    }
 }

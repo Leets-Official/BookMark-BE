@@ -37,4 +37,11 @@ public class UserController {
         userUseCase.updateNickname(userId, request.nickname());
         return CommonResponse.createSuccess(UPDATE_USER_NICKNAME_SUCCESS.getMessage());
     }
+
+    @DeleteMapping("/withdraw")
+    @Operation(summary = "회원탈퇴 API", description = "사용자가 회원 탈퇴를 요청하는 API입니다.")
+    public CommonResponse<Void> withdrawUser(@CurrentUser Long userId) {
+        userUseCase.withdraw(userId);
+        return CommonResponse.createSuccess(WITHDRAW_USER_SUCCESS.getMessage());
+    }
 }

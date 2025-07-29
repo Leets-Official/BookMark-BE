@@ -6,4 +6,6 @@ public interface UserUseCase {
     UserInfoResponse getUserInfo(Long userId);
 
     void updateNickname(Long userId, String newNickname);
+
+    void withdraw(Long userId);
 }
