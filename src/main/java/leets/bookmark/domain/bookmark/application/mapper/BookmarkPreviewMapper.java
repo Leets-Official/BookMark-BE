@@ -11,6 +11,7 @@ public class BookmarkPreviewMapper {
                 .title(response.title())
                 .thumbnailUrl(response.thumbnailUrl())
                 .faviconUrl(response.faviconUrl())
+                .platform(response.platform())
                 .build();
     }
 
