@@ -2,6 +2,7 @@ package leets.bookmark.domain.user.domain.entity;
 
 import jakarta.persistence.*;
 import leets.bookmark.domain.user.domain.entity.enums.Role;
+import leets.bookmark.domain.user.domain.entity.enums.Status;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,9 @@ public class User extends BaseTimeEntity {
 
     private String kakaoRefreshToken;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     public void updateJwtTokens(String jwtAccessToken, String jwtRefreshToken) {
         this.jwtAccessToken = jwtAccessToken;
         this.jwtRefreshToken = jwtRefreshToken;
@@ -67,5 +71,11 @@ public class User extends BaseTimeEntity {
         this.jwtRefreshToken = null;
         this.kakaoAccessToken = null;
         this.kakaoRefreshToken = null;
+    }
+
+    public void withdraw() {
+        this.status = Status.DELETED;
+        this.kakaoId = null;
+        deleteAllTokens();
     }
 }
