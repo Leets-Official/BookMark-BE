@@ -3,6 +3,7 @@ package leets.bookmark.domain.bookmark.application.usecase;
 import java.util.List;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
@@ -59,7 +60,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public List<BookmarkResponse> extractPreviewFromUrl(String url) {
+    public List<BookmarkPreviewResponse> extractPreviewFromUrl(String url) {
         return bookmarkPreviewService.extractPreviewFromUrl(url);
     }
 }

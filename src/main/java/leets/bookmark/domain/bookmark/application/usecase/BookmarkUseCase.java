@@ -1,5 +1,6 @@
 package leets.bookmark.domain.bookmark.application.usecase;
 
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
@@ -14,5 +15,5 @@ public interface BookmarkUseCase {
     List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request);
     List<BookmarkResponse> getAllBookmarks(Long userId);
     List<BookmarkResponse> getFilteredBookmarksByCategory(Long userId, Long categoryId);
-    List<BookmarkResponse> extractPreviewFromUrl(String url);
+    List<BookmarkPreviewResponse> extractPreviewFromUrl(String url);
 }
