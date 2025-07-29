@@ -9,9 +9,9 @@ import leets.bookmark.domain.bookmark.application.mapper.BookmarkPreviewMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookmarkPreviewService {
@@ -29,14 +29,12 @@ public class BookmarkPreviewService {
     return List.of(preview);
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(BookmarkPreviewService.class);
-
   private BookmarkPreviewResponse callPreviewApi(String url, String endpoint) {
     try {
       String fullUrl = endpoint + "?url=" + url;
       return restTemplate.getForObject(fullUrl, BookmarkPreviewResponse.class);
     } catch (Exception e) {
-      logger.error("미리보기 API 호출 실패. url: {}, endpoint: {}, error: {}", url, endpoint, e.getMessage(), e);
+      log.error("미리보기 API 호출 실패 | url: {}, endpoint: {}, message: {}", url, endpoint, e.getMessage(), e);
       throw new BookmarkPreviewException();
     }
   }
