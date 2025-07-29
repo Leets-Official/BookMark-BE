@@ -8,6 +8,7 @@ import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     private final BookmarkGetService bookmarkGetService;
     private final BookmarkMapper bookmarkMapper;
+    private final BookmarkPreviewService bookmarkPreviewService;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
@@ -56,4 +58,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
                 .toList();
     }
 
+    @Override
+    public List<BookmarkResponse> extractPreviewFromUrl(String url) {
+        return bookmarkPreviewService.extractPreviewFromUrl(url);
+    }
 }

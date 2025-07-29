@@ -30,6 +30,12 @@ public class Bookmark extends BaseTimeEntity {
 
     private String memo;
 
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl;
+
+    @Column(name = "favicon_url")
+    private String faviconUrl;
+
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
