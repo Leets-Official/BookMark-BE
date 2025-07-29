@@ -8,6 +8,7 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
+import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,19 @@ public class BookmarkGetService {
     private final BookmarkRepository bookmarkRepository;
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
 
-    public List<Bookmark> getBookmarksByMemoContaining(String keyword, Long userId) {
-        return bookmarkRepository.findByMemoContainingAndUserId(keyword, userId);
+    public List<Bookmark> getBookmarksByMemoContaining(String keyword, User user) {
+        return bookmarkRepository.findByMemoContainingAndUserId(keyword, user.getId());
     }
 
     public List<BookmarkTagMapping> getMappingsByBookmark(Bookmark bookmark) {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
     }
 
-    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, List<Long> categoryIds, DeviceType deviceType) {
-        return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, deviceType);
+    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(User user, List<Long> categoryIds, DeviceType deviceType) {
+        return bookmarkRepository.findAllByUserIdAndCategoryIds(user.getId(), categoryIds, deviceType);
     }
 
-    public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
+    public List<Bookmark> getFilteredBookmarks(User user, BookmarkFilterRequest request) {
         List<Long> categoryIds = request.categoryIds();
         List<Long> tagIds = request.tagId();
         DeviceType deviceType = request.deviceType();
@@ -44,13 +45,13 @@ public class BookmarkGetService {
         }
 
         if (tagIds == null || tagIds.isEmpty()) {
-            return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, deviceType);
+            return bookmarkRepository.findAllByUserIdAndCategoryIds(user.getId(), categoryIds, deviceType);
         }
-        return bookmarkRepository.findAllWithFilter(userId, categoryIds, tagIds, deviceType);
+        return bookmarkRepository.findAllWithFilter(user.getId(), categoryIds, tagIds, deviceType);
     }
 
-    public List<Bookmark> getAllBookmarks(Long userId) {
-        return bookmarkRepository.findAllByUserId(userId);
+    public List<Bookmark> getAllBookmarks(leets.bookmark.domain.user.domain.entity.User user) {
+        return bookmarkRepository.findAllByUserId(user.getId());
     }
 
     public Bookmark getBookmarkById(Long bookmarkId) {
@@ -58,20 +59,20 @@ public class BookmarkGetService {
                 .orElseThrow(BookmarkNotFoundException::new);
     }
 
-    public Slice<Bookmark> getRecentBookmarksByPlatform(Long userId, DeviceType deviceType, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(userId, deviceType, pageable);
+    public Slice<Bookmark> getRecentBookmarksByPlatform(User user, DeviceType deviceType, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(user.getId(), deviceType, pageable);
     }
 
-    public Slice<Bookmark> getBookmarksByPlatformWithSlice(Long userId, DeviceType deviceType, Long lastBookmarkId, Pageable pageable) {
+    public Slice<Bookmark> getBookmarksByPlatformWithSlice(User user, DeviceType deviceType, Long lastBookmarkId, Pageable pageable) {
         if (lastBookmarkId == null) {
-            return bookmarkRepository.findTopByUserIdAndPlatformOrderByIdDesc(userId, deviceType, pageable);
+            return bookmarkRepository.findTopByUserIdAndPlatformOrderByIdDesc(user.getId(), deviceType, pageable);
         } else {
             return bookmarkRepository.findByUserIdAndPlatformAndIdLessThanOrderByIdDesc(
-                userId, deviceType, lastBookmarkId, pageable);
+                user.getId(), deviceType, lastBookmarkId, pageable);
         }
     }
 
-    public Slice<Bookmark> getSavedBookmarksByPlatform(Long userId, DeviceType deviceType, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndPlatformAndIsSavedTrue(userId, deviceType, pageable);
+    public Slice<Bookmark> getSavedBookmarksByPlatform(User user, DeviceType deviceType, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformAndIsSavedTrue(user.getId(), deviceType, pageable);
     }
 }

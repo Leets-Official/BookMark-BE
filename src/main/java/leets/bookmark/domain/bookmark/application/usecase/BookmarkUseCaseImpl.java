@@ -44,19 +44,22 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
-        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemoContaining(keyword, userId);
+        User user = userGetService.findById(userId);
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemoContaining(keyword, user);
         return mapToResponses(bookmarks);
     }
 
     @Override
     public List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        List<Bookmark> bookmarks = bookmarkGetService.getFilteredBookmarks(userId, request);
+        User user = userGetService.findById(userId);
+        List<Bookmark> bookmarks = bookmarkGetService.getFilteredBookmarks(user, request);
         return mapToResponses(bookmarks);
     }
 
     @Override
     public List<BookmarkResponse> getAllBookmarks(Long userId) {
-        List<Bookmark> bookmarks = bookmarkGetService.getAllBookmarks(userId);
+        User user = userGetService.findById(userId);
+        List<Bookmark> bookmarks = bookmarkGetService.getAllBookmarks(user);
         return mapToResponses(bookmarks);
     }
 
@@ -127,13 +130,15 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider, Pageable pageable) {
-        return bookmarkGetService.getSavedBookmarksByPlatform(userId, deviceType, pageable)
+        User user = userGetService.findById(userId);
+        return bookmarkGetService.getSavedBookmarksByPlatform(user, deviceType, pageable)
             .map(this::toResponseWithMappings);
     }
 
     @Override
     public Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider,Pageable pageable) {
-        return bookmarkGetService.getRecentBookmarksByPlatform(userId, deviceType, pageable)
+        User user = userGetService.findById(userId);
+        return bookmarkGetService.getRecentBookmarksByPlatform(user, deviceType, pageable)
             .map(this::toResponseWithMappings);
     }
 
