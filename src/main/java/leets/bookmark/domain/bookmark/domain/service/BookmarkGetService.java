@@ -1,9 +1,11 @@
 package leets.bookmark.domain.bookmark.domain.service;
+import leets.bookmark.domain.bookmark.application.exception.InvalidDeviceTypeException;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
+import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,19 +30,23 @@ public class BookmarkGetService {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
     }
 
-    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, List<Long> categoryIds, String platform) {
-        return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, platform);
+    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, List<Long> categoryIds, DeviceType deviceType) {
+        return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, deviceType);
     }
 
     public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
         List<Long> categoryIds = request.categoryIds();
         List<Long> tagIds = request.tagId();
-        String platform = request.platform();
+        DeviceType deviceType = request.deviceType();
+
+        if (deviceType == null) {
+            throw new InvalidDeviceTypeException();
+        }
 
         if (tagIds == null || tagIds.isEmpty()) {
-            return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, platform);
+            return bookmarkRepository.findAllByUserIdAndCategoryIds(userId, categoryIds, deviceType);
         }
-        return bookmarkRepository.findAllWithFilter(userId, categoryIds, tagIds, platform);
+        return bookmarkRepository.findAllWithFilter(userId, categoryIds, tagIds, deviceType);
     }
 
     public List<Bookmark> getAllBookmarks(Long userId) {
@@ -52,20 +58,20 @@ public class BookmarkGetService {
                 .orElseThrow(BookmarkNotFoundException::new);
     }
 
-    public Slice<Bookmark> getRecentBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(userId, platform, pageable);
+    public Slice<Bookmark> getRecentBookmarksByPlatform(Long userId, DeviceType deviceType, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(userId, deviceType, pageable);
     }
 
-    public Slice<Bookmark> getBookmarksByPlatformWithSlice(Long userId, String platform, Long lastBookmarkId, Pageable pageable) {
+    public Slice<Bookmark> getBookmarksByPlatformWithSlice(Long userId, DeviceType deviceType, Long lastBookmarkId, Pageable pageable) {
         if (lastBookmarkId == null) {
-            return bookmarkRepository.findTopByUserIdAndPlatformOrderByIdDesc(userId, platform, pageable);
+            return bookmarkRepository.findTopByUserIdAndPlatformOrderByIdDesc(userId, deviceType, pageable);
         } else {
             return bookmarkRepository.findByUserIdAndPlatformAndIdLessThanOrderByIdDesc(
-                userId, platform, lastBookmarkId, pageable);
+                userId, deviceType, lastBookmarkId, pageable);
         }
     }
 
-    public Slice<Bookmark> getSavedBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndPlatformAndIsSavedTrue(userId, platform, pageable);
+    public Slice<Bookmark> getSavedBookmarksByPlatform(Long userId, DeviceType deviceType, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformAndIsSavedTrue(userId, deviceType, pageable);
     }
 }

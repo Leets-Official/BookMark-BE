@@ -1,5 +1,7 @@
 package leets.bookmark.domain.bookmark.application.dto.request;
 
+import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import lombok.Builder;
 
 import java.util.List;
@@ -8,5 +10,6 @@ import java.util.List;
 public record BookmarkFilterRequest(
         List<Long> categoryIds,
         List<Long> tagId,
-        String platform
+        DeviceType deviceType,
+        Provider provider
 ) {}

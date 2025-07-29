@@ -8,7 +8,8 @@ import leets.bookmark.global.common.entity.BaseTimeEntity;
 import leets.bookmark.domain.category.domain.entity.Category;
 
 import lombok.*;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
+import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -33,7 +34,10 @@ public class Bookmark extends BaseTimeEntity {
     private String memo;
 
     @Enumerated(EnumType.STRING)
-    private Platform platform;
+    private DeviceType deviceType;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @Column(name = "is_saved", nullable = false)
     private boolean isSaved = true;
@@ -56,7 +60,7 @@ public class Bookmark extends BaseTimeEntity {
         this.title = title;
         this.memo = memo;
         this.thumbnailUrl = thumbnailUrl;
-        this.platform = Platform.from(platform);
+        this.deviceType = DeviceType.from(platform);
     }
 
     public void addTagMapping(BookmarkTagMapping mapping) {
@@ -75,12 +79,4 @@ public class Bookmark extends BaseTimeEntity {
         this.category = category;
     }
 
-
-    public File getFile() {
-        return null;
-    }
-
-    public String getThumbnailUrl() {
-        return this.thumbnailUrl;
-    }
 }

@@ -4,7 +4,9 @@ import java.util.List;
 
 import leets.bookmark.domain.bookmark.application.exception.BookmarkTagCountExceededException;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkTagMinimumRequiredException;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Pageable;
 
@@ -124,14 +126,14 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
-        return bookmarkGetService.getSavedBookmarksByPlatform(userId, platform, pageable)
+    public Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider, Pageable pageable) {
+        return bookmarkGetService.getSavedBookmarksByPlatform(userId, deviceType, pageable)
             .map(this::toResponseWithMappings);
     }
 
     @Override
-    public Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, String platform, Pageable pageable) {
-        return bookmarkGetService.getRecentBookmarksByPlatform(userId, platform, pageable)
+    public Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider,Pageable pageable) {
+        return bookmarkGetService.getRecentBookmarksByPlatform(userId, deviceType, pageable)
             .map(this::toResponseWithMappings);
     }
 

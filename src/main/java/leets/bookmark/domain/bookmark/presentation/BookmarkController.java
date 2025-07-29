@@ -5,6 +5,8 @@ import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessag
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
@@ -63,11 +65,12 @@ public class BookmarkController {
     @Operation(summary = "저장 북마크 리스트 조회 API", description = "모바일/PC 플랫폼 구분 후 최근순으로 n개씩 조회합니다.")
     public CommonResponse<Slice<BookmarkResponse>> getSavedBookmarksByPlatform(
             @CurrentUser Long userId,
-            @RequestParam String platform,
+            @RequestParam DeviceType deviceType,
+            @RequestParam Provider provider,
             @RequestParam int page,
             @RequestParam int size
     ) {
-        Slice<BookmarkResponse> result = bookmarkUseCase.getSavedBookmarksByPlatform(userId, platform, PageRequest.of(page, size));
+        Slice<BookmarkResponse> result = bookmarkUseCase.getSavedBookmarksByPlatform(userId, deviceType, provider, PageRequest.of(page, size));
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 
@@ -75,11 +78,12 @@ public class BookmarkController {
     @Operation(summary = "저장 북마크 무한스크롤 API", description = "모바일/PC 플랫폼에 따라 북마크를 최근순으로 slice하여 무한스크롤합니다.")
     public CommonResponse<Slice<BookmarkResponse>> getRecentBookmarksByPlatform(
             @CurrentUser Long userId,
-            @RequestParam String platform,
+            @RequestParam DeviceType platform,
+            @RequestParam Provider provider,
             @RequestParam int page,
             @RequestParam int size
     ) {
-        Slice<BookmarkResponse> result = bookmarkUseCase.getRecentBookmarksByPlatform(userId, platform, PageRequest.of(page, size));
+        Slice<BookmarkResponse> result = bookmarkUseCase.getRecentBookmarksByPlatform(userId, platform, provider, PageRequest.of(page, size));
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 
