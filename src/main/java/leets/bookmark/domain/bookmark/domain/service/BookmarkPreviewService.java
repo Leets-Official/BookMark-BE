@@ -1,6 +1,7 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -10,8 +11,6 @@ import leets.bookmark.domain.bookmark.application.mapper.BookmarkPreviewMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 import org.springframework.web.util.UriUtils;
 
 @Service

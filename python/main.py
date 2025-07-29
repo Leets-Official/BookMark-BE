@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Query
+from fastapi import FastAPI, APIRouter, Query, HTTPException
 from pydantic import BaseModel
 from bs4 import BeautifulSoup
 import requests
@@ -26,12 +26,16 @@ def preview(url: str = Query(...)):
             continue
 
     if response is None:
-        return JSONResponse(content={
-            "title": "요청 실패",
-            "thumbnailUrl": None,
-            "faviconUrl": None,
-            "error": "모든 User-Agent 요청 실패"
-        })
+        return JSONResponse(
+            status_code=400,
+            content={
+                "title": "요청 실패",
+                "thumbnailUrl": None,
+                "faviconUrl": None,
+                "error": "모든 User-Agent 요청 실패"
+            }
+        )
+
     soup = BeautifulSoup(response.text, "html.parser")
 
     # 제목
@@ -51,11 +55,11 @@ def preview(url: str = Query(...)):
     # 썸네일이 없으면 파비콘으로 대체
     thumbnail_to_use = thumbnail or favicon_url
 
-    return JSONResponse(content={
+    return {
         "title": title,
         "thumbnailUrl": thumbnail_to_use,
         "faviconUrl": favicon_url
-    })
+    }
 
 app = FastAPI()
 app.include_router(router)
