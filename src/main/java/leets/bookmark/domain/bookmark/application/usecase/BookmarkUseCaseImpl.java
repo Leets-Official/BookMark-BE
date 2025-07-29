@@ -138,7 +138,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     @Override
     public Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider,Pageable pageable) {
         User user = userGetService.findById(userId);
-        return bookmarkGetService.getRecentBookmarksByPlatform(user, deviceType, pageable)
+        return bookmarkGetService.getRecentBookmarksByPlatform(user, deviceType, provider, pageable)
             .map(this::toResponseWithMappings);
     }
 

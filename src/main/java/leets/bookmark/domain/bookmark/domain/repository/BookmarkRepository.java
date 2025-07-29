@@ -2,6 +2,7 @@ package leets.bookmark.domain.bookmark.domain.repository;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,11 +18,11 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     List<Bookmark> findAllByUserId(Long userId);
 
-    Slice<Bookmark> findTopByUserIdAndPlatformOrderByIdDesc(Long userId, DeviceType platform, Pageable pageable);
+    Slice<Bookmark> findTopByUserIdAndDeviceTypeOrderByIdDesc(Long userId, DeviceType platform, Pageable pageable);
 
-    Slice<Bookmark> findByUserIdAndPlatformAndIdLessThanOrderByIdDesc(Long userId, DeviceType platform, Long lastBookmarkId, Pageable pageable);
+    Slice<Bookmark> findByUserIdAndDeviceTypeAndIdLessThanOrderByIdDesc(Long userId, DeviceType platform, Long lastBookmarkId, Pageable pageable);
 
-    Slice<Bookmark> findByUserIdAndPlatformAndIsSavedTrue(Long userId, DeviceType platform,Pageable pageable);
+    Slice<Bookmark> findByUserIdAndDeviceTypeAndIsSavedTrue(Long userId, DeviceType platform, Pageable pageable);
 
     @Query("""
         SELECT DISTINCT b FROM Bookmark b
@@ -53,6 +54,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
             @Param("deviceType") DeviceType deviceType
     );
 
-    Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, DeviceType platform, Pageable pageable);
+    Page<Bookmark> findByUserIdAndDeviceTypeAndProviderOrderByCreatedAtDesc(Long userId, DeviceType deviceType, Provider provider, Pageable pageable);
 
 }
