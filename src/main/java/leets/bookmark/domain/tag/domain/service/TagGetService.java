@@ -36,4 +36,9 @@ public class TagGetService {
     public long countByCategory(Category category) {
         return tagRepository.countByCategory(category);
     }
+
+    public Tag findByIdAndCategoryId(Long tagId, Category category){
+        return tagRepository.findByIdAndCategory(tagId, category)
+                .orElseThrow(TagNotFoundException::new);
+    }
 }

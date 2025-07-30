@@ -2,13 +2,19 @@ package leets.bookmark.domain.bookmark.application.usecase;
 
 import java.util.List;
 
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
+import leets.bookmark.domain.file.domain.service.FileGetService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +25,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final BookmarkGetService bookmarkGetService;
     private final BookmarkMapper bookmarkMapper;
     private final BookmarkPreviewService bookmarkPreviewService;
+    private final FileGetService fileGetService;
 
     @Override
     public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
@@ -27,9 +34,17 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        List<Bookmark> bookmarks = bookmarkGetService.getFilteredBookmarks(userId, request);
-        return mapToResponses(bookmarks);
+    public Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
+        Pageable pageable = PageRequest.of(request.page(),
+                request.size(),
+                Sort.by(Sort.Direction.DESC, "id"));
+
+        Slice<Bookmark> bookmarks = bookmarkGetService.search(userId, request, pageable);
+        return bookmarks.map(bookmark -> {
+                    File file = fileGetService.findByBookmarkId(bookmark.getId());
+                    return bookmarkMapper.toResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark), file);
+                }
+        );
     }
 
     @Override
@@ -42,7 +57,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         return bookmarks.stream()
             .map(bookmark -> {
                 List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-                return bookmarkMapper.toResponse(bookmark, mappings);
+                File file = fileGetService.findByBookmarkId(bookmark.getId());
+                return bookmarkMapper.toResponse(bookmark, mappings, file);
             })
             .toList();
     }
@@ -53,7 +69,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         return bookmarks.stream()
                 .map(bookmark -> {
                     List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-                    return bookmarkMapper.toResponse(bookmark, mappings);
+                    File file = fileGetService.findByBookmarkId(bookmark.getId());
+                    return bookmarkMapper.toResponse(bookmark, mappings, file);
                 })
                 .toList();
     }
