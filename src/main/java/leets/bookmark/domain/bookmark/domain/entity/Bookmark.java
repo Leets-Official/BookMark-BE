@@ -36,6 +36,8 @@ public class Bookmark extends BaseTimeEntity {
     @Column(name = "favicon_url")
     private String faviconUrl;
 
+    private String platform;
+
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
 

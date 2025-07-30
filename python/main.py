@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter, Query, HTTPException
 from pydantic import BaseModel
 from bs4 import BeautifulSoup
 import requests
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from fastapi.responses import JSONResponse
 
 router = APIRouter()
@@ -37,6 +37,8 @@ def preview(url: str = Query(...)):
         )
 
     soup = BeautifulSoup(response.text, "html.parser")
+    parsed_url = urlparse(url)
+    hostname = parsed_url.hostname or ""
 
     # 제목
     og_title = soup.find("meta", property="og:title")
@@ -51,6 +53,20 @@ def preview(url: str = Query(...)):
     favicon_url = icon_tag["href"] if icon_tag and icon_tag.get("href") else None
     if favicon_url and not favicon_url.startswith("http"):
         favicon_url = urljoin(url, favicon_url)
+    
+    # 플랫폼 이름 추출
+    og_site_name = soup.find("meta", property="og:site_name")
+    platform = og_site_name["content"] if og_site_name and og_site_name.get("content") else None
+
+    # 예외 처리: 특정 도메인 강제 지정
+    if "blog.naver.com" in hostname:
+        platform = "네이버 블로그"
+    elif "tistory.com" in hostname:
+        platform = "티스토리"
+    elif"x.com" in hostname:
+        platform = "트위터"
+    elif platform is None:
+        platform = hostname
 
     # 썸네일이 없으면 파비콘으로 대체
     thumbnail_to_use = thumbnail or favicon_url
@@ -58,7 +74,8 @@ def preview(url: str = Query(...)):
     return {
         "title": title,
         "thumbnailUrl": thumbnail_to_use,
-        "faviconUrl": favicon_url
+        "faviconUrl": favicon_url,
+        "platform": platform
     }
 
 app = FastAPI()
