@@ -3,9 +3,11 @@ package leets.bookmark.domain.bookmark.application.dto.request;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.tag.domain.entity.Tag;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record BookmarkSearchCondition (
         String keyword,
         Platform platform,
