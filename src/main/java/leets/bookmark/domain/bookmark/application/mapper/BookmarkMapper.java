@@ -5,6 +5,7 @@ import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
+import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
 
@@ -17,16 +18,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkMapper {
 
-    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
+    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings, File file) {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
-        return buildBookmarkResponse(bookmark, tagInfo);
-    }
-
-    public BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
-        BookmarkTagInfoResponse categoryTagResponse = toBookmarkTagInfoResponseFromTags(tags);
-
-        return buildBookmarkResponse(bookmark, categoryTagResponse);
+        return BookmarkResponse.builder()
+                .id(bookmark.getId())
+                .url(bookmark.getUrl())
+                .title(bookmark.getTitle())
+                .memo(bookmark.getMemo())
+                .thumbnailUrl(file != null ? file.getFileUrl() : null)
+                .categoryTagInfos(List.of(tagInfo))
+                .createdAt(bookmark.getCreatedAt())
+                .updatedAt(bookmark.getUpdatedAt())
+                .build();
     }
 
     public BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
@@ -81,19 +85,6 @@ public class BookmarkMapper {
             .categoryId(category != null ? category.getId() : null)
             .categoryName(category != null ? category.getCategoryName() : null)
             .tags(tags)
-            .build();
-    }
-
-    private BookmarkResponse buildBookmarkResponse(Bookmark bookmark, BookmarkTagInfoResponse tagInfo) {
-        return BookmarkResponse.builder()
-            .id(bookmark.getId())
-            .url(bookmark.getUrl())
-            .title(bookmark.getTitle())
-            .memo(bookmark.getMemo())
-            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
-            .categoryTagInfos(List.of(tagInfo))
-            .createdAt(bookmark.getCreatedAt())
-            .updatedAt(bookmark.getUpdatedAt())
             .build();
     }
 }
