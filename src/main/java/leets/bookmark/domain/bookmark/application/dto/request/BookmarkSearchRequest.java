@@ -7,6 +7,7 @@ import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import java.util.List;
 
 public record BookmarkSearchRequest(
+        String keyword,
         List<CategoryTagRequest> categoryTagRequests,
         Platform platform,
         @PositiveOrZero

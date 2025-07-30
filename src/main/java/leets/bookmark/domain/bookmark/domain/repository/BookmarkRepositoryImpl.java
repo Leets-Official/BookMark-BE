@@ -71,6 +71,14 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
             builder.and(bookmark.platform.eq(condition.platform()));
         }
 
+        if (condition.keyword() != null && !condition.keyword().isBlank()) {
+            String keyword = "%" + condition.keyword().trim() + "%";
+            builder.and(
+                    bookmark.title.likeIgnoreCase(keyword)
+                            .or(bookmark.memo.likeIgnoreCase(keyword))
+            );
+        }
+
         BooleanBuilder categoryBuilder = new BooleanBuilder();
         if (condition.categories() != null && !condition.categories().isEmpty()) {
             for (Category category : condition.categories()) {
@@ -98,7 +106,6 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
             }
         }
 
-        // categories OR categoryWithTags 조건 결합
         BooleanBuilder orBuilder = new BooleanBuilder();
 
         if (categoryBuilder.hasValue()) {

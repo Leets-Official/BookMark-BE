@@ -81,6 +81,7 @@ public class BookmarkGetService {
         }
 
         BookmarkSearchCondition condition = new BookmarkSearchCondition(
+                request.keyword(),
                 request.platform(),
                 categories,
                 categoryWithTags
