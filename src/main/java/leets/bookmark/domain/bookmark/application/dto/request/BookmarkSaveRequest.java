@@ -1,5 +1,6 @@
 package leets.bookmark.domain.bookmark.application.dto.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
@@ -16,9 +17,10 @@ public record BookmarkSaveRequest(
     @NotBlank String title,
     @NotBlank String url,
     String memo,
-    FileSaveRequest file,
+    @Valid FileSaveRequest file,
     NotificationSaveRequest notification,
     @NotNull Platform platform,
     @NotNull Long categoryId,
+    @NotNull String faviconUrl,
     @NotNull List<Long> tagIds
 ) {}

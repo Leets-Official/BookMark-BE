@@ -36,9 +36,7 @@ public class BookmarkSaveService {
         bookmarkRepository.save(bookmark);
     }
 
-    public Bookmark save(BookmarkSaveRequest request, User user) {
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(CategoryNotFoundException::new);
+    public Bookmark save(BookmarkSaveRequest request, User user,Category category) {
 
         Bookmark bookmark = bookmarkMapper.toBookmark(user, request, category);
         Bookmark saved = bookmarkRepository.save(bookmark);
@@ -53,15 +51,14 @@ public class BookmarkSaveService {
     }
 
     public void updateCategoryAndTags(Bookmark bookmark, Long categoryId, List<Long> tagIds) {
-        bookmark.clearTagMappings();
 
-        for (Long tagId : tagIds) {
-            Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(TagNotFoundException::new);
-            BookmarkTagMapping mapping = BookmarkTagMapping.builder()
-                .tag(tag)
-                .build();
-            bookmark.addTagMapping(mapping);
-        }
+        bookmarkTagMappingRepository.deleteAllByBookmark(bookmark);
+
+        List<BookmarkTagMapping> mappings = tagIds.stream()
+            .map(tagGetService::findById)
+            .map(tag -> bookmarkMapper.toMapping(bookmark, tag))
+            .toList();
+
+        bookmarkTagMappingRepository.saveAll(mappings);
     }
 }
