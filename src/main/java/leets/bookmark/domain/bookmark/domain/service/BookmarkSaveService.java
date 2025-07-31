@@ -1,11 +1,16 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
+import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.category.application.exception.CategoryNotFoundException;
+import leets.bookmark.domain.category.application.exception.CategoryErrorCode;
+
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
+import leets.bookmark.domain.category.domain.repository.CategoryRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
@@ -23,6 +28,7 @@ public class BookmarkSaveService {
     private final BookmarkMapper bookmarkMapper;
     private final TagRepository tagRepository;
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
+    private final CategoryRepository categoryRepository;
 
     public void save(Bookmark bookmark) {
         bookmarkRepository.save(bookmark);
@@ -30,6 +36,11 @@ public class BookmarkSaveService {
 
     public Bookmark save(BookmarkSaveRequest request, User user) {
         Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
+        if (request.categoryId() != null) {
+            Category category = categoryRepository.findById(request.categoryId())
+                    .orElseThrow(CategoryNotFoundException::new);
+            bookmark.setCategory(category);
+        }
         Bookmark saved = bookmarkRepository.save(bookmark);
 
         for (Long tagId : request.tagIds()) {
