@@ -8,6 +8,7 @@ import leets.bookmark.domain.category.application.exception.CategoryNotFoundExce
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.repository.CategoryRepository;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class BookmarkUpdateService {
 
     @Transactional
     public void update(Bookmark bookmark, BookmarkUpdateRequest request) {
-        FileSaveRequest fileRequest = request.file();
+        FileUpdateRequest fileRequest = request.file();
         bookmark.updateBookmark(
             request.title(),
             request.memo()
@@ -44,7 +45,6 @@ public class BookmarkUpdateService {
         if (tagIds != null && !tagIds.isEmpty()) {
             List<Tag> tags = tagRepository.findAllById(tagIds);
             for (Tag tag : tags) {
-                bookmark.addTagMapping(BookmarkTagMapping.of(tag, bookmark));
             }
         }
     }
