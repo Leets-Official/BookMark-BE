@@ -42,7 +42,7 @@ public class BookmarkSaveService {
         Bookmark saved = bookmarkRepository.save(bookmark);
 
         for (Long tagId : request.tagIds()) {
-            Tag tag = tagGetService.findById(tagId);
+            Tag tag = tagGetService.findByIdAndCategoryId(tagId, category.getId());
             BookmarkTagMapping mapping = BookmarkTagMapping.of(tag, saved);
             bookmarkTagMappingRepository.save(mapping);
         }

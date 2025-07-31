@@ -7,5 +7,6 @@ import java.time.LocalDateTime;
 public record NotificationUpdateRequest(
         @NotNull
         Long notificationId,
+        @NotNull
         LocalDateTime notifyAt
 ) {}

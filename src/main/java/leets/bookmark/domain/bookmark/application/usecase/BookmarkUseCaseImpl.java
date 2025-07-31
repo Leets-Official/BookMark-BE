@@ -183,8 +183,9 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             updated = true;
         }
 
-        if (request.notification() != null) {
+        if (request.notification() != null && request.notification().notificationId() != null) {
             notificationUseCase.updateNotification(user, bookmark, request.notification());
+            updated = true;
         }
 
         if (request.tagIds() != null && !request.tagIds().isEmpty() && request.categoryId() == null) {
@@ -192,14 +193,15 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             validateCategoryOwner(user.getId(), category);
 
             List<Tag> tags = tagGetService.findAllByTagIdsAndCategoryId(request.tagIds(), category.getId());
+            if (tags != null && !tags.isEmpty()) {
+                bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
+                List<BookmarkTagMapping> mappings = tags.stream()
+                        .map(tag -> BookmarkTagMapping.of(tag, bookmark))
+                        .toList();
+                bookmarkTagMappingRepository.saveAll(mappings);
 
-            bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
-            List<BookmarkTagMapping> mappings = tags.stream()
-                    .map(tag -> BookmarkTagMapping.of(tag, bookmark))
-                    .toList();
-            bookmarkTagMappingRepository.saveAll(mappings);
-
-            updated = true;
+                updated = true;
+            }
         }
 
         if (request.tagIds() != null && !request.tagIds().isEmpty() && request.categoryId() != null) {
