@@ -6,5 +6,6 @@ import lombok.Builder;
 public record BookmarkPreviewResponse(
     String title,
     String thumbnailUrl,
-    String faviconUrl
+    String faviconUrl,
+    String platform
 ) {}

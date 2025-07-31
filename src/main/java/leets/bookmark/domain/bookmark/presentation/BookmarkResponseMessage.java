@@ -9,7 +9,7 @@ public enum BookmarkResponseMessage {
     BOOKMARK_SEARCH_SUCCESS("북마크 검색에 성공했습니다."),
     BOOKMARK_MEMO_SEARCH_SUCCESS("북마크 메모 검색에 성공했습니다."),
     BOOKMARK_FILTER_SUCCESS("북마크 필터링에 성공했습니다."),
-    BOOKMARK_PREVIEW_SUCCESS("썸네일, 제목, 파비콘 추출에 성공했습니다.");
+    BOOKMARK_PREVIEW_SUCCESS("썸네일, 제목, 파비콘, 플랫폼 추출에 성공했습니다.");
 
     private final String message;
 }
