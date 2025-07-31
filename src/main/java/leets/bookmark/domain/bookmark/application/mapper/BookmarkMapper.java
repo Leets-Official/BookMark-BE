@@ -82,9 +82,10 @@ public class BookmarkMapper {
             .build();
     }
 
-    public Bookmark toBookmark(User user, BookmarkSaveRequest request) {
+    public Bookmark toBookmark(User user, BookmarkSaveRequest request, Category category) {
         return Bookmark.builder()
             .user(user)
+            .category(category)
             .title(request.title())
             .url(request.url())
             .memo(request.memo())

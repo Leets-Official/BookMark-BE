@@ -40,7 +40,7 @@ public class BookmarkSaveService {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(CategoryNotFoundException::new);
 
-        Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
+        Bookmark bookmark = bookmarkMapper.toBookmark(user, request, category);
         Bookmark saved = bookmarkRepository.save(bookmark);
 
         for (Long tagId : request.tagIds()) {

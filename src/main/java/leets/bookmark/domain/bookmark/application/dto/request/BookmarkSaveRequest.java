@@ -18,7 +18,7 @@ public record BookmarkSaveRequest(
     String memo,
     FileSaveRequest file,
     NotificationSaveRequest notification,
-    Platform platform,
+    @NotNull Platform platform,
     @NotNull Long categoryId,
     @NotNull List<Long> tagIds
 ) {}
