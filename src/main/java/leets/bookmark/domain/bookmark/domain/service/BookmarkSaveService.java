@@ -16,6 +16,7 @@ import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
 import java.util.List;
 
+import leets.bookmark.domain.tag.domain.service.TagGetService;
 import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,23 +30,21 @@ public class BookmarkSaveService {
     private final TagRepository tagRepository;
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
     private final CategoryRepository categoryRepository;
+    private final TagGetService tagGetService;
 
     public void save(Bookmark bookmark) {
         bookmarkRepository.save(bookmark);
     }
 
     public Bookmark save(BookmarkSaveRequest request, User user) {
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(CategoryNotFoundException::new);
+
         Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
-        if (request.categoryId() != null) {
-            Category category = categoryRepository.findById(request.categoryId())
-                    .orElseThrow(CategoryNotFoundException::new);
-            bookmark.setCategory(category);
-        }
         Bookmark saved = bookmarkRepository.save(bookmark);
 
         for (Long tagId : request.tagIds()) {
-            Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(TagNotFoundException::new);
+            Tag tag = tagGetService.findById(tagId);
             BookmarkTagMapping mapping = BookmarkTagMapping.of(tag, saved);
             bookmarkTagMappingRepository.save(mapping);
         }

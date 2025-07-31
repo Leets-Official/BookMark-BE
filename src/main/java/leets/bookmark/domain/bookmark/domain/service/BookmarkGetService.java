@@ -26,4 +26,8 @@ public class BookmarkGetService {
     public Slice<Bookmark> search(Long userId, BookmarkSearchCondition condition, Pageable pageable) {
         return bookmarkRepository.searchWithFilters(userId, condition, pageable);
     }
+
+    public Bookmark getBookmarkById(Long bookmarkId) {
+        return bookmarkRepository.findById(bookmarkId).orElse(null);
+    }
 }

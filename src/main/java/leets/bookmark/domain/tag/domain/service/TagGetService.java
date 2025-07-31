@@ -40,4 +40,5 @@ public class TagGetService {
     public List<Tag> findAllByIds(List<Long> tagIds) {
         return tagRepository.findAllByIdIn(tagIds);
     }
+
 }

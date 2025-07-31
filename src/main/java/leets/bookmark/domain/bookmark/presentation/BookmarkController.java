@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -22,8 +23,9 @@ import io.swagger.v3.oas.annotations.Operation;
 public class BookmarkController {
 
     private final BookmarkUseCase bookmarkUseCase;
+    private final NotificationUseCase notificationUseCase;
 
-    @PostMapping
+    @PostMapping("/search")
     @Operation(summary = "북마크 필터링 API")
     public CommonResponse<Slice<BookmarkResponse>> getFilteredBookmarks(@CurrentUser Long userId,
                                                                         @RequestBody @Valid BookmarkSearchRequest bookmarkSearchRequest) {

@@ -4,7 +4,6 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveReques
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import org.springframework.data.domain.Slice;
@@ -25,9 +24,6 @@ public interface BookmarkUseCase {
 
     void save(Long userId, BookmarkSaveRequest request);
 
-    Slice<BookmarkResponse> getSavedBookmarks(Long userId, Platform platform, Pageable pageable);
-
-    Slice<BookmarkResponse> getRecentBookmarks(Long userId, Platform platform, Pageable pageable);
 
     List<BookmarkPreviewResponse> extractPreviewFromUrl(String url);
 }
