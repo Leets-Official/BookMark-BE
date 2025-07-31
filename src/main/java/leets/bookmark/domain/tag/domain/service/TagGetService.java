@@ -37,8 +37,7 @@ public class TagGetService {
         return tagRepository.countByCategory(category);
     }
 
-    public Tag findByIdAndCategoryAndUser(Long tagId, Category category, User user) {
-        return tagRepository.findByIdAndCategoryAndCategory_UserId(tagId, category, user.getId())
-                .orElseThrow(TagNotFoundException::new);
+    public List<Tag> findAllByIds(List<Long> tagIds) {
+        return tagRepository.findAllByIdIn(tagIds);
     }
 }

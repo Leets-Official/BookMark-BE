@@ -32,8 +32,7 @@ public class CategoryGetService {
         return categoryRepository.countByUser(user);
     }
 
-    public Category findByIdAndUser(Long id, User user) {
-        return categoryRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(CategoryNotFoundException::new);
+    public List<Category> findAllByIdInAndUser(List<Long> categoryIds, User user) {
+        return categoryRepository.findAllByIdInAndUser(categoryIds, user);
     }
 }
