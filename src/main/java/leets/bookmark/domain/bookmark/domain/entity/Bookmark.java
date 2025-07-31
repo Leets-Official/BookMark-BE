@@ -66,4 +66,20 @@ public class Bookmark extends BaseTimeEntity {
     public void deleteFile() {
         this.file = null;
     }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updatePlatform(Platform platform) {
+        this.platform = platform;
+    }
+
+    public void updateFaviconUrl(String s) {
+        this.faviconUrl = s;
+    }
+
+    public void updateUrl(String url) {
+        this.url = url;
+    }
 }

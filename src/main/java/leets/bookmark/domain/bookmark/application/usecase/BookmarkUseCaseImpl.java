@@ -158,14 +158,37 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
         validateBookmarkOwner(userId, bookmark);
 
-        bookmarkUpdateService.update(bookmark, request);
+        boolean updated = false;
+
+        if (request.title() != null && !request.title().trim().isEmpty()) {
+            bookmark.updateTitle(request.title());
+        }
 
         if (request.file() != null) {
             fileUseCase.updateFile(user, bookmark, request.file());
         }
 
+        if (request.platform() != null) {
+            bookmark.updatePlatform(request.platform());
+            updated = true;
+        }
+
+        if (request.faviconUrl() != null && !request.faviconUrl().trim().isEmpty()) {
+            bookmark.updateFaviconUrl(request.faviconUrl());
+            updated = true;
+        }
+
+        if (request.url() != null && !request.url().trim().isEmpty()) {
+            bookmark.updateUrl(request.url());
+            updated = true;
+        }
+
         if (request.notification() != null) {
-            notificationUseCase.saveNotification(user, bookmark, request.notification());
+            notificationUseCase.updateNotification(user, bookmark, request.notification());
+        }
+
+        if (!updated) {
+            throw new IllegalArgumentException("업데이트할 필드가 존재하지 않습니다.");
         }
     }
 
