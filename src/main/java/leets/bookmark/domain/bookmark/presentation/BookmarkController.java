@@ -42,21 +42,6 @@ public class BookmarkController {
         return CommonResponse.createSuccess(BOOKMARK_MEMO_SEARCH_SUCCESS.getMessage(), result);
     }
 
-    @GetMapping
-    @Operation(summary = "북마크 필터링 API", description = "카테고리 ID는 필수이며, 태그 ID로 북마크를 추가 필터링합니다.")
-    public CommonResponse<List<BookmarkResponse>> getFilteredBookmarks(
-        @CurrentUser Long userId,
-        @RequestParam List<Long> categoryIds,
-        @RequestParam(required = false) List<Long> tagIds,
-        @RequestParam(required = false, defaultValue = "PC") DeviceType deviceType,
-        @RequestParam(required = false, defaultValue = "KAKAO") Provider provider
-
-    ) {
-        BookmarkFilterRequest request = bookmarkMapper.toFilterRequest(categoryIds, tagIds,deviceType,provider);
-        List<BookmarkResponse> result = bookmarkUseCase.getFilteredBookmarks(userId, request);
-        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
-    }
-
     @GetMapping("/all")
     @Operation(summary = "전체 북마크 조회 API", description = "모든 북마크를 조회합니다.")
     public CommonResponse<List<BookmarkResponse>> getAllBookmarks(@CurrentUser Long userId) {

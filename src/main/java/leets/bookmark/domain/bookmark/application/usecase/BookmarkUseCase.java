@@ -17,8 +17,6 @@ import java.util.List;
 public interface BookmarkUseCase {
     List<BookmarkResponse> getByMemoContaining(Long userId, String keyword);
 
-    List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request);
-
     List<BookmarkResponse> getAllBookmarks(Long userId);
 
     BookmarkResponse getById(Long userId, Long bookmarkId);

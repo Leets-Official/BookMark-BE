@@ -53,13 +53,6 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public List<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        User user = userGetService.findById(userId);
-        List<Bookmark> bookmarks = bookmarkGetService.getFilteredBookmarks(user, request);
-        return mapToResponses(bookmarks);
-    }
-
-    @Override
     public List<BookmarkResponse> getAllBookmarks(Long userId) {
         User user = userGetService.findById(userId);
         List<Bookmark> bookmarks = bookmarkGetService.getAllBookmarks(user);

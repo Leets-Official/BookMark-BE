@@ -32,25 +32,6 @@ public class BookmarkGetService {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
     }
 
-    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(User user, List<Long> categoryIds, DeviceType deviceType) {
-        return bookmarkRepository.findAllByUserIdAndCategoryIds(user.getId(), categoryIds, deviceType);
-    }
-
-    public List<Bookmark> getFilteredBookmarks(User user, BookmarkFilterRequest request) {
-        List<Long> categoryIds = request.categoryIds();
-        List<Long> tagIds = request.tagId();
-        DeviceType deviceType = request.deviceType();
-
-        if (deviceType == null) {
-            throw new InvalidDeviceTypeException();
-        }
-
-        if (tagIds == null || tagIds.isEmpty()) {
-            return bookmarkRepository.findAllByUserIdAndCategoryIds(user.getId(), categoryIds, deviceType);
-        }
-        return bookmarkRepository.findAllWithFilter(user.getId(), categoryIds, tagIds, deviceType);
-    }
-
     public List<Bookmark> getAllBookmarks(leets.bookmark.domain.user.domain.entity.User user) {
         return bookmarkRepository.findAllByUserId(user.getId());
     }
