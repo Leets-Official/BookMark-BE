@@ -5,6 +5,7 @@ import java.util.List;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
 import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryGetService;
@@ -112,7 +113,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public List<BookmarkResponse> extractPreviewFromUrl(String url) {
+    public List<BookmarkPreviewResponse> extractPreviewFromUrl(String url) {
         return bookmarkPreviewService.extractPreviewFromUrl(url);
     }
 }
