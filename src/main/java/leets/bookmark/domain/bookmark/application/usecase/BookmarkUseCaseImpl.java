@@ -186,17 +186,36 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         if (request.notification() != null) {
             notificationUseCase.updateNotification(user, bookmark, request.notification());
         }
-        if (request.categoryId() != null && request.tagIds() != null) {
-            Category category = categoryGetService.findById(request.categoryId());
+
+        if (request.tagIds() != null && !request.tagIds().isEmpty() && request.categoryId() == null) {
+            Category category = bookmark.getCategory();
             validateCategoryOwner(user.getId(), category);
 
-            bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
-            bookmark.updateCategory(category);
             List<Tag> tags = tagGetService.findAllByTagIdsAndCategoryId(request.tagIds(), category.getId());
+
+            bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
             List<BookmarkTagMapping> mappings = tags.stream()
-                .map(tag -> BookmarkTagMapping.of(tag, bookmark))
-                .toList();
+                    .map(tag -> BookmarkTagMapping.of(tag, bookmark))
+                    .toList();
             bookmarkTagMappingRepository.saveAll(mappings);
+
+            updated = true;
+        }
+
+        if (request.tagIds() != null && !request.tagIds().isEmpty() && request.categoryId() != null) {
+            Category newCategory = categoryGetService.findById(request.categoryId());
+            validateCategoryOwner(user.getId(), newCategory);
+
+            List<Tag> tags = tagGetService.findAllByTagIdsAndCategoryId(request.tagIds(), newCategory.getId());
+
+            bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
+            List<BookmarkTagMapping> mappings = tags.stream()
+                    .map(tag -> BookmarkTagMapping.of(tag, bookmark))
+                    .toList();
+            bookmarkTagMappingRepository.saveAll(mappings);
+
+            bookmark.updateCategory(newCategory);
+            updated = true;
         }
 
         if (!updated) {
