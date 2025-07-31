@@ -172,12 +172,15 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     @Transactional
     @Override
     public void delete(Long userId, Long bookmarkId) {
+        User user = userGetService.findById(userId);
         Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
-        validateBookmarkOwner(userId, bookmark);
+
+        validateBookmarkOwner(user.getId(), bookmark);
+
         bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
         if (bookmark.getFile() != null) {
             bookmark.deleteFile();
-            fileUseCase.deleteFile(bookmark.getUser(), bookmark);
+            fileUseCase.deleteFile(user, bookmark);
         }
 
         notificationGetService.findByBookmarkId(bookmarkId)

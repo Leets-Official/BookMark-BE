@@ -8,11 +8,12 @@ import java.util.List;
 
 public record BookmarkUpdateRequest(
         String title,
+        String url,
         String memo,
-        String thumbnailUrl,
         FileUpdateRequest file,
         NotificationSaveRequest notification,
         Platform platform,
         Long categoryId,
+        String faviconUrl,
         List<Long> tagIds
 ) {}
