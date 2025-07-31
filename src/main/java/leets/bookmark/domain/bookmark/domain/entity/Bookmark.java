@@ -82,4 +82,8 @@ public class Bookmark extends BaseTimeEntity {
     public void updateUrl(String url) {
         this.url = url;
     }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }

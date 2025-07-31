@@ -41,4 +41,7 @@ public class TagGetService {
         return tagRepository.findAllByIdIn(tagIds);
     }
 
+    public List<Tag> findAllByTagIdsAndCategoryId(List<Long> tagIds, Long categoryId) {
+        return tagRepository.findAllByIdInAndCategory_Id(tagIds, categoryId);
+    }
 }

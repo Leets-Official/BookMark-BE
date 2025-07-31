@@ -11,8 +11,9 @@ import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
+import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
-import leets.bookmark.domain.category.application.mapper.CategoryMapper;
+import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryGetService;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
@@ -20,7 +21,6 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
-import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.service.FileGetService;
 import leets.bookmark.domain.notification.domain.service.NotificationDeleteService;
 import leets.bookmark.domain.notification.domain.service.NotificationGetService;
@@ -186,6 +186,18 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         if (request.notification() != null) {
             notificationUseCase.updateNotification(user, bookmark, request.notification());
         }
+        if (request.categoryId() != null && request.tagIds() != null) {
+            Category category = categoryGetService.findById(request.categoryId());
+            validateCategoryOwner(user.getId(), category);
+
+            bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
+            bookmark.updateCategory(category);
+            List<Tag> tags = tagGetService.findAllByTagIdsAndCategoryId(request.tagIds(), category.getId());
+            List<BookmarkTagMapping> mappings = tags.stream()
+                .map(tag -> BookmarkTagMapping.of(tag, bookmark))
+                .toList();
+            bookmarkTagMappingRepository.saveAll(mappings);
+        }
 
         if (!updated) {
             throw new IllegalArgumentException("업데이트할 필드가 존재하지 않습니다.");
@@ -217,6 +229,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
     }
 
+    @Transactional
     @Override
     public List<BookmarkPreviewResponse> extractPreviewFromUrl(String url) {
         return bookmarkPreviewService.extractPreviewFromUrl(url);
@@ -228,5 +241,11 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
                 throw new TagCategoryMismatchException();
             }
         });
+    }
+
+    private void validateCategoryOwner(Long userId, Category category){
+        if(!category.getUser().getId().equals(userId)) {
+            throw new CategoryOwnerMismatchException();
+        }
     }
 }
