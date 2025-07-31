@@ -1,11 +1,16 @@
 package leets.bookmark.domain.bookmark.domain.repository;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
+
+import org.springframework.data.domain.Slice;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
@@ -13,19 +18,26 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     List<Bookmark> findAllByUserId(Long userId);
 
+    Slice<Bookmark> findTopByUserIdAndDeviceTypeOrderByIdDesc(Long userId, DeviceType platform, Pageable pageable);
+
+    Slice<Bookmark> findByUserIdAndDeviceTypeAndIdLessThanOrderByIdDesc(Long userId, DeviceType platform, Long lastBookmarkId, Pageable pageable);
+
+    Slice<Bookmark> findByUserIdAndDeviceTypeAndIsSavedTrue(Long userId, DeviceType platform, Pageable pageable);
+
     @Query("""
         SELECT DISTINCT b FROM Bookmark b
         LEFT JOIN BookmarkTagMapping m ON m.bookmark = b
         LEFT JOIN Tag t ON t = m.tag
         WHERE b.user.id = :userId
-        AND (
-            t.category.id = :categoryId
-            OR (m.id IS NULL AND b.categoryId = :categoryId)
-        )
+        AND (:categoryIds IS NULL OR t.category.id IN (:categoryIds))
+        AND (:tagIds IS NULL OR t.id IN (:tagIds))
+        AND (:deviceType IS NULL OR b.deviceType = :deviceType)
     """)
-    List<Bookmark> findAllByUserIdAndCategoryId(
+    List<Bookmark> findAllWithFilter(
         @Param("userId") Long userId,
-        @Param("categoryId") Long categoryId
+        @Param("categoryIds") List<Long> categoryIds,
+        @Param("tagIds") List<Long> tagIds,
+        @Param("deviceType") DeviceType deviceType
     );
 
     @Query("""
@@ -33,12 +45,15 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         LEFT JOIN BookmarkTagMapping m ON m.bookmark = b
         LEFT JOIN Tag t ON t = m.tag
         WHERE b.user.id = :userId
-        AND (:categoryId IS NULL OR t.category.id = :categoryId)
-        AND (:tagIds IS NULL OR t.id IN (:tagIds))
+        AND t.category.id IN :categoryIds
+        AND (:deviceType IS NULL OR b.deviceType = :deviceType)
     """)
-    List<Bookmark> findAllWithFilter(
+    List<Bookmark> findAllByUserIdAndCategoryIds(
         @Param("userId") Long userId,
-        @Param("categoryId") Long categoryId,
-        @Param("tagIds") List<Long> tagIds
+        @Param("categoryIds") List<Long> categoryIds,
+        @Param("deviceType") DeviceType deviceType
     );
+
+    Page<Bookmark> findByUserIdAndDeviceTypeAndProviderOrderByCreatedAtDesc(Long userId, DeviceType deviceType, Provider provider, Pageable pageable);
+
 }

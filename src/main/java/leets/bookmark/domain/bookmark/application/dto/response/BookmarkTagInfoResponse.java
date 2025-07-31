@@ -11,8 +11,7 @@ public record BookmarkTagInfoResponse(
 ) {
     @Builder
     public record TagInfo(
-            Long tagId,
-            String tagName
+        Long tagId,
+        String tagName
     ) {}
 }
-
