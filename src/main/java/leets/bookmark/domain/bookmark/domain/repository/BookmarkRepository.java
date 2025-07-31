@@ -1,7 +1,6 @@
 package leets.bookmark.domain.bookmark.domain.repository;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,11 +17,11 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     List<Bookmark> findAllByUserId(Long userId);
 
-    Slice<Bookmark> findTopByUserIdAndDeviceTypeOrderByIdDesc(Long userId, DeviceType platform, Pageable pageable);
+    Slice<Bookmark> findTopByUserIdOrderByIdDesc(Long userId, Pageable pageable);
 
-    Slice<Bookmark> findByUserIdAndDeviceTypeAndIdLessThanOrderByIdDesc(Long userId, DeviceType platform, Long lastBookmarkId, Pageable pageable);
+    Slice<Bookmark> findByUserIdAndIdLessThanOrderByIdDesc(Long userId, Long lastBookmarkId, Pageable pageable);
 
-    Slice<Bookmark> findByUserIdAndDeviceTypeAndIsSavedTrue(Long userId, DeviceType platform, Pageable pageable);
+    Slice<Bookmark> findByUserId(Long userId, Pageable pageable);
 
     @Query("""
         SELECT DISTINCT b FROM Bookmark b
@@ -31,13 +30,11 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         WHERE b.user.id = :userId
         AND (:categoryIds IS NULL OR t.category.id IN (:categoryIds))
         AND (:tagIds IS NULL OR t.id IN (:tagIds))
-        AND (:deviceType IS NULL OR b.deviceType = :deviceType)
     """)
     List<Bookmark> findAllWithFilter(
         @Param("userId") Long userId,
         @Param("categoryIds") List<Long> categoryIds,
-        @Param("tagIds") List<Long> tagIds,
-        @Param("deviceType") DeviceType deviceType
+        @Param("tagIds") List<Long> tagIds
     );
 
     @Query("""
@@ -46,14 +43,12 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         LEFT JOIN Tag t ON t = m.tag
         WHERE b.user.id = :userId
         AND t.category.id IN :categoryIds
-        AND (:deviceType IS NULL OR b.deviceType = :deviceType)
     """)
     List<Bookmark> findAllByUserIdAndCategoryIds(
         @Param("userId") Long userId,
-        @Param("categoryIds") List<Long> categoryIds,
-        @Param("deviceType") DeviceType deviceType
+        @Param("categoryIds") List<Long> categoryIds
     );
 
-    Page<Bookmark> findByUserIdAndDeviceTypeAndProviderOrderByCreatedAtDesc(Long userId, DeviceType deviceType, Provider provider, Pageable pageable);
+    Page<Bookmark> findByUserIdAndProviderOrderByCreatedAtDesc(Long userId, Provider provider, Pageable pageable);
 
 }

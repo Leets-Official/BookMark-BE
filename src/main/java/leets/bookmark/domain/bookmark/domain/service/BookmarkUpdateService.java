@@ -26,8 +26,7 @@ public class BookmarkUpdateService {
         bookmark.updateBookmark(
             request.title(),
             request.memo(),
-            fileRequest != null ? fileRequest.fileUrl() : null,
-            request.deviceType().name()
+            fileRequest != null ? fileRequest.fileUrl() : null
         );
 
         tagMappingRepository.deleteByBookmark(bookmark);

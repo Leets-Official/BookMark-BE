@@ -8,7 +8,6 @@ import leets.bookmark.global.common.entity.BaseTimeEntity;
 import leets.bookmark.domain.category.domain.entity.Category;
 
 import lombok.*;
-import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 
 import java.util.List;
@@ -34,9 +33,6 @@ public class Bookmark extends BaseTimeEntity {
     private String memo;
 
     @Enumerated(EnumType.STRING)
-    private DeviceType deviceType;
-
-    @Enumerated(EnumType.STRING)
     private Provider provider;
 
     @Column(name = "thumbnail_url")
@@ -58,11 +54,10 @@ public class Bookmark extends BaseTimeEntity {
     @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
 
-    public void updateBookmark(String title, String memo, String thumbnailUrl, String platform) {
+    public void updateBookmark(String title, String memo, String thumbnailUrl) {
         this.title = title;
         this.memo = memo;
         this.thumbnailUrl = thumbnailUrl;
-        this.deviceType = DeviceType.from(platform);
     }
 
     public void addTagMapping(BookmarkTagMapping mapping) {

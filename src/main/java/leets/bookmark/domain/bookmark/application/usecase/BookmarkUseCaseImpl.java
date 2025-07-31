@@ -8,7 +8,6 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
 import leets.bookmark.domain.user.domain.entity.User;
-import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Pageable;
 
@@ -134,16 +133,16 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public Slice<BookmarkResponse> getSavedBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider, Pageable pageable) {
+    public Slice<BookmarkResponse> getSavedBookmarks(Long userId, Provider provider, Pageable pageable) {
         User user = userGetService.findById(userId);
-        return bookmarkGetService.getSavedBookmarksByPlatform(user, deviceType, pageable)
+        return bookmarkGetService.getSavedBookmarks(user, provider, pageable)
             .map(this::toResponseWithMappings);
     }
 
     @Override
-    public Slice<BookmarkResponse> getRecentBookmarksByPlatform(Long userId, DeviceType deviceType, Provider provider, Pageable pageable) {
+    public Slice<BookmarkResponse> getRecentBookmarks(Long userId, Provider provider, Pageable pageable) {
         User user = userGetService.findById(userId);
-        return bookmarkGetService.getRecentBookmarksByPlatform(user, deviceType, provider, pageable)
+        return bookmarkGetService.getRecentBookmarks(user, provider, pageable)
             .map(this::toResponseWithMappings);
     }
 

@@ -1,6 +1,5 @@
 package leets.bookmark.domain.bookmark.application.mapper;
 
-import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
@@ -69,7 +68,6 @@ public class BookmarkMapper {
             .title(bookmark.getTitle())
             .memo(bookmark.getMemo())
             .thumbnailUrl(bookmark.getThumbnailUrl())
-            .deviceType(bookmark.getDeviceType() != null ? bookmark.getDeviceType().name() : null)
             .provider(bookmark.getProvider() != null ? bookmark.getProvider().name() : null)
             .categoryTagInfos(List.of(tagInfo))
             .createdAt(bookmark.getCreatedAt())
@@ -83,7 +81,6 @@ public class BookmarkMapper {
             .title(request.title())
             .url(request.url())
             .memo(request.memo())
-            .deviceType(DeviceType.from(request.deviceType()))
             .provider(Provider.from(request.provider()))
             .build();
     }

@@ -3,7 +3,6 @@ package leets.bookmark.domain.bookmark.domain.service;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
-import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
@@ -39,20 +38,11 @@ public class BookmarkGetService {
             .orElseThrow(BookmarkNotFoundException::new);
     }
 
-    public Slice<Bookmark> getRecentBookmarksByPlatform(User user, DeviceType deviceType, Provider provider, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndDeviceTypeAndProviderOrderByCreatedAtDesc(user.getId(), deviceType, provider,pageable);
+    public Slice<Bookmark> getRecentBookmarks(User user, Provider provider, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndProviderOrderByCreatedAtDesc(user.getId(), provider, pageable);
     }
 
-    public Slice<Bookmark> getBookmarksByPlatformWithSlice(User user, DeviceType deviceType, Long lastBookmarkId, Pageable pageable) {
-        if (lastBookmarkId == null) {
-            return bookmarkRepository.findTopByUserIdAndDeviceTypeOrderByIdDesc(user.getId(), deviceType, pageable);
-        } else {
-            return bookmarkRepository.findByUserIdAndDeviceTypeAndIdLessThanOrderByIdDesc(
-                user.getId(), deviceType, lastBookmarkId, pageable);
-        }
-    }
-
-    public Slice<Bookmark> getSavedBookmarksByPlatform(User user, DeviceType deviceType, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndDeviceTypeAndIsSavedTrue(user.getId(), deviceType, pageable);
+    public Slice<Bookmark> getSavedBookmarks(User user, Provider provider, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndProviderOrderByCreatedAtDesc(user.getId(), provider, pageable);
     }
 }
