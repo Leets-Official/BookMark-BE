@@ -32,9 +32,7 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
     QBookmark bookmark = QBookmark.bookmark;
     QBookmarkTagMapping tagMapping = QBookmarkTagMapping.bookmarkTagMapping;
     QTag tag = QTag.tag;
-
     QCategory category = QCategory.category;
-
     QFile file = QFile.file;
 
     @Override
