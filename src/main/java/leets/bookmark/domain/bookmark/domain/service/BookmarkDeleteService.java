@@ -13,7 +13,6 @@ public class BookmarkDeleteService {
 
     private final BookmarkRepository bookmarkRepository;
 
-    @Transactional
     public void delete(final Bookmark bookmark) {
         bookmarkRepository.delete(bookmark);
     }
