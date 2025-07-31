@@ -71,12 +71,12 @@ public class BookmarkController {
 
     @PostMapping()
     @Operation(summary = "북마크 저장 API", description = "알림 정보와 함께 북마크를 저장할 수 있는 API입니다.")
-    public CommonResponse<BookmarkResponse> saveBookmark(
+    public CommonResponse<Void> saveBookmark(
         @CurrentUser Long userId,
         @RequestPart("request") @Validated BookmarkSaveRequest request
     ) {
-        BookmarkResponse response = bookmarkUseCase.save(userId, request);
-        return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage(), response);
+        bookmarkUseCase.save(userId, request);
+        return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
     }
 
     @DeleteMapping("/{bookmarkId}")

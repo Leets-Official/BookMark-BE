@@ -24,7 +24,7 @@ public interface BookmarkUseCase {
 
     void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request, NotificationUseCase notificationUseCase);
 
-    BookmarkResponse save(Long userId, BookmarkSaveRequest request);
+    void save(Long userId, BookmarkSaveRequest request);
 
     Slice<BookmarkResponse> getSavedBookmarks(Long userId, Provider provider, Pageable pageable);
 

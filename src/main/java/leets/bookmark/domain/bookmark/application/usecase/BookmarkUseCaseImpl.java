@@ -74,17 +74,14 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public BookmarkResponse save(Long userId, BookmarkSaveRequest request) {
+    public void save(Long userId, BookmarkSaveRequest request) {
         User user = userGetService.findById(userId);
 
-        Bookmark bookmark = bookmarkMapper.toBookmark(user, request);
-        bookmarkSaveService.save(bookmark);
+        Bookmark bookmark = bookmarkSaveService.save(request, user);
 
         if (request.file() != null) {
             fileUseCase.saveFile(user, bookmark, request.file());
         }
-        List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-        return bookmarkMapper.toResponse(bookmark, mappings);
     }
 
     @Override
