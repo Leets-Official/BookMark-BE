@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
@@ -49,7 +50,40 @@ public class Bookmark extends BaseTimeEntity {
     @Column(nullable = false)
     private Platform platform;
 
-    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
+    public void updateBookmark(String title, String memo) {
+        if (title != null) {
+            this.title = title;
+        }
+        if (memo != null) {
+            this.memo = memo;
+        }
+    }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void deleteFile() {
+        this.file = null;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updatePlatform(Platform platform) {
+        this.platform = platform;
+    }
+
+    public void updateFaviconUrl(String s) {
+        this.faviconUrl = s;
+    }
+
+    public void updateUrl(String url) {
+        this.url = url;
+    }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }

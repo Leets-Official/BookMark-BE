@@ -40,4 +40,13 @@ public class TagGetService {
     public List<Tag> findAllByIds(List<Long> tagIds) {
         return tagRepository.findAllByIdIn(tagIds);
     }
+
+    public List<Tag> findAllByTagIdsAndCategoryId(List<Long> tagIds, Long categoryId) {
+        return tagRepository.findAllByIdInAndCategory_Id(tagIds, categoryId);
+    }
+
+    public Tag findByIdAndCategoryId(Long tagId, Long categoryId) {
+        return tagRepository.findByIdAndCategory_Id(tagId, categoryId)
+                .orElseThrow(TagNotFoundException::new);
+    }
 }

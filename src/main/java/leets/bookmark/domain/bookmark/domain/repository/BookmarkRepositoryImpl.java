@@ -49,8 +49,8 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
         List<Long> ids = queryFactory
                 .select(bookmark.id)
-                .from(bookmark)
-                .leftJoin(bookmark.bookmarkTagMappings, tagMapping)
+                .from(tagMapping)
+                .leftJoin(tagMapping.bookmark, bookmark)
                 .where(builder)
                 .orderBy(bookmark.id.desc())
                 .offset(pageable.getOffset())
@@ -67,12 +67,12 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
         if (ids.isEmpty()) return List.of();
 
         return queryFactory
-                .selectFrom(bookmark)
+                .select(bookmark)
                 .distinct()
+                .from(tagMapping)
+                .join(tagMapping.bookmark, bookmark)
                 .leftJoin(bookmark.category, category).fetchJoin()
                 .leftJoin(bookmark.file, file).fetchJoin()
-                .leftJoin(bookmark.bookmarkTagMappings, tagMapping).fetchJoin()
-                .leftJoin(tagMapping.tag, tag).fetchJoin()
                 .where(bookmark.id.in(ids))
                 .fetch();
     }
