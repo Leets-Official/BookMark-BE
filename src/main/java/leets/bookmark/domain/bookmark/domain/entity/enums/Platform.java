@@ -4,11 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum Platform {
-    Naver("네이버"),
-    Tistory("티스토리"),
-    Youtube("유튜브"),
-    Instagram("인스타그램"),
-    Google("구글");
+    NAVER("네이버"),
+    NAVER_BLOG("네이버 블로그"),
+    TISTORY("티스토리"),
+    YOUTUBE("YouTube"),
+    INSTAGRAM("Instagram"),
+    VELOG("velog.io"),
+    ETC("기타");
 
     private final String platformName;
 
