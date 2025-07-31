@@ -1,7 +1,9 @@
 package leets.bookmark.domain.bookmark.domain.entity.enums;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Getter
 public enum Platform {
     NAVER("네이버"),
@@ -14,7 +16,4 @@ public enum Platform {
 
     private final String platformName;
 
-    Platform(String platformName) {
-        this.platformName = platformName;
-    }
 }
