@@ -37,7 +37,7 @@ public class BookmarkController {
     @Operation(summary = "북마크 저장 API", description = "알림 정보와 함께 북마크를 저장할 수 있는 API입니다.")
     public CommonResponse<Void> saveBookmark(
         @CurrentUser Long userId,
-        @RequestPart("request") @Validated BookmarkSaveRequest request
+        @RequestBody @Validated BookmarkSaveRequest request
     ) {
         bookmarkUseCase.save(userId, request);
         return CommonResponse.createSuccess(BOOKMARK_SAVE_SUCCESS.getMessage());
@@ -55,7 +55,7 @@ public class BookmarkController {
     public CommonResponse<Void> updateBookmark(
         @CurrentUser Long userId,
         @PathVariable Long bookmarkId,
-        @RequestPart("request") @Validated BookmarkUpdateRequest request
+        @RequestBody @Validated BookmarkUpdateRequest request
     ) {
         bookmarkUseCase.update(userId, bookmarkId, request, notificationUseCase);
 
