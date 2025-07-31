@@ -11,6 +11,7 @@ import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
+import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.category.application.mapper.CategoryMapper;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryGetService;
@@ -70,6 +71,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     private final FileMapper fileMapper;
     private final FileGetService fileGetService;
+
+    private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -171,8 +174,12 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     public void delete(Long userId, Long bookmarkId) {
         Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
         validateBookmarkOwner(userId, bookmark);
+        bookmarkTagMappingRepository.deleteByBookmarkId(bookmarkId);
+        if (bookmark.getFile() != null) {
+            bookmark.deleteFile();
+            fileUseCase.deleteFile(bookmark.getUser(), bookmark);
+        }
 
-        fileUseCase.deleteFile(bookmark.getUser(), bookmark);
         notificationGetService.findByBookmarkId(bookmarkId)
             .ifPresent(notificationDeleteService::delete);
         bookmarkDeleteService.delete(bookmark);

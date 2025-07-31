@@ -63,4 +63,7 @@ public class Bookmark extends BaseTimeEntity {
         this.category = category;
     }
 
+    public void deleteFile() {
+        this.file = null;
+    }
 }
