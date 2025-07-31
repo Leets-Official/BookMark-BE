@@ -50,22 +50,13 @@ public class Bookmark extends BaseTimeEntity {
     @Column(nullable = false)
     private Platform platform;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
-
-    public void clearTagMappings() {
-        this.bookmarkTagMappings.clear();
-    }
-
-    public void addTagMapping(BookmarkTagMapping mapping) {
-        mapping.setBookmark(this);
-        this.bookmarkTagMappings.add(mapping);
-    }
-
     public void updateBookmark(String title, String memo) {
-        this.title = title;
-        this.memo = memo;
+        if (title != null) {
+            this.title = title;
+        }
+        if (memo != null) {
+            this.memo = memo;
+        }
     }
 
     public void setCategory(Category category) {
