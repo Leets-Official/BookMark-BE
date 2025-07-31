@@ -11,4 +11,6 @@ public interface BookmarkTagMappingRepository extends JpaRepository<BookmarkTagM
     List<BookmarkTagMapping> findAllByBookmarkId(Long bookmarkId);
 
     void deleteByBookmark(Bookmark bookmark);
+
+    void deleteAllByBookmark(Bookmark bookmark);
 }
