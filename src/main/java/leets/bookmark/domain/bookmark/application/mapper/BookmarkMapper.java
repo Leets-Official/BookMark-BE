@@ -5,6 +5,7 @@ import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
+import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
@@ -19,7 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkMapper {
 
-    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings, File file) {
+    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings,
+                                       FileResponse fileResponse) {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
         return BookmarkResponse.builder()
@@ -27,8 +29,10 @@ public class BookmarkMapper {
                 .url(bookmark.getUrl())
                 .title(bookmark.getTitle())
                 .memo(bookmark.getMemo())
-                .thumbnailUrl(file != null ? file.getFileUrl() : null)
+                .platform(String.valueOf(bookmark.getPlatform()))
+                .faviconUrl(bookmark.getFaviconUrl())
                 .categoryTagInfos(List.of(tagInfo))
+                .file(fileResponse)
                 .createdAt(bookmark.getCreatedAt())
                 .updatedAt(bookmark.getUpdatedAt())
                 .build();
@@ -90,7 +94,21 @@ public class BookmarkMapper {
             .url(request.url())
             .memo(request.memo())
             .platform(request.platform())
+            .faviconUrl(request.faviconUrl())
             .build();
     }
 
+
+    public BookmarkTagMapping toMapping(Bookmark bookmark, Tag tag) {
+        return BookmarkTagMapping.builder()
+            .bookmark(bookmark)
+            .tag(tag)
+            .build();
+    }
+
+    public List<BookmarkTagMapping> toMappings(Bookmark bookmark, List<Tag> tags) {
+        return tags.stream()
+            .map(tag -> toMapping(bookmark, tag))
+            .toList();
+    }
 }
