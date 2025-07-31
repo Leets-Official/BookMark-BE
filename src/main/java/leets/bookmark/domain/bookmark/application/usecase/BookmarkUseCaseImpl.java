@@ -20,6 +20,8 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.domain.service.FileGetService;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.service.TagGetService;
+import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.user.domain.service.UserGetService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -38,6 +40,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     private final CategoryGetService categoryGetService;
     private final TagGetService tagGetService;
+    private final UserGetService userGetService;
 
     private final BookmarkSearchConditionMapper bookmarkSearchConditionMapper;
 
@@ -49,6 +52,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     public Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
+        User user = userGetService.findById(userId);
+
         Pageable pageable = PageRequest.of(request.page(),
                 request.size(),
                 Sort.by(Sort.Direction.DESC, "id"));
@@ -59,13 +64,13 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         List<CategoryTagRequest> categoryTagRequests = request.categoryTagRequests();
         if (categoryTagRequests != null) {
             for (CategoryTagRequest categoryTagRequest : categoryTagRequests) {
-                Category category = categoryGetService.findById(categoryTagRequest.categoryId());
+                Category category = categoryGetService.findByIdAndUser(categoryTagRequest.categoryId(), user);
 
                 if (categoryTagRequest.tagIds() == null || categoryTagRequest.tagIds().isEmpty()) {
                     categories.add(category);
                 } else {
                     for (Long tagId : categoryTagRequest.tagIds()) {
-                        Tag tag = tagGetService.findByIdAndCategoryId(tagId, category);
+                        Tag tag = tagGetService.findByIdAndCategoryAndUser(tagId, category, user);
                         categoryWithTags.add(tag);
                     }
                 }
@@ -76,7 +81,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
                 request, categories, categoryWithTags);
 
-        Slice<Bookmark> bookmarks = bookmarkGetService.search(userId, condition, pageable);
+        Slice<Bookmark> bookmarks = bookmarkGetService.search(user.getId(), condition, pageable);
 
         return bookmarks.map(bookmark -> {
             File file = fileGetService.findByBookmarkId(bookmark.getId());

@@ -20,5 +20,5 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     long countByCategory(Category category);
 
-    Optional<Tag> findByIdAndCategory(Long id, Category category);
+    Optional<Tag> findByIdAndCategoryAndCategory_UserId(Long tagId, Category category, Long userId);
 }
