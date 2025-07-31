@@ -1,15 +1,16 @@
 package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
+import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.file.domain.entity.File;
-import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
 import lombok.*;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "bookmarks")
@@ -30,23 +31,25 @@ public class Bookmark extends BaseTimeEntity {
 
     private String memo;
 
-    @Column(name = "thumbnail_url")
-    private String thumbnailUrl;
-
     @Column(name = "favicon_url")
     private String faviconUrl;
 
-    private String platform;
-
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id")
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToOne(mappedBy = "bookmark", fetch = FetchType.LAZY)
     private File file;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Platform platform;
+
+    @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
 
 }

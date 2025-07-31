@@ -31,4 +31,8 @@ public class CategoryGetService {
     public long countByUser(User user) {
         return categoryRepository.countByUser(user);
     }
+
+    public List<Category> findAllByIdInAndUser(List<Long> categoryIds, User user) {
+        return categoryRepository.findAllByIdInAndUser(categoryIds, user);
+    }
 }

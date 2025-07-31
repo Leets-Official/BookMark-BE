@@ -1,11 +1,14 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,5 +48,9 @@ public class BookmarkGetService {
 
     public List<Bookmark> getAllBookmarks(Long userId) {
         return bookmarkRepository.findAllByUserId(userId);
+    }
+
+    public Slice<Bookmark> search(Long userId, BookmarkSearchCondition condition, Pageable pageable) {
+        return bookmarkRepository.searchWithFilters(userId, condition, pageable);
     }
 }

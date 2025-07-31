@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
 
     List<Bookmark> findByMemoContainingAndUserId(String keyword, Long userId);
 
@@ -20,7 +20,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         WHERE b.user.id = :userId
         AND (
             t.category.id = :categoryId
-            OR (m.id IS NULL AND b.categoryId = :categoryId)
+            OR (m.id IS NULL AND b.category.id = :categoryId)
         )
     """)
     List<Bookmark> findAllByUserIdAndCategoryId(
