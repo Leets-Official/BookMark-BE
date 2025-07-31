@@ -15,11 +15,9 @@ public record BookmarkSaveRequest(
     @NotBlank String url,
     String memo,
     FileSaveRequest file,
-    @NotNull NotificationSaveRequest notification,
+    NotificationSaveRequest notification,
     @NotNull String deviceType,
     @NotNull String provider,
-    Long categoryId,
-    List<Long> tagIds,
-    Long bookmarkId,
-    User user
+    @NotNull Long categoryId,
+    @NotNull List<Long> tagIds
 ) {}

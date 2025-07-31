@@ -2,7 +2,6 @@ package leets.bookmark.domain.bookmark.application.mapper;
 
 import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
@@ -25,22 +24,6 @@ public class BookmarkMapper {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
         return buildBookmarkResponse(bookmark, tagInfo);
-    }
-
-    public BookmarkFilterRequest toFilterRequest(List<Long> categoryId, List<Long> tagId) {
-        return BookmarkFilterRequest.builder()
-            .categoryIds(categoryId)
-            .tagId(tagId)
-            .build();
-    }
-
-    public BookmarkFilterRequest toFilterRequest(List<Long> categoryId, List<Long> tagId, DeviceType deviceType, Provider provider) {
-        return BookmarkFilterRequest.builder()
-            .categoryIds(categoryId)
-            .tagId(tagId)
-            .deviceType(deviceType)
-            .provider(provider)
-            .build();
     }
 
     private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {

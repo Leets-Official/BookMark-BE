@@ -2,11 +2,11 @@ package leets.bookmark.domain.bookmark.application.usecase;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -23,7 +23,7 @@ public interface BookmarkUseCase {
 
     void delete(Long userId, Long bookmarkId);
 
-    void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request);
+    void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request, NotificationUseCase notificationUseCase);
 
     BookmarkResponse save(Long userId, BookmarkSaveRequest request);
 

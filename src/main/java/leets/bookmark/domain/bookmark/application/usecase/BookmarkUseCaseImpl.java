@@ -12,7 +12,6 @@ import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Pageable;
 
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
@@ -90,7 +89,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request) {
+    public void update(Long userId, Long bookmarkId, BookmarkUpdateRequest request, NotificationUseCase notificationUseCase) {
         User user = userGetService.findById(userId);
         Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
         validateBookmarkOwner(userId, bookmark);
@@ -103,6 +102,10 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
                 request.file().fileUrl()
             );
             fileUseCase.updateFile(user, bookmark, fileUpdateRequest);
+        }
+
+        if (request.notification() != null) {
+            notificationUseCase.saveNotification(user, bookmark, request.notification());
         }
     }
 

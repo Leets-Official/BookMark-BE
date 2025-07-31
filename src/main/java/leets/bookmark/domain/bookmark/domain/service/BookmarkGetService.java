@@ -1,7 +1,5 @@
 package leets.bookmark.domain.bookmark.domain.service;
-import leets.bookmark.domain.bookmark.application.exception.InvalidDeviceTypeException;
 
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;

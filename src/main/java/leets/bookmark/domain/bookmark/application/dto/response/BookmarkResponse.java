@@ -8,15 +8,15 @@ import leets.bookmark.domain.file.application.dto.response.FileResponse;
 
 @Builder
 public record BookmarkResponse(
-    Long id,
-    String url,
-    String title,
-    String memo,
-    String thumbnailUrl,
-    String deviceType,
-    String provider,
-    List<BookmarkTagInfoResponse> categoryTagInfos,
-    FileResponse file,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+        Long id,
+        String url,
+        String title,
+        String memo,
+        String thumbnailUrl,
+        String deviceType,
+        String provider,
+        List<BookmarkTagInfoResponse> categoryTagInfos,
+        FileResponse file,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {}

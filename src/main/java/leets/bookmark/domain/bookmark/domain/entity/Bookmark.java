@@ -39,9 +39,6 @@ public class Bookmark extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Column(name = "is_saved", nullable = false)
-    private boolean isSaved = true;
-
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 

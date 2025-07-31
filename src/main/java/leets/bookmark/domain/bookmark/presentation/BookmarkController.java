@@ -8,12 +8,10 @@ import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.enums.DeviceType;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
-import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +73,7 @@ public class BookmarkController {
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 
-    @PostMapping(consumes = "multipart/form-data")
+    @PostMapping()
     @Operation(summary = "북마크 저장 API", description = "알림 정보와 함께 북마크를 저장할 수 있는 API입니다.")
     public CommonResponse<BookmarkResponse> saveBookmark(
         @CurrentUser Long userId,
@@ -99,15 +97,7 @@ public class BookmarkController {
         @PathVariable Long bookmarkId,
         @RequestPart("request") @Validated BookmarkUpdateRequest request
     ) {
-        bookmarkUseCase.update(userId, bookmarkId, request);
-
-        if (request.notification() != null) {
-            notificationUseCase.saveNotification(
-                userGetService.findById(userId),
-                Bookmark.builder().id(bookmarkId).build(),
-                request.notification()
-            );
-        }
+        bookmarkUseCase.update(userId, bookmarkId, request, notificationUseCase);
 
         return CommonResponse.createSuccess(BOOKMARK_UPDATE_SUCCESS.getMessage());
     }
