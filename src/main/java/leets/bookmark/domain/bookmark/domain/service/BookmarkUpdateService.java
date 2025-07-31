@@ -5,11 +5,9 @@ import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.category.application.exception.CategoryNotFoundException;
-import leets.bookmark.domain.category.application.exception.CategoryErrorCode;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.repository.CategoryRepository;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
-import leets.bookmark.domain.tag.application.exception.TagNotFoundException;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +29,7 @@ public class BookmarkUpdateService {
         FileSaveRequest fileRequest = request.file();
         bookmark.updateBookmark(
             request.title(),
-            request.memo(),
-            fileRequest != null ? fileRequest.fileUrl() : null
+            request.memo()
         );
 
         if (request.categoryId() != null) {

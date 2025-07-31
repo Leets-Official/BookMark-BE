@@ -12,7 +12,7 @@ public record BookmarkResponse(
         String url,
         String title,
         String memo,
-        String thumbnailUrl,
+        String platform,
         String provider,
         List<BookmarkTagInfoResponse> categoryTagInfos,
         FileResponse file,

@@ -3,7 +3,7 @@ package leets.bookmark.domain.bookmark.application.usecase;
 import java.util.List;
 
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
@@ -130,16 +130,16 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     }
 
     @Override
-    public Slice<BookmarkResponse> getSavedBookmarks(Long userId, Provider provider, Pageable pageable) {
+    public Slice<BookmarkResponse> getSavedBookmarks(Long userId, Platform platform, Pageable pageable) {
         User user = userGetService.findById(userId);
-        return bookmarkGetService.getSavedBookmarks(user, provider, pageable)
+        return bookmarkGetService.getSavedBookmarks(user, platform, pageable)
             .map(this::toResponseWithMappings);
     }
 
     @Override
-    public Slice<BookmarkResponse> getRecentBookmarks(Long userId, Provider provider, Pageable pageable) {
+    public Slice<BookmarkResponse> getRecentBookmarks(Long userId, Platform platform, Pageable pageable) {
         User user = userGetService.findById(userId);
-        return bookmarkGetService.getRecentBookmarks(user, provider, pageable)
+        return bookmarkGetService.getRecentBookmarks(user, platform, pageable)
             .map(this::toResponseWithMappings);
     }
 

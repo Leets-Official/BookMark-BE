@@ -4,7 +4,7 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveReques
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +26,9 @@ public interface BookmarkUseCase {
 
     void save(Long userId, BookmarkSaveRequest request);
 
-    Slice<BookmarkResponse> getSavedBookmarks(Long userId, Provider provider, Pageable pageable);
+    Slice<BookmarkResponse> getSavedBookmarks(Long userId, Platform platform, Pageable pageable);
 
-    Slice<BookmarkResponse> getRecentBookmarks(Long userId, Provider provider, Pageable pageable);
+    Slice<BookmarkResponse> getRecentBookmarks(Long userId, Platform platform, Pageable pageable);
 
     List<BookmarkPreviewResponse> extractPreviewFromUrl(String url);
 }

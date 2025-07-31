@@ -1,7 +1,7 @@
 package leets.bookmark.domain.bookmark.domain.repository;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -49,6 +49,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         @Param("categoryIds") List<Long> categoryIds
     );
 
-    Page<Bookmark> findByUserIdAndProviderOrderByCreatedAtDesc(Long userId, Provider provider, Pageable pageable);
+    Page<Bookmark> findByUserIdAndPlatformOrderByCreatedAtDesc(Long userId, Platform platform, Pageable pageable);
 
 }

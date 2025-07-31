@@ -3,7 +3,7 @@ package leets.bookmark.domain.bookmark.domain.service;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -38,11 +38,11 @@ public class BookmarkGetService {
             .orElseThrow(BookmarkNotFoundException::new);
     }
 
-    public Slice<Bookmark> getRecentBookmarks(User user, Provider provider, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndProviderOrderByCreatedAtDesc(user.getId(), provider, pageable);
+    public Slice<Bookmark> getRecentBookmarks(User user, Platform platform, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(user.getId(), platform, pageable);
     }
 
-    public Slice<Bookmark> getSavedBookmarks(User user, Provider provider, Pageable pageable) {
-        return bookmarkRepository.findByUserIdAndProviderOrderByCreatedAtDesc(user.getId(), provider, pageable);
+    public Slice<Bookmark> getSavedBookmarks(User user, Platform platform, Pageable pageable) {
+        return bookmarkRepository.findByUserIdAndPlatformOrderByCreatedAtDesc(user.getId(), platform, pageable);
     }
 }

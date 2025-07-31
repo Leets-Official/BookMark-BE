@@ -4,7 +4,7 @@ import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessag
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.domain.user.domain.service.UserGetService;
 import leets.bookmark.global.auth.annotation.CurrentUser;
@@ -49,11 +49,11 @@ public class BookmarkController {
     @Operation(summary = "저장 북마크 리스트 조회 API", description = "최근순으로 n개씩 저장된 북마크를 조회합니다.")
     public CommonResponse<Slice<BookmarkResponse>> getSavedBookmarks(
         @CurrentUser Long userId,
-        @RequestParam Provider provider,
+        @RequestParam Platform platform,
         @RequestParam int page,
         @RequestParam int size
     ) {
-        Slice<BookmarkResponse> result = bookmarkUseCase.getSavedBookmarks(userId, provider, PageRequest.of(page, size));
+        Slice<BookmarkResponse> result = bookmarkUseCase.getSavedBookmarks(userId, platform, PageRequest.of(page, size));
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 
@@ -61,11 +61,11 @@ public class BookmarkController {
     @Operation(summary = "저장 북마크 무한스크롤 API", description = "북마크를 최근순으로 slice하여 무한스크롤합니다.")
     public CommonResponse<Slice<BookmarkResponse>> getRecentBookmarks(
         @CurrentUser Long userId,
-        @RequestParam Provider provider,
+        @RequestParam Platform platform,
         @RequestParam int page,
         @RequestParam int size
     ) {
-        Slice<BookmarkResponse> result = bookmarkUseCase.getRecentBookmarks(userId, provider, PageRequest.of(page, size));
+        Slice<BookmarkResponse> result = bookmarkUseCase.getRecentBookmarks(userId, platform, PageRequest.of(page, size));
         return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
     }
 

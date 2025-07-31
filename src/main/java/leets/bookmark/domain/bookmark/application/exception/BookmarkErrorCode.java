@@ -13,7 +13,7 @@ public enum BookmarkErrorCode implements ErrorCode{
     INVALID_BOOKMARK_CATEGORY_EXCEPTION(400, "카테고리를 선택해야 합니다."),
     BOOKMARK_TAG_MINIMUM_REQUIRED_EXCEPTION(400, "최소 1개 이상의 태그를 선택해야 합니다."),
     BOOKMARK_TAG_COUNT_EXCEEDED_EXCEPTION(400, "태그는 최대 3개까지만 선택할 수 있습니다."),
-    INVALID_PROVIDER_EXCEPTION(400, "지원하지 않는 provider입니다."),
+    INVALID_PLATFORM_EXCEPTION(400, "지원하지 않는 platform입니다."),
     BOOKMARK_PREVIEW_FAILED(500, "북마크 미리보기 데이터 추출에 실패했습니다.");
 
     private final int errorCode;

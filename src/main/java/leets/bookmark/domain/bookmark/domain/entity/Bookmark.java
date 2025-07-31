@@ -8,7 +8,7 @@ import leets.bookmark.global.common.entity.BaseTimeEntity;
 import leets.bookmark.domain.category.domain.entity.Category;
 
 import lombok.*;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Provider;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -33,15 +33,15 @@ public class Bookmark extends BaseTimeEntity {
     private String memo;
 
     @Enumerated(EnumType.STRING)
-    private Provider provider;
+    @Column(nullable = false)
+    private Platform platform;
 
-    @Column(name = "thumbnail_url")
-    private String thumbnailUrl;
 
     @Column(name = "favicon_url")
     private String faviconUrl;
 
-    private String platform;
+    @OneToOne(mappedBy = "bookmark", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private File file;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -54,10 +54,9 @@ public class Bookmark extends BaseTimeEntity {
     @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookmarkTagMapping> bookmarkTagMappings = new ArrayList<>();
 
-    public void updateBookmark(String title, String memo, String thumbnailUrl) {
+    public void updateBookmark(String title, String memo) {
         this.title = title;
         this.memo = memo;
-        this.thumbnailUrl = thumbnailUrl;
     }
 
     public void addTagMapping(BookmarkTagMapping mapping) {
@@ -70,10 +69,6 @@ public class Bookmark extends BaseTimeEntity {
             mapping.setBookmark(null);
         }
         this.bookmarkTagMappings.clear();
-    }
-
-    public File getFile(){
-        return null;
     }
 
     public void setCategory(Category category) {
