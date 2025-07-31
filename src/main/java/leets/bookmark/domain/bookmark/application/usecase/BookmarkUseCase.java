@@ -3,22 +3,21 @@ package leets.bookmark.domain.bookmark.application.usecase;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
+
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
+import org.springframework.data.domain.Slice;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 @Service
 public interface BookmarkUseCase {
-    List<BookmarkResponse> getByMemoContaining(Long userId, String keyword);
-
-    List<BookmarkResponse> getAllBookmarks(Long userId);
-
-    BookmarkResponse getById(Long userId, Long bookmarkId);
+    Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request);
 
     void delete(Long userId, Long bookmarkId);
 

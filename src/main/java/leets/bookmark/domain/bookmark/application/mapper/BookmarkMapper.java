@@ -5,6 +5,7 @@ import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
+import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
 
@@ -18,10 +19,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkMapper {
 
-    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
+    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings, File file) {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
-        return buildBookmarkResponse(bookmark, tagInfo);
+        return BookmarkResponse.builder()
+                .id(bookmark.getId())
+                .url(bookmark.getUrl())
+                .title(bookmark.getTitle())
+                .memo(bookmark.getMemo())
+                .thumbnailUrl(file != null ? file.getFileUrl() : null)
+                .categoryTagInfos(List.of(tagInfo))
+                .createdAt(bookmark.getCreatedAt())
+                .updatedAt(bookmark.getUpdatedAt())
+                .build();
     }
 
     private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
@@ -50,7 +60,6 @@ public class BookmarkMapper {
 
         return buildBookmarkTagInfoResponse(category, tags);
     }
-
 
     private BookmarkTagInfoResponse buildBookmarkTagInfoResponse(Category category, List<BookmarkTagInfoResponse.TagInfo> tags) {
         return BookmarkTagInfoResponse.builder()

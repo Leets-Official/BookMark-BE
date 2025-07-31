@@ -2,24 +2,19 @@ package leets.bookmark.domain.bookmark.presentation;
 
 import static leets.bookmark.domain.bookmark.presentation.BookmarkResponseMessage.*;
 
+import jakarta.validation.Valid;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
-import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
-import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
-import leets.bookmark.domain.user.domain.service.UserGetService;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
-import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/v1/bookmarks")
@@ -27,46 +22,13 @@ import java.util.List;
 public class BookmarkController {
 
     private final BookmarkUseCase bookmarkUseCase;
-    private final BookmarkMapper bookmarkMapper;
-    private final NotificationUseCase notificationUseCase;
-    private final UserGetService userGetService;
 
-    @GetMapping("/search")
-    @Operation(summary = "북마크 메모 검색 API", description = "키워드를 포함하는 메모를 가진 북마크 목록을 조회합니다.")
-    public CommonResponse<List<BookmarkResponse>> searchBookmarksByMemo(@CurrentUser Long userId, @RequestParam String keyword) {
-        List<BookmarkResponse> result = bookmarkUseCase.getByMemoContaining(userId, keyword);
-        return CommonResponse.createSuccess(BOOKMARK_MEMO_SEARCH_SUCCESS.getMessage(), result);
-    }
-
-    @GetMapping("/all")
-    @Operation(summary = "전체 북마크 조회 API", description = "모든 북마크를 조회합니다.")
-    public CommonResponse<List<BookmarkResponse>> getAllBookmarks(@CurrentUser Long userId) {
-        List<BookmarkResponse> result = bookmarkUseCase.getAllBookmarks(userId);
-        return CommonResponse.createSuccess(BOOKMARK_SEARCH_SUCCESS.getMessage(), result);
-    }
-
-    @GetMapping("/saved")
-    @Operation(summary = "저장 북마크 리스트 조회 API", description = "최근순으로 n개씩 저장된 북마크를 조회합니다.")
-    public CommonResponse<Slice<BookmarkResponse>> getSavedBookmarks(
-        @CurrentUser Long userId,
-        @RequestParam Platform platform,
-        @RequestParam int page,
-        @RequestParam int size
-    ) {
-        Slice<BookmarkResponse> result = bookmarkUseCase.getSavedBookmarks(userId, platform, PageRequest.of(page, size));
-        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
-    }
-
-    @GetMapping("/recent")
-    @Operation(summary = "저장 북마크 무한스크롤 API", description = "북마크를 최근순으로 slice하여 무한스크롤합니다.")
-    public CommonResponse<Slice<BookmarkResponse>> getRecentBookmarks(
-        @CurrentUser Long userId,
-        @RequestParam Platform platform,
-        @RequestParam int page,
-        @RequestParam int size
-    ) {
-        Slice<BookmarkResponse> result = bookmarkUseCase.getRecentBookmarks(userId, platform, PageRequest.of(page, size));
-        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), result);
+    @PostMapping
+    @Operation(summary = "북마크 필터링 API")
+    public CommonResponse<Slice<BookmarkResponse>> getFilteredBookmarks(@CurrentUser Long userId,
+                                                                        @RequestBody @Valid BookmarkSearchRequest bookmarkSearchRequest) {
+        Slice<BookmarkResponse> responses = bookmarkUseCase.getFilteredBookmarks(userId, bookmarkSearchRequest);
+        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), responses);
     }
 
     @PostMapping()

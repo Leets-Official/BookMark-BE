@@ -1,8 +1,20 @@
 package leets.bookmark.domain.bookmark.application.usecase;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
+import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
+import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
+import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
+import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.category.domain.service.CategoryGetService;
+import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
@@ -18,12 +30,15 @@ import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.application.exception.NoBookmarkPermissionException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
-import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
+import leets.bookmark.domain.tag.domain.entity.Tag;
+import leets.bookmark.domain.tag.domain.service.TagGetService;
+import leets.bookmark.domain.user.domain.service.UserGetService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkSaveService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkUpdateService;
-import leets.bookmark.domain.user.domain.service.UserGetService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,40 +52,76 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final BookmarkMapper bookmarkMapper;
     private final BookmarkDeleteService bookmarkDeleteService;
     private final BookmarkSaveService bookmarkSaveService;
-    private final NotificationUseCase notificationUseCase;
     private final BookmarkUpdateService bookmarkUpdateService;
     private final UserGetService userGetService;
     private final BookmarkPreviewService bookmarkPreviewService;
+
+    private final CategoryGetService categoryGetService;
+    private final TagGetService tagGetService;
+
+    private final BookmarkSearchConditionMapper bookmarkSearchConditionMapper;
     private final FileUseCase fileUseCase;
 
     @Override
-    public List<BookmarkResponse> getByMemoContaining(Long userId, String keyword) {
+    @Transactional(readOnly = true)
+    public Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
         User user = userGetService.findById(userId);
-        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByMemoContaining(keyword, user);
-        return mapToResponses(bookmarks);
-    }
 
-    @Override
-    public List<BookmarkResponse> getAllBookmarks(Long userId) {
-        User user = userGetService.findById(userId);
-        List<Bookmark> bookmarks = bookmarkGetService.getAllBookmarks(user);
-        return mapToResponses(bookmarks);
-    }
+        Pageable pageable = PageRequest.of(request.page(),
+                request.size(),
+                Sort.by(Sort.Direction.DESC, "id"));
 
-    private List<BookmarkResponse> mapToResponses(List<Bookmark> bookmarks) {
-        return bookmarks.stream()
-            .map(bookmark -> {
-                List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-                return bookmarkMapper.toResponse(bookmark, mappings);
-            })
-            .toList();
-    }
+        List<CategoryTagRequest> categoryTagRequests = request.categoryTagRequests();
 
-    @Override
-    public BookmarkResponse getById(Long userId, Long bookmarkId) {
-        Bookmark bookmark = getAuthorizedBookmark(userId, bookmarkId);
-        List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-        return bookmarkMapper.toResponse(bookmark, mappings);
+        List<Long> categoryIds = categoryTagRequests.stream()
+                .map(CategoryTagRequest::categoryId)
+                .toList();
+        List<Category> categories = categoryGetService.findAllByIdInAndUser(categoryIds, user);
+
+        Map<Long, Category> categoryMap = categories.stream()
+                .collect(Collectors.toMap(Category::getId, Function.identity()));
+
+        Map<Long, List<Long>> categoryToTagIds = categoryTagRequests.stream()
+                .filter(r -> r.tagIds() != null && !r.tagIds().isEmpty())
+                .collect(Collectors.toMap(
+                        CategoryTagRequest::categoryId,
+                        CategoryTagRequest::tagIds
+                ));
+
+        List<Category> categoriesWithoutTags = new ArrayList<>();
+        List<Tag> filteredTags = new ArrayList<>();
+
+        // 태그가 존재하는 카테고리-태그는 filteredTags에 추가
+        for (Map.Entry<Long, List<Long>> categoryAndTags : categoryToTagIds.entrySet()) {
+            Long categoryId = categoryAndTags.getKey();
+            List<Long> tagIds = categoryAndTags.getValue();
+
+            Category category = categoryMap.get(categoryId);
+            if (category == null) continue;
+
+            List<Tag> tags = tagGetService.findAllByIds(tagIds);
+            validateTags(tags, category);
+            filteredTags.addAll(tags);
+        }
+
+        // 태그 없는 카테고리는 categoriesWithoutTags에 추가
+        for (CategoryTagRequest req : categoryTagRequests) {
+            if (req.tagIds() == null || req.tagIds().isEmpty()) {
+                Category category = categoryMap.get(req.categoryId());
+                if (category != null) {
+                    categoriesWithoutTags.add(category);
+                }
+            }
+        }
+
+        BookmarkSearchCondition condition = bookmarkSearchConditionMapper.toBookmarkSearchCondition(
+                request, categoriesWithoutTags, filteredTags);
+
+        Slice<Bookmark> bookmarks = bookmarkGetService.search(user.getId(), condition, pageable);
+
+        return bookmarks.map(bookmark ->
+                bookmarkMapper.toResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark), bookmark.getFile())
+        );
     }
 
     @Override
@@ -120,36 +171,16 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
     }
 
-    private Bookmark getAuthorizedBookmark(Long userId, Long bookmarkId) {
-        User user = userGetService.findById(userId);
-        Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
-        if (!bookmark.getUser().getId().equals(userId)) {
-            throw new NoBookmarkPermissionException();
-        }
-        return bookmark;
-    }
-
-    @Override
-    public Slice<BookmarkResponse> getSavedBookmarks(Long userId, Platform platform, Pageable pageable) {
-        User user = userGetService.findById(userId);
-        return bookmarkGetService.getSavedBookmarks(user, platform, pageable)
-            .map(this::toResponseWithMappings);
-    }
-
-    @Override
-    public Slice<BookmarkResponse> getRecentBookmarks(Long userId, Platform platform, Pageable pageable) {
-        User user = userGetService.findById(userId);
-        return bookmarkGetService.getRecentBookmarks(user, platform, pageable)
-            .map(this::toResponseWithMappings);
-    }
-
-    private BookmarkResponse toResponseWithMappings(Bookmark bookmark) {
-        List<BookmarkTagMapping> mappings = bookmarkGetService.getMappingsByBookmark(bookmark);
-        return bookmarkMapper.toResponse(bookmark, mappings);
-    }
-
     @Override
     public List<BookmarkPreviewResponse> extractPreviewFromUrl(String url) {
         return bookmarkPreviewService.extractPreviewFromUrl(url);
+    }
+
+    private void validateTags(List<Tag> tags, Category category){
+        tags.forEach(tag -> {
+            if(!tag.getCategory().equals(category)){
+                throw new TagCategoryMismatchException();
+            }
+        });
     }
 }
