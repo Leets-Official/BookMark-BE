@@ -37,4 +37,8 @@ public class BookmarkGetService {
     public List<Bookmark> getRecent3BookmarksByCategory(Category category) {
         return bookmarkRepository.findTop3ByCategoryOrderByCreatedAtDesc(category);
     }
+
+    public List<Bookmark> getBookmarksByCategory(Category category) {
+        return bookmarkRepository.findAllByCategory(category);
+    }
 }

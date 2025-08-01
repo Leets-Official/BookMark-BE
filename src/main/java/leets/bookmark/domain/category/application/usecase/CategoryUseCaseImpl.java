@@ -6,6 +6,7 @@ import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequ
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
+import leets.bookmark.domain.category.application.exception.CategoryHasBookmarksException;
 import leets.bookmark.domain.category.application.exception.CategoryLimitExceedException;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
@@ -16,7 +17,6 @@ import leets.bookmark.domain.category.domain.service.CategorySaveService;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryUpdateService;
 import leets.bookmark.domain.file.domain.entity.File;
-import leets.bookmark.domain.file.domain.service.FileGetService;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.service.TagDeleteService;
 import leets.bookmark.domain.tag.domain.service.TagGetService;
@@ -112,11 +112,16 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         Category category = categoryGetService.findById(categoryId);
 
         validateCategoryOwner(category, user);
-
-        // TODO: 해당 카테고리 내에 컨텐츠(북마크DB)가 존재하면 삭제 불가능하도록 로직 추가
+        checkDoesCategoryHasBookmarks(category);
 
         tagDeleteService.deleteAllByCategory(category);
         categoryDeleteService.delete(categoryId);
+    }
+
+    private void checkDoesCategoryHasBookmarks(Category category) {
+        if (!bookmarkGetService.getBookmarksByCategory(category).isEmpty()) {
+            throw new CategoryHasBookmarksException();
+        }
     }
 
     private void validateCategoryOwner(Category category, User user) {

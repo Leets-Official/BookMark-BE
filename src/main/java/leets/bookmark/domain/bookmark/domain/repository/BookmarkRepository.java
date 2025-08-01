@@ -9,4 +9,6 @@ import java.util.List;
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
 
     List<Bookmark> findTop3ByCategoryOrderByCreatedAtDesc(Category category);
+
+    List<Bookmark> findAllByCategory(Category category);
 }
