@@ -7,6 +7,7 @@ import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.tag.domain.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -23,6 +24,10 @@ public class BookmarkGetService {
 
     public List<BookmarkTagMapping> getMappingsByBookmark(Bookmark bookmark) {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
+    }
+
+    public List<BookmarkTagMapping> getBookmarksByTag(Tag tag) {
+        return bookmarkTagMappingRepository.findAllByTag(tag);
     }
 
     public Slice<Bookmark> search(Long userId, BookmarkSearchCondition condition, Pageable pageable) {

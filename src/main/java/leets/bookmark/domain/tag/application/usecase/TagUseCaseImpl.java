@@ -1,5 +1,6 @@
 package leets.bookmark.domain.tag.application.usecase;
 
+import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryGetService;
@@ -7,6 +8,7 @@ import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
 import leets.bookmark.domain.tag.application.dto.request.TagNameUpdateRequest;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.exception.DuplicatedTagNameException;
+import leets.bookmark.domain.tag.application.exception.TagHasBookmarksException;
 import leets.bookmark.domain.tag.application.exception.TagLimitExceedException;
 import leets.bookmark.domain.tag.application.exception.TagOwnerMismatchException;
 import leets.bookmark.domain.tag.application.mapper.TagMapper;
@@ -37,6 +39,7 @@ public class TagUseCaseImpl implements TagUseCase {
     private final TagDeleteService tagDeleteService;
 
     private final TagMapper tagMapper;
+    private final BookmarkGetService bookmarkGetService;
 
     @Transactional(readOnly = true)
     @Override
@@ -83,8 +86,15 @@ public class TagUseCaseImpl implements TagUseCase {
         Tag tag = tagGetService.findById(tagId);
 
         validateTagOwner(tag, user);
+        checkDoesTagHasBookmarks(tag);
 
         tagDeleteService.delete(tag);
+    }
+
+    private void checkDoesTagHasBookmarks(Tag tag) {
+        if (!bookmarkGetService.getBookmarksByTag(tag).isEmpty()) {
+            throw new TagHasBookmarksException();
+        }
     }
 
     private void validateTagOwner(Tag tag, User user) {
