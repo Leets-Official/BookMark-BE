@@ -6,6 +6,7 @@ import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
+import leets.bookmark.domain.category.domain.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,5 +32,9 @@ public class BookmarkGetService {
     public Bookmark getBookmarkById(Long bookmarkId) {
         return bookmarkRepository.findById(bookmarkId)
                 .orElseThrow(BookmarkNotFoundException::new);
+    }
+
+    public List<Bookmark> getRecent3BookmarksByCategory(Category category) {
+        return bookmarkRepository.findTop3ByCategoryOrderByCreatedAtDesc(category);
     }
 }
