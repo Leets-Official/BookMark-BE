@@ -86,15 +86,9 @@ public class TagUseCaseImpl implements TagUseCase {
         Tag tag = tagGetService.findById(tagId);
 
         validateTagOwner(tag, user);
-        checkDoesTagHasBookmarks(tag);
+        checkTagIsEmpty(tag);
 
         tagDeleteService.delete(tag);
-    }
-
-    private void checkDoesTagHasBookmarks(Tag tag) {
-        if (!bookmarkGetService.getBookmarksByTag(tag).isEmpty()) {
-            throw new TagHasBookmarksException();
-        }
     }
 
     private void validateTagOwner(Tag tag, User user) {
@@ -118,6 +112,12 @@ public class TagUseCaseImpl implements TagUseCase {
     private void checkExceededTagLimit(Category category) {
         if (tagGetService.countByCategory(category) >= TAG_LIMIT) {
             throw new TagLimitExceedException();
+        }
+    }
+
+    private void checkTagIsEmpty(Tag tag) {
+        if (!bookmarkGetService.getBookmarksByTag(tag).isEmpty()) {
+            throw new TagHasBookmarksException();
         }
     }
 }

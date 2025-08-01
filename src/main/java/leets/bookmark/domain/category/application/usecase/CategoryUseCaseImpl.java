@@ -112,16 +112,10 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         Category category = categoryGetService.findById(categoryId);
 
         validateCategoryOwner(category, user);
-        checkDoesCategoryHasBookmarks(category);
+        checkCategoryIsEmpty(category);
 
         tagDeleteService.deleteAllByCategory(category);
         categoryDeleteService.delete(categoryId);
-    }
-
-    private void checkDoesCategoryHasBookmarks(Category category) {
-        if (!bookmarkGetService.getBookmarksByCategory(category).isEmpty()) {
-            throw new CategoryHasBookmarksException();
-        }
     }
 
     private void validateCategoryOwner(Category category, User user) {
@@ -139,6 +133,12 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private void checkExceededCategoryLimit(User user) {
         if (categoryGetService.countByUser(user) >= CATEGORY_LIMIT) {
             throw new CategoryLimitExceedException();
+        }
+    }
+
+    private void checkCategoryIsEmpty(Category category) {
+        if (!bookmarkGetService.getBookmarksByCategory(category).isEmpty()) {
+            throw new CategoryHasBookmarksException();
         }
     }
 }
