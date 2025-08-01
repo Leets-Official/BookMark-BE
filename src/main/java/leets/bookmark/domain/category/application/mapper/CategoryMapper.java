@@ -28,18 +28,22 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static CategoryResponse toResponse(Category category) {
+    public static CategoryResponse toCategoryResponse(Category category, List<String> thumbnailUrls) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
                 .createdAt(category.getCreatedAt())
                 .updatedAt(category.getUpdatedAt())
+                .thumbnailUrls(thumbnailUrls)
                 .build();
     }
 
-    public List<CategoryResponse> toCategoryResponseList(List<Category> categories) {
+    public List<CategoryResponse> toCategoryResponseList(List<Category> categories, Map<Long, List<String>> thumbnailMap) {
         return categories.stream()
-                .map(CategoryMapper::toResponse)
+                .map(category -> {
+                    List<String> thumbnailUrls = thumbnailMap.getOrDefault(category.getId(), List.of());
+                    return toCategoryResponse(category, thumbnailUrls);
+                })
                 .toList();
     }
 
