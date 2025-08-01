@@ -28,7 +28,7 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static CategoryResponse toResponse(Category category, List<String> thumbnailUrls) {
+    public static CategoryResponse toCategoryResponse(Category category, List<String> thumbnailUrls) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
@@ -42,7 +42,7 @@ public class CategoryMapper {
         return categories.stream()
                 .map(category -> {
                     List<String> thumbnailUrls = thumbnailMap.getOrDefault(category.getId(), List.of());
-                    return toResponse(category, thumbnailUrls);
+                    return toCategoryResponse(category, thumbnailUrls);
                 })
                 .toList();
     }
