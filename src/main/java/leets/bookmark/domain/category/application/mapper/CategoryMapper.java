@@ -1,5 +1,6 @@
 package leets.bookmark.domain.category.application.mapper;
 
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
@@ -47,24 +48,26 @@ public class CategoryMapper {
                 .toList();
     }
 
-    public CategoryWithTagResponse toCategoryWithTagResponse(Category category, List<Tag> tags) {
+    public CategoryWithTagResponse toCategoryWithTagResponse(Category category, List<Tag> tags, List<Platform> platforms) {
         List<TagResponse> tagResponse = tagMapper.toTagResponseList(tags);
 
         return CategoryWithTagResponse.builder()
                 .categoryId(category.getId())
                 .categoryName(category.getCategoryName())
                 .tags(tagResponse)
+                .platforms(platforms)
                 .build();
     }
 
-    public List<CategoryWithTagResponse> toCategoryWithTagResponseList(List<Category> categories, List<Tag> tags) {
+    public List<CategoryWithTagResponse> toCategoryWithTagResponseList(List<Category> categories, List<Tag> tags, Map<Long, List<Platform>> platformMap) {
         Map<Long, List<Tag>> tagMap = tags.stream()
                 .collect(Collectors.groupingBy(tag -> tag.getCategory().getId()));
 
         return categories.stream()
                 .map(category -> {
                     List<Tag> tagList = tagMap.getOrDefault(category.getId(), List.of());
-                    return toCategoryWithTagResponse(category, tagList);
+                    List<Platform> platformList = platformMap.getOrDefault(category.getId(), List.of());
+                    return toCategoryWithTagResponse(category, tagList, platformList);
                 })
                 .toList();
     }

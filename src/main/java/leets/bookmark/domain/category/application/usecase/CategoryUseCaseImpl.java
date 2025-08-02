@@ -1,6 +1,7 @@
 package leets.bookmark.domain.category.application.usecase;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
@@ -90,7 +91,20 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         List<Category> categories = categoryGetService.getAllByUser(user);
         List<Tag> tags = tagGetService.findAllByUser(user);
 
-        return categoryMapper.toCategoryWithTagResponseList(categories, tags);
+        Map<Long, List<Platform>> platformMap = new HashMap<>();
+
+        for (Category category : categories) {
+            List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategory(category);
+
+            List<Platform> platforms = bookmarks.stream()
+                    .map(Bookmark::getPlatform)
+                    .distinct()
+                    .toList();
+
+            platformMap.put(category.getId(), platforms);
+        }
+
+        return categoryMapper.toCategoryWithTagResponseList(categories, tags, platformMap);
     }
 
     @Transactional
