@@ -20,6 +20,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     private String kakaoId;
@@ -31,6 +32,7 @@ public class User extends BaseTimeEntity {
     private String profileImage;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     private String jwtAccessToken;
@@ -42,6 +44,7 @@ public class User extends BaseTimeEntity {
     private String kakaoRefreshToken;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     public void updateJwtTokens(String jwtAccessToken, String jwtRefreshToken) {
