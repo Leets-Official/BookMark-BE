@@ -82,8 +82,8 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
         builder.and(bookmark.user.id.eq(userId));
 
-        if (condition.platform() != null) {
-            builder.and(bookmark.platform.eq(condition.platform()));
+        if (condition.platforms() != null && !condition.platforms().isEmpty()) {
+            builder.and(bookmark.platform.in(condition.platforms()));
         }
 
         if (condition.keyword() != null && !condition.keyword().isBlank()) {
