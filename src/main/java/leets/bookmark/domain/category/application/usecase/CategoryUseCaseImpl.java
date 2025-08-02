@@ -1,6 +1,6 @@
 package leets.bookmark.domain.category.application.usecase;
 
-import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.application.mapper.BookmarkCategoryMapper;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
@@ -17,7 +17,6 @@ import leets.bookmark.domain.category.domain.service.CategoryGetService;
 import leets.bookmark.domain.category.domain.service.CategorySaveService;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.category.domain.service.CategoryUpdateService;
-import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.service.TagDeleteService;
 import leets.bookmark.domain.tag.domain.service.TagGetService;
@@ -27,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +42,10 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private final CategoryUpdateService categoryUpdateService;
     private final TagGetService tagGetService;
     private final TagDeleteService tagDeleteService;
+    private final BookmarkGetService bookmarkGetService;
 
     private final CategoryMapper categoryMapper;
-    private final BookmarkGetService bookmarkGetService;
+    private final BookmarkCategoryMapper bookmarkCategoryMapper;
 
     @Transactional
     @Override
@@ -66,19 +65,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         User user = userGetService.findById(userId);
 
         List<Category> categories = categoryGetService.getAllByUser(user);
-
-        Map<Long, List<String>> thumbnailMap = new HashMap<>();
-
-        for (Category category : categories) {
-            List<Bookmark> bookmarks = bookmarkGetService.getRecent3BookmarksByCategory(category);
-
-            List<String> thumbnailUrls = bookmarks.stream()
-                    .map(Bookmark::getFile)
-                    .map(File::getFileUrl)
-                    .toList();
-
-            thumbnailMap.put(category.getId(), thumbnailUrls);
-        }
+        Map<Long, List<String>> thumbnailMap = bookmarkCategoryMapper.toThumbnailMap(categories);
 
         return categoryMapper.toCategoryResponseList(categories, thumbnailMap);
     }
@@ -90,19 +77,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
         List<Category> categories = categoryGetService.getAllByUser(user);
         List<Tag> tags = tagGetService.findAllByUser(user);
-
-        Map<Long, List<Platform>> platformMap = new HashMap<>();
-
-        for (Category category : categories) {
-            List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategory(category);
-
-            List<Platform> platforms = bookmarks.stream()
-                    .map(Bookmark::getPlatform)
-                    .distinct()
-                    .toList();
-
-            platformMap.put(category.getId(), platforms);
-        }
+        Map<Long, List<Platform>> platformMap = bookmarkCategoryMapper.toPlatformMap(categories);
 
         return categoryMapper.toCategoryWithTagResponseList(categories, tags, platformMap);
     }
