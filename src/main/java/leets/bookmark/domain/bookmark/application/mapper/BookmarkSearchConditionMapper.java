@@ -16,7 +16,7 @@ public class BookmarkSearchConditionMapper {
                 .categoryWithTags(categoryWithTags)
                 .categories(categories)
                 .keyword(request.keyword())
-                .platform(request.platform())
+                .platforms(request.platforms())
                 .build();
     }
 }

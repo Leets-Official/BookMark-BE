@@ -9,7 +9,7 @@ import java.util.List;
 public record BookmarkSearchRequest(
         String keyword,
         List<CategoryTagRequest> categoryTagRequests,
-        Platform platform,
+        List<Platform> platforms,
         @PositiveOrZero
         int page,
         @Positive

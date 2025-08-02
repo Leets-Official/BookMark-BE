@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public record BookmarkSearchCondition (
         String keyword,
-        Platform platform,
+        List<Platform> platforms,
         List<Category> categories,         // 태그 없이 카테고리만 있는 경우
         List<Tag> categoryWithTags
 ) {}
