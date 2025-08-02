@@ -1,5 +1,6 @@
 package leets.bookmark.domain.category.application.dto.response;
 
+import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import lombok.Builder;
 
@@ -9,6 +10,7 @@ import java.util.List;
 public record CategoryWithTagResponse(
         Long categoryId,
         String categoryName,
-        List<TagResponse> tags
+        List<TagResponse> tags,
+        List<Platform> platforms
 ) {
 }
