@@ -23,7 +23,6 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
-import leets.bookmark.domain.file.domain.service.FileGetService;
 import leets.bookmark.domain.notification.domain.service.NotificationDeleteService;
 import leets.bookmark.domain.notification.domain.service.NotificationGetService;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -45,7 +44,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkSaveService;
-import leets.bookmark.domain.bookmark.domain.service.BookmarkUpdateService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +56,6 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final BookmarkMapper bookmarkMapper;
     private final BookmarkDeleteService bookmarkDeleteService;
     private final BookmarkSaveService bookmarkSaveService;
-    private final BookmarkUpdateService bookmarkUpdateService;
     private final UserGetService userGetService;
     private final BookmarkPreviewService bookmarkPreviewService;
 
@@ -67,12 +64,10 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     private final BookmarkSearchConditionMapper bookmarkSearchConditionMapper;
     private final FileUseCase fileUseCase;
-    private final NotificationUseCase notificationUseCase;
     private final NotificationDeleteService notificationDeleteService;
     private final NotificationGetService notificationGetService;
 
     private final FileMapper fileMapper;
-    private final FileGetService fileGetService;
 
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
     private final BookmarkPlatformMapper bookmarkPlatformMapper;
