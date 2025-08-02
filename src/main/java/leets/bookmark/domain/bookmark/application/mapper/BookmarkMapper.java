@@ -1,13 +1,16 @@
 package leets.bookmark.domain.bookmark.application.mapper;
 
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
+import leets.bookmark.domain.file.application.dto.response.FileResponse;
+import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
 
+import leets.bookmark.domain.user.domain.entity.User;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
@@ -17,23 +20,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkMapper {
 
-    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings) {
+    public BookmarkResponse toResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings,
+                                       FileResponse fileResponse) {
         BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
 
-        return buildBookmarkResponse(bookmark, tagInfo);
-    }
-
-    public BookmarkResponse toResponseWithTags(Bookmark bookmark, List<Tag> tags) {
-        BookmarkTagInfoResponse categoryTagResponse = toBookmarkTagInfoResponseFromTags(tags);
-
-        return buildBookmarkResponse(bookmark, categoryTagResponse);
-    }
-
-    public BookmarkFilterRequest toFilterRequest(Long categoryId, List<Long> tagId) {
-        return BookmarkFilterRequest.builder()
-            .categoryId(categoryId)
-            .tagId(tagId)
-            .build();
+        return BookmarkResponse.builder()
+                .id(bookmark.getId())
+                .url(bookmark.getUrl())
+                .title(bookmark.getTitle())
+                .memo(bookmark.getMemo())
+                .platform(String.valueOf(bookmark.getPlatform()))
+                .faviconUrl(bookmark.getFaviconUrl())
+                .categoryTagInfos(List.of(tagInfo))
+                .file(fileResponse)
+                .createdAt(bookmark.getCreatedAt())
+                .updatedAt(bookmark.getUpdatedAt())
+                .build();
     }
 
     private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromMappings(List<BookmarkTagMapping> bookmarkTagMappings) {
@@ -63,19 +65,6 @@ public class BookmarkMapper {
         return buildBookmarkTagInfoResponse(category, tags);
     }
 
-    private BookmarkTagInfoResponse toBookmarkTagInfoResponseFromTags(List<Tag> tags) {
-        List<BookmarkTagInfoResponse.TagInfo> tagInfos = tags.stream()
-            .map(tag -> BookmarkTagInfoResponse.TagInfo.builder()
-                .tagId(tag.getId())
-                .tagName(tag.getTagName())
-                .build())
-            .toList();
-
-        Category category = tags.isEmpty() ? null : tags.get(0).getCategory();
-
-        return buildBookmarkTagInfoResponse(category, tagInfos);
-    }
-
     private BookmarkTagInfoResponse buildBookmarkTagInfoResponse(Category category, List<BookmarkTagInfoResponse.TagInfo> tags) {
         return BookmarkTagInfoResponse.builder()
             .categoryId(category != null ? category.getId() : null)
@@ -90,10 +79,36 @@ public class BookmarkMapper {
             .url(bookmark.getUrl())
             .title(bookmark.getTitle())
             .memo(bookmark.getMemo())
-            .thumbnailUrl(bookmark.getFile() != null ? bookmark.getFile().getFileUrl() : null)
+            .platform(bookmark.getPlatform() != null ? bookmark.getPlatform().name() : null)
             .categoryTagInfos(List.of(tagInfo))
             .createdAt(bookmark.getCreatedAt())
             .updatedAt(bookmark.getUpdatedAt())
             .build();
+    }
+
+    public Bookmark toBookmark(User user, BookmarkSaveRequest request, Category category) {
+        return Bookmark.builder()
+            .user(user)
+            .category(category)
+            .title(request.title())
+            .url(request.url())
+            .memo(request.memo())
+            .platform(request.platform())
+            .faviconUrl(request.faviconUrl())
+            .build();
+    }
+
+
+    public BookmarkTagMapping toMapping(Bookmark bookmark, Tag tag) {
+        return BookmarkTagMapping.builder()
+            .bookmark(bookmark)
+            .tag(tag)
+            .build();
+    }
+
+    public List<BookmarkTagMapping> toMappings(Bookmark bookmark, List<Tag> tags) {
+        return tags.stream()
+            .map(tag -> toMapping(bookmark, tag))
+            .toList();
     }
 }

@@ -1,11 +1,16 @@
 package leets.bookmark.domain.bookmark.domain.service;
 
-import leets.bookmark.domain.bookmark.application.dto.request.BookmarkFilterRequest;
+import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
+import leets.bookmark.domain.category.domain.entity.Category;
+import leets.bookmark.domain.tag.domain.entity.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,33 +22,28 @@ public class BookmarkGetService {
     private final BookmarkRepository bookmarkRepository;
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
 
-    public List<Bookmark> getBookmarksByMemoContaining(String keyword, Long userId) {
-        return bookmarkRepository.findByMemoContainingAndUserId(keyword, userId);
-    }
-
     public List<BookmarkTagMapping> getMappingsByBookmark(Bookmark bookmark) {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
     }
 
-    public List<Bookmark> getBookmarksByCategoryIncludingUntagged(Long userId, Long categoryId) {
-        return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId);
+    public List<BookmarkTagMapping> getBookmarksByTag(Tag tag) {
+        return bookmarkTagMappingRepository.findAllByTag(tag);
     }
 
-    public List<Bookmark> getFilteredBookmarks(Long userId, Long categoryId, List<Long> tagIds) {
-        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds);
+    public Slice<Bookmark> search(Long userId, BookmarkSearchCondition condition, Pageable pageable) {
+        return bookmarkRepository.searchWithFilters(userId, condition, pageable);
     }
 
-    public List<Bookmark> getFilteredBookmarks(Long userId, BookmarkFilterRequest request) {
-        Long categoryId = request.categoryId();
-        List<Long> tagIds = request.tagId();
-
-        if (tagIds == null || tagIds.isEmpty()) {
-            return bookmarkRepository.findAllByUserIdAndCategoryId(userId, categoryId);
-        }
-        return bookmarkRepository.findAllWithFilter(userId, categoryId, tagIds);
+    public Bookmark getBookmarkById(Long bookmarkId) {
+        return bookmarkRepository.findById(bookmarkId)
+                .orElseThrow(BookmarkNotFoundException::new);
     }
 
-    public List<Bookmark> getAllBookmarks(Long userId) {
-        return bookmarkRepository.findAllByUserId(userId);
+    public List<Bookmark> getRecent3BookmarksByCategory(Category category) {
+        return bookmarkRepository.findTop3ByCategoryOrderByCreatedAtDesc(category);
+    }
+
+    public List<Bookmark> getBookmarksByCategory(Category category) {
+        return bookmarkRepository.findAllByCategory(category);
     }
 }

@@ -9,8 +9,13 @@ import java.util.List;
 
 public interface BookmarkTagMappingRepository extends JpaRepository<BookmarkTagMapping, Long> {
 
-    List<BookmarkTagMapping> findAllByBookmark(Bookmark bookmark);
-    List<BookmarkTagMapping> findAllByTag(Tag tag);
-    List<BookmarkTagMapping> findAllByBookmark_Id(Long bookmarkId);
     List<BookmarkTagMapping> findAllByBookmarkId(Long bookmarkId);
+
+    void deleteByBookmark(Bookmark bookmark);
+
+    void deleteAllByBookmark(Bookmark bookmark);
+
+    void deleteByBookmarkId(Long bookmarkId);
+
+    List<BookmarkTagMapping> findAllByTag(Tag tag);
 }

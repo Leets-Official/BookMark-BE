@@ -2,6 +2,8 @@ package leets.bookmark.global.common.exception;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkErrorCode;
+import leets.bookmark.domain.bookmark.application.exception.InvalidPlatformException;
 import leets.bookmark.global.common.response.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -124,6 +126,17 @@ public class GlobalExceptionHandler {
                     .status(GlobalErrorCode.MISMATCHED_INPUT_EXCEPTION.getStatus())
                     .body(response);
         }
+
+        if(containsInvalidPlatformException(ex)){   // 플랫폼 enum 예외처리
+
+            CommonResponse<Void> response = CommonResponse.createFailure(
+                    BookmarkErrorCode.INVALID_PLATFORM_EXCEPTION.getErrorCode(),
+                    BookmarkErrorCode.INVALID_PLATFORM_EXCEPTION.getMessage());
+
+            return ResponseEntity
+                    .status(BookmarkErrorCode.INVALID_PLATFORM_EXCEPTION.getErrorCode())
+                    .body(response);
+        }
         // 이외의 경우
         log.warn("HttpMessageNotReadableException");
         log.warn(LOG_FORMAT, ex.getClass().getSimpleName(), GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatusCode(), ex.getMessage());
@@ -133,6 +146,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(GlobalErrorCode.JSON_PARSE_EXCEPTION.getStatus())
                 .body(response);
+    }
+
+    private boolean containsInvalidPlatformException(Throwable throwable) {
+        while (throwable != null) {
+            if (throwable instanceof InvalidPlatformException) {
+                return true;
+            }
+            throwable = throwable.getCause();
+        }
+        return false;
     }
 
     // 이외 예외 처리

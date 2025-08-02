@@ -1,11 +1,10 @@
 package leets.bookmark.domain.bookmark.application.dto.request;
 
-import lombok.Builder;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
-@Builder
-public record BookmarkFilterRequest(
+public record CategoryTagRequest(
         Long categoryId,
-        List<Long> tagId
+        @Nullable List<Long> tagIds
 ) {}
