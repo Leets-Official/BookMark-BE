@@ -1,6 +1,7 @@
 package leets.bookmark.global.auth.jwt.service;
 
 import leets.bookmark.domain.user.domain.entity.User;
+import leets.bookmark.domain.user.domain.entity.enums.Status;
 import leets.bookmark.domain.user.domain.repository.UserRepository;
 import leets.bookmark.global.auth.jwt.application.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findById(Long.parseLong(userId))
+        User user = userRepository.findByIdAndStatus(Long.valueOf(userId), Status.ACTIVE)
                 .orElseThrow(UnauthorizedException::new);
 
         return new CustomUserDetails(user);

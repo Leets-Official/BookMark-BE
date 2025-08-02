@@ -2,6 +2,7 @@ package leets.bookmark.domain.user.domain.entity;
 
 import jakarta.persistence.*;
 import leets.bookmark.domain.user.domain.entity.enums.Role;
+import leets.bookmark.domain.user.domain.entity.enums.Status;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     private String kakaoId;
@@ -30,6 +32,7 @@ public class User extends BaseTimeEntity {
     private String profileImage;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     private String jwtAccessToken;
@@ -39,6 +42,10 @@ public class User extends BaseTimeEntity {
     private String kakaoAccessToken;
 
     private String kakaoRefreshToken;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
 
     public void updateJwtTokens(String jwtAccessToken, String jwtRefreshToken) {
         this.jwtAccessToken = jwtAccessToken;
@@ -60,5 +67,18 @@ public class User extends BaseTimeEntity {
 
     public void updateKakaoAccessToken(String kakaoAccessToken) {
         this.kakaoAccessToken = kakaoAccessToken;
+    }
+
+    public void deleteAllTokens() {
+        this.jwtAccessToken = null;
+        this.jwtRefreshToken = null;
+        this.kakaoAccessToken = null;
+        this.kakaoRefreshToken = null;
+    }
+
+    public void withdraw() {
+        this.status = Status.DELETED;
+        this.kakaoId = null;
+        deleteAllTokens();
     }
 }

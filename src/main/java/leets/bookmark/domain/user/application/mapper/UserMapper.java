@@ -4,6 +4,7 @@ import leets.bookmark.domain.user.application.dto.response.UserInfoResponse;
 import leets.bookmark.domain.user.application.dto.response.UserKakaoLoginResponse;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.domain.user.domain.entity.enums.Role;
+import leets.bookmark.domain.user.domain.entity.enums.Status;
 import leets.bookmark.global.auth.oauth2.application.dto.response.KakaoUserInfoResponse;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ public class UserMapper {
                 .nickname(userInfo.kakaoAccount().profile().nickName())
                 .profileImage(userInfo.kakaoAccount().profile().profileImageUrl())
                 .role(Role.USER)
+                .status(Status.ACTIVE)
                 .build();
     }
 
