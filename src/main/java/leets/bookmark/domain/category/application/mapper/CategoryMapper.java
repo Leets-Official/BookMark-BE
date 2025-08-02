@@ -50,12 +50,15 @@ public class CategoryMapper {
 
     public CategoryWithTagResponse toCategoryWithTagResponse(Category category, List<Tag> tags, List<Platform> platforms) {
         List<TagResponse> tagResponse = tagMapper.toTagResponseList(tags);
+        List<String> platformNames = platforms.stream()
+                .map(Platform::getPlatformName)
+                .toList();
 
         return CategoryWithTagResponse.builder()
                 .categoryId(category.getId())
                 .categoryName(category.getCategoryName())
                 .tags(tagResponse)
-                .platforms(platforms)
+                .platforms(platformNames)
                 .build();
     }
 
