@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
 import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPlatformResponse;
 import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
+import leets.bookmark.domain.bookmark.application.mapper.BookmarkPlatformMapper;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
@@ -73,6 +75,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final FileGetService fileGetService;
 
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
+    private final BookmarkPlatformMapper bookmarkPlatformMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -254,6 +257,14 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     @Override
     public List<BookmarkPreviewResponse> extractPreviewFromUrl(String url) {
         return bookmarkPreviewService.extractPreviewFromUrl(url);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<BookmarkPlatformResponse> getAllPlatforms(Long userId) {
+        User user = userGetService.findById(userId);
+        List<Bookmark> bookmarks = bookmarkGetService.getDistinctPlatformsByUser(user);
+        return bookmarkPlatformMapper.toBookmarkPlatformResponseList(bookmarks);
     }
 
     private void validateTags(List<Tag> tags, Category category){

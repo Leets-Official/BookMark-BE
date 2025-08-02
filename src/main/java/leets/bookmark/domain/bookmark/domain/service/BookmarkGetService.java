@@ -2,12 +2,14 @@ package leets.bookmark.domain.bookmark.domain.service;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
 import leets.bookmark.domain.bookmark.application.exception.BookmarkNotFoundException;
+import leets.bookmark.domain.bookmark.application.mapper.BookmarkPlatformMapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkRepository;
 import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.tag.domain.entity.Tag;
+import leets.bookmark.domain.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -21,6 +23,7 @@ public class BookmarkGetService {
 
     private final BookmarkRepository bookmarkRepository;
     private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
+    private final BookmarkPlatformMapper bookmarkPlatformMapper;
 
     public List<BookmarkTagMapping> getMappingsByBookmark(Bookmark bookmark) {
         return bookmarkTagMappingRepository.findAllByBookmarkId(bookmark.getId());
@@ -45,5 +48,10 @@ public class BookmarkGetService {
 
     public List<Bookmark> getBookmarksByCategory(Category category) {
         return bookmarkRepository.findAllByCategory(category);
+    }
+
+    public List<Bookmark> getDistinctPlatformsByUser(User user) {
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUserOrderByCreatedAtDesc(user);
+        return bookmarkPlatformMapper.toBookmarkPlatformList(bookmarks);
     }
 }
