@@ -83,45 +83,48 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
                 request.size(),
                 Sort.by(Sort.Direction.DESC, "id"));
 
-        List<CategoryTagRequest> categoryTagRequests = request.categoryTagRequests();
-
-        List<Long> categoryIds = categoryTagRequests.stream()
-                .map(CategoryTagRequest::categoryId)
-                .toList();
-        List<Category> categories = categoryGetService.findAllByIdInAndUser(categoryIds, user);
-
-        Map<Long, Category> categoryMap = categories.stream()
-                .collect(Collectors.toMap(Category::getId, Function.identity()));
-
-        Map<Long, List<Long>> categoryToTagIds = categoryTagRequests.stream()
-                .filter(r -> r.tagIds() != null && !r.tagIds().isEmpty())
-                .collect(Collectors.toMap(
-                        CategoryTagRequest::categoryId,
-                        CategoryTagRequest::tagIds
-                ));
-
         List<Category> categoriesWithoutTags = new ArrayList<>();
         List<Tag> filteredTags = new ArrayList<>();
 
-        // 태그가 존재하는 카테고리-태그는 filteredTags에 추가
-        for (Map.Entry<Long, List<Long>> categoryAndTags : categoryToTagIds.entrySet()) {
-            Long categoryId = categoryAndTags.getKey();
-            List<Long> tagIds = categoryAndTags.getValue();
+        if(request.categoryTagRequests()!=null && !request.categoryTagRequests().isEmpty()) {
 
-            Category category = categoryMap.get(categoryId);
-            if (category == null) continue;
+            List<CategoryTagRequest> categoryTagRequests = request.categoryTagRequests();
 
-            List<Tag> tags = tagGetService.findAllByIds(tagIds);
-            validateTags(tags, category);
-            filteredTags.addAll(tags);
-        }
+            List<Long> categoryIds = categoryTagRequests.stream()
+                    .map(CategoryTagRequest::categoryId)
+                    .toList();
+            List<Category> categories = categoryGetService.findAllByIdInAndUser(categoryIds, user);
 
-        // 태그 없는 카테고리는 categoriesWithoutTags에 추가
-        for (CategoryTagRequest req : categoryTagRequests) {
-            if (req.tagIds() == null || req.tagIds().isEmpty()) {
-                Category category = categoryMap.get(req.categoryId());
-                if (category != null) {
-                    categoriesWithoutTags.add(category);
+            Map<Long, Category> categoryMap = categories.stream()
+                    .collect(Collectors.toMap(Category::getId, Function.identity()));
+
+            Map<Long, List<Long>> categoryToTagIds = categoryTagRequests.stream()
+                    .filter(r -> r.tagIds() != null && !r.tagIds().isEmpty())
+                    .collect(Collectors.toMap(
+                            CategoryTagRequest::categoryId,
+                            CategoryTagRequest::tagIds
+                    ));
+
+            // 태그가 존재하는 카테고리-태그는 filteredTags에 추가
+            for (Map.Entry<Long, List<Long>> categoryAndTags : categoryToTagIds.entrySet()) {
+                Long categoryId = categoryAndTags.getKey();
+                List<Long> tagIds = categoryAndTags.getValue();
+
+                Category category = categoryMap.get(categoryId);
+                if (category == null) continue;
+
+                List<Tag> tags = tagGetService.findAllByIds(tagIds);
+                validateTags(tags, category);
+                filteredTags.addAll(tags);
+            }
+
+            // 태그 없는 카테고리는 categoriesWithoutTags에 추가
+            for (CategoryTagRequest req : categoryTagRequests) {
+                if (req.tagIds() == null || req.tagIds().isEmpty()) {
+                    Category category = categoryMap.get(req.categoryId());
+                    if (category != null) {
+                        categoriesWithoutTags.add(category);
+                    }
                 }
             }
         }
