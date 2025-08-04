@@ -59,6 +59,9 @@ public class Bookmark extends BaseTimeEntity {
         }
     }
 
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl;
+
     public void setCategory(Category category) {
         this.category = category;
     }
