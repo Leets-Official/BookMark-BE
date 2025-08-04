@@ -12,7 +12,9 @@ public enum BookmarkResponseMessage {
     BOOKMARK_DELETE_SUCCESS("북마크 삭제에 성공했습니다."),
     BOOKMARK_UPDATE_SUCCESS("북마크 수정에 성공했습니다."),
     BOOKMARK_SAVE_SUCCESS("북마크 저장에 성공하였습니다."),
-    BOOKMARK_PREVIEW_SUCCESS("썸네일, 제목, 파비콘, 플랫폼 추출에 성공했습니다.");
+    BOOKMARK_PREVIEW_SUCCESS("썸네일, 제목, 파비콘, 플랫폼 추출에 성공했습니다."),
+
+    GET_ALL_BOOKMARK_PLATFORMS_SUCCESS("플랫폼 조회에 성공했습니다.");
 
     private final String message;
 }
