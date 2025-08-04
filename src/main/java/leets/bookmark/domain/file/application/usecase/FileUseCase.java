@@ -35,6 +35,7 @@ public class FileUseCase {
     private final PreSignedMapper preSignedMapper;
 
     public PresignedUrlResponse getPreSignedUrl(String fileName) {
+        fileName = extractFileNameWithExtension(fileName);
         return preSignedMapper.toResponse(fileName, preSignedService.createPresignedUrl(fileName));
     }
 
@@ -89,6 +90,16 @@ public class FileUseCase {
 
     private FileType getValidatedFileType(String fileName){
        return FileType.fromExtension(getExtension(getExtension(fileName)))
+                .orElseThrow(InvalidFileExtensionException::new);
+    }
+
+    public String extractFileNameWithExtension(String fileName) {
+        return FileType.fromFileName(fileName)
+                .map(fileType -> {
+                    String lowerFileName = fileName.toLowerCase();
+                    return fileName.substring(0,
+                            lowerFileName.lastIndexOf(fileType.getExtension()) + fileType.getExtension().length());
+                })
                 .orElseThrow(InvalidFileExtensionException::new);
     }
 
