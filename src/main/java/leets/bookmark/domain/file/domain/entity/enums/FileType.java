@@ -17,7 +17,8 @@ public enum FileType {
     DOCX(".docx"),
     PPTX(".pptx"),
     PPT(".ppt"),
-    TXT(".txt");
+    TXT(".txt"),
+    WEBP(".webp");
 
     private final String extension;
 
