@@ -17,7 +17,7 @@ public record BookmarkSaveRequest(
     @NotBlank String title,
     @NotBlank String url,
     String memo,
-    @Valid FileSaveRequest file,
+    @NotNull @Valid FileSaveRequest file,
     NotificationSaveRequest notification,
     @NotNull Platform platform,
     @NotNull Long categoryId,
