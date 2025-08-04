@@ -40,8 +40,13 @@ public class FileUseCase {
 
     @Transactional
     public void saveFile(User user, Bookmark bookmark, @Valid FileSaveRequest fileSaveRequest) {
-        File file = fileMapper.toFile(user, bookmark, fileSaveRequest,
-                getValidatedFileType(fileSaveRequest.fileName()));
+        FileType fileNameType = getValidatedFileType(fileSaveRequest.fileName());
+        FileType fileUrlType = getValidatedFileType(fileSaveRequest.fileUrl());
+        if (!fileNameType.equals(fileUrlType)){
+            throw new InvalidFileExtensionException();
+        }
+
+        File file = fileMapper.toFile(user, bookmark, fileSaveRequest, fileUrlType);
         fileSaveService.save(file);
     }
 
