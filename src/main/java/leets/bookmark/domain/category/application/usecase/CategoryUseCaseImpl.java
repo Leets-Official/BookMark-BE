@@ -1,8 +1,9 @@
 package leets.bookmark.domain.category.application.usecase;
 
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkCategoryMapper;
-import leets.bookmark.domain.bookmark.application.usecase.BookmarkUseCase;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
@@ -43,11 +44,10 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private final TagGetService tagGetService;
     private final TagDeleteService tagDeleteService;
     private final BookmarkGetService bookmarkGetService;
+    private final BookmarkDeleteService bookmarkDeleteService;
 
     private final CategoryMapper categoryMapper;
     private final BookmarkCategoryMapper bookmarkCategoryMapper;
-
-    private final BookmarkUseCase bookmarkUseCase;
 
     @Transactional
     @Override
@@ -104,8 +104,9 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
 
         validateCategoryOwner(category, user);
 
-        bookmarkGetService.getBookmarksByCategory(category)
-                        .forEach(bookmark -> bookmarkUseCase.delete(user.getId(), bookmark.getId()));
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategory(category);
+        bookmarkDeleteService.deleteAllBookmarks(bookmarks);
+
         tagDeleteService.deleteAllByCategory(category);
         categoryDeleteService.delete(categoryId);
     }
