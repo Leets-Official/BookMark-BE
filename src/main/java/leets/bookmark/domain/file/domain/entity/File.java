@@ -37,7 +37,7 @@ public class File extends BaseTimeEntity {
     String fileName;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1024)
     String fileUrl;
 
     @Enumerated(EnumType.STRING)
