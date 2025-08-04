@@ -1,17 +1,15 @@
 package leets.bookmark.domain.bookmark.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.file.domain.entity.File;
-import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.common.entity.BaseTimeEntity;
 
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "bookmarks")
@@ -26,6 +24,8 @@ public class Bookmark extends BaseTimeEntity {
     @Column(name = "bookmark_id")
     private Long id;
 
+    @NotNull
+    @Column(nullable = false, length = 1024)
     private String url;
 
     private String title;
