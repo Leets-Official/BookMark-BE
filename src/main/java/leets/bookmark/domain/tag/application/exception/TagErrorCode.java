@@ -12,7 +12,8 @@ public enum TagErrorCode implements ErrorCode {
     DUPLICATED_TAG_NAME_EXCEPTION(400, "이미 존재하는 태그입니다."),
     TAG_OWNER_MISMATCH_EXCEPTION(403, "해당 태그 소유자만 접근 가능합니다."),
     TAG_LIMIT_EXCEED_EXCEPTION(400, "태그는 카테고리당 최대 10개까지 생성 가능합니다."),
-    TAG_HAS_BOOKMARK_EXCEPTION(400, "해당 태그에 북마크가 존재합니다.");
+
+    TAG_ONLY_USED_BOOKMARK_EXISTS(400, "해당 태그를 유일하게 사용하고 있는 북마크가 존재합니다.");
 
     private final int errorCode;
     private final String message;

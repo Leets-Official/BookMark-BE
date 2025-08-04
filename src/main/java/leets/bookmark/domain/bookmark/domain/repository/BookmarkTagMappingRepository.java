@@ -5,6 +5,7 @@ import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface BookmarkTagMappingRepository extends JpaRepository<BookmarkTagMapping, Long> {
@@ -18,4 +19,8 @@ public interface BookmarkTagMappingRepository extends JpaRepository<BookmarkTagM
     void deleteByBookmarkId(Long bookmarkId);
 
     List<BookmarkTagMapping> findAllByTag(Tag tag);
+
+    void deleteByBookmarkIn(Collection<Bookmark> bookmarks);
+
+    void deleteByTag(Tag tag);
 }

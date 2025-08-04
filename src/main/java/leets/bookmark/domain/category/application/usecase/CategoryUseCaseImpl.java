@@ -1,13 +1,14 @@
 package leets.bookmark.domain.category.application.usecase;
 
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkCategoryMapper;
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.domain.entity.enums.Platform;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkDeleteService;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.category.application.dto.request.CategoryCreateRequest;
 import leets.bookmark.domain.category.application.dto.request.CategoryNameUpdateRequest;
 import leets.bookmark.domain.category.application.dto.response.CategoryResponse;
 import leets.bookmark.domain.category.application.dto.response.CategoryWithTagResponse;
-import leets.bookmark.domain.category.application.exception.CategoryHasBookmarksException;
 import leets.bookmark.domain.category.application.exception.CategoryLimitExceedException;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.application.exception.DuplicatedCategoryNameException;
@@ -43,6 +44,7 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private final TagGetService tagGetService;
     private final TagDeleteService tagDeleteService;
     private final BookmarkGetService bookmarkGetService;
+    private final BookmarkDeleteService bookmarkDeleteService;
 
     private final CategoryMapper categoryMapper;
     private final BookmarkCategoryMapper bookmarkCategoryMapper;
@@ -101,7 +103,9 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
         Category category = categoryGetService.findById(categoryId);
 
         validateCategoryOwner(category, user);
-        checkCategoryIsEmpty(category);
+
+        List<Bookmark> bookmarks = bookmarkGetService.getBookmarksByCategory(category);
+        bookmarkDeleteService.deleteAllBookmarks(bookmarks);
 
         tagDeleteService.deleteAllByCategory(category);
         categoryDeleteService.delete(categoryId);
@@ -122,12 +126,6 @@ public class CategoryUseCaseImpl implements CategoryUseCase {
     private void checkExceededCategoryLimit(User user) {
         if (categoryGetService.countByUser(user) >= CATEGORY_LIMIT) {
             throw new CategoryLimitExceedException();
-        }
-    }
-
-    private void checkCategoryIsEmpty(Category category) {
-        if (!bookmarkGetService.getBookmarksByCategory(category).isEmpty()) {
-            throw new CategoryHasBookmarksException();
         }
     }
 }

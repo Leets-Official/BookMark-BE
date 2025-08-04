@@ -1,5 +1,7 @@
 package leets.bookmark.domain.tag.application.usecase;
 
+import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
+import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.bookmark.domain.service.BookmarkGetService;
 import leets.bookmark.domain.category.application.exception.CategoryOwnerMismatchException;
 import leets.bookmark.domain.category.domain.entity.Category;
@@ -8,7 +10,7 @@ import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
 import leets.bookmark.domain.tag.application.dto.request.TagNameUpdateRequest;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.exception.DuplicatedTagNameException;
-import leets.bookmark.domain.tag.application.exception.TagHasBookmarksException;
+import leets.bookmark.domain.tag.application.exception.TagOnlyUsedException;
 import leets.bookmark.domain.tag.application.exception.TagLimitExceedException;
 import leets.bookmark.domain.tag.application.exception.TagOwnerMismatchException;
 import leets.bookmark.domain.tag.application.mapper.TagMapper;
@@ -37,9 +39,9 @@ public class TagUseCaseImpl implements TagUseCase {
     private final TagSaveService tagSaveService;
     private final TagUpdateService tagUpdateService;
     private final TagDeleteService tagDeleteService;
+    private final BookmarkGetService bookmarkGetService;
 
     private final TagMapper tagMapper;
-    private final BookmarkGetService bookmarkGetService;
 
     @Transactional(readOnly = true)
     @Override
@@ -86,7 +88,7 @@ public class TagUseCaseImpl implements TagUseCase {
         Tag tag = tagGetService.findById(tagId);
 
         validateTagOwner(tag, user);
-        checkTagIsEmpty(tag);
+        checkTagCanBeDeleted(tag);
 
         tagDeleteService.delete(tag);
     }
@@ -115,9 +117,16 @@ public class TagUseCaseImpl implements TagUseCase {
         }
     }
 
-    private void checkTagIsEmpty(Tag tag) {
-        if (!bookmarkGetService.getBookmarksByTag(tag).isEmpty()) {
-            throw new TagHasBookmarksException();
+    private void checkTagCanBeDeleted(Tag tag) {
+        List<BookmarkTagMapping> mappings = bookmarkGetService.getBookmarksByTag(tag);
+
+        for (BookmarkTagMapping mapping : mappings) {
+            Bookmark bookmark = mapping.getBookmark();
+            List<BookmarkTagMapping> bookmarkMappings = bookmarkGetService.getMappingsByBookmark(bookmark);
+
+            if (bookmarkMappings.size() == 1) { // 북마크가 해당 태그 1개만 사용할 경우 삭제 불가
+                throw new TagOnlyUsedException();
+            }
         }
     }
 }
