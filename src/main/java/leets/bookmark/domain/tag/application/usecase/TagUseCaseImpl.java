@@ -10,7 +10,7 @@ import leets.bookmark.domain.tag.application.dto.request.TagCreateRequest;
 import leets.bookmark.domain.tag.application.dto.request.TagNameUpdateRequest;
 import leets.bookmark.domain.tag.application.dto.response.TagResponse;
 import leets.bookmark.domain.tag.application.exception.DuplicatedTagNameException;
-import leets.bookmark.domain.tag.application.exception.TagHasBookmarksException;
+import leets.bookmark.domain.tag.application.exception.TagOnlyUsedException;
 import leets.bookmark.domain.tag.application.exception.TagLimitExceedException;
 import leets.bookmark.domain.tag.application.exception.TagOwnerMismatchException;
 import leets.bookmark.domain.tag.application.mapper.TagMapper;
@@ -125,7 +125,7 @@ public class TagUseCaseImpl implements TagUseCase {
             List<BookmarkTagMapping> bookmarkMappings = bookmarkGetService.getMappingsByBookmark(bookmark);
 
             if (bookmarkMappings.size() == 1) { // 북마크가 해당 태그 1개만 사용할 경우 삭제 불가
-                throw new TagHasBookmarksException();
+                throw new TagOnlyUsedException();
             }
         }
     }
