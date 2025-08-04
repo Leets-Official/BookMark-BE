@@ -1,6 +1,6 @@
 package leets.bookmark.domain.tag.domain.service;
 
-import leets.bookmark.domain.bookmark.domain.repository.BookmarkTagMappingRepository;
+import leets.bookmark.domain.bookmark.domain.service.BookmarkTagDeleteService;
 import leets.bookmark.domain.category.domain.entity.Category;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.tag.domain.repository.TagRepository;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 public class TagDeleteService {
 
     private final TagRepository tagRepository;
-    private final BookmarkTagMappingRepository bookmarkTagMappingRepository;
+    private final BookmarkTagDeleteService bookmarkTagDeleteService;
 
     public void delete(Tag tag) {
-        bookmarkTagMappingRepository.deleteByTag(tag);
+        bookmarkTagDeleteService.deleteByTag(tag);
         tagRepository.delete(tag);
     }
 
