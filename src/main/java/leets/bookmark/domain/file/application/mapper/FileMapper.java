@@ -23,8 +23,11 @@ public class FileMapper {
 
     public FileResponse toFileResponse(File file){
         return FileResponse.builder()
+                .fileId(file.getId())
                 .fileUrl(file.getFileUrl())
                 .fileName(file.getFileName())
+                .createdAt(file.getCreatedAt())
+                .updatedAt(file.getUpdatedAt())
                 .build();
     }
 }
