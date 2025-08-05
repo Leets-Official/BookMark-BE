@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClient;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,6 +41,7 @@ public class KakaoNotificationService {
 
         for (int i = 0; i < notificationItemRequests.size(); i++) {
             NotificationItemRequest item = notificationItemRequests.get(i);
+            String description = Optional.ofNullable(item.description()).orElse(" ");
             contentsJson.append("""
                 {
                     "title": "%s",
@@ -54,7 +56,7 @@ public class KakaoNotificationService {
                 }
             """.formatted(
                     escapeJson(item.title()),
-                    escapeJson(item.description()),
+                    description,
                     escapeJson(item.imageUrl()),
                     linkedUrl,
                     linkedUrl
@@ -89,6 +91,8 @@ public class KakaoNotificationService {
         """.formatted(notificationTitle, linkedUrl, linkedUrl, contentsJson.toString(), linkedUrl, linkedUrl);
 
         String formBody = "template_object=" + URLEncoder.encode(templateJson, StandardCharsets.UTF_8);
+
+        System.out.println(formBody);
 
         String response = kakaoRestClient.post()
                 .uri(messageSendUri)
