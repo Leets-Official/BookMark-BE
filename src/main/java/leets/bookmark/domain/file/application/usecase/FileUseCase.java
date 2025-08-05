@@ -27,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 public class FileUseCase {
 
     private final PreSignedService preSignedService;
+    private final S3UploadService s3UploadService;
     private final FileSaveService fileSaveService;
     private final FileGetService fileGetService;
     private final FileUpdateService fileUpdateService;
@@ -50,6 +51,12 @@ public class FileUseCase {
 
         File file = fileMapper.toFile(user, bookmark, fileSaveRequest, fileUrlType);
         fileSaveService.save(file);
+    }
+
+    public S3UrlResponse upload(String fileUrl) {
+        fileUrl = extractFileNameWithExtension(fileUrl);
+        String s3UrlResponse = s3UploadService.upload(fileUrl);
+        return fileMapper.toS3UrlResponse(s3UrlResponse, fileUrl);
     }
 
     @Transactional(readOnly = true)
@@ -104,7 +111,4 @@ public class FileUseCase {
                 .orElseThrow(InvalidFileExtensionException::new);
     }
 
-    public S3UrlResponse upload(String fileUrl) {
-        return null;
-    }
 }

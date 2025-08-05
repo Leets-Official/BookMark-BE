@@ -10,7 +10,8 @@ public enum FileErrorCode implements ErrorCode {
 
     FILE_NOT_FOUND_EXCEPTION(404,"해당하는 파일을 찾을 수 없습니다."),
     INVALID_FILE_EXTENSION(400, "올바르지 않은 파일 확장자입니다."),
-    FILE_OWNER_MISMATCH_EXCEPTION(403, "파일 소유자만 접근 가능합니다");
+    FILE_OWNER_MISMATCH_EXCEPTION(403, "파일 소유자만 접근 가능합니다."),
+    S3_UPLOAD_EXCEPTION(500, "파일 업로드에 실패하였습니다.");
 
     private final int errorCode;
     private final String message;

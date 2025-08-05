@@ -3,6 +3,7 @@ package leets.bookmark.domain.file.application.mapper;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
+import leets.bookmark.domain.file.application.dto.response.S3UrlResponse;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -18,6 +19,13 @@ public class FileMapper {
                 .fileName(fileSaveRequest.fileName())
                 .fileUrl(fileSaveRequest.fileUrl())
                 .fileType(fileType)
+                .build();
+    }
+
+    public S3UrlResponse toS3UrlResponse(String s3Url, String fileUrl){
+        return S3UrlResponse.builder()
+                .s3Url(s3Url)
+                .originalFileName(fileUrl)
                 .build();
     }
 
