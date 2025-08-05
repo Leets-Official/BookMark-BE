@@ -28,6 +28,9 @@ public class KakaoNotificationService {
     @Value("${kakao.message-send-uri}")
     private String messageSendUri;
 
+    @Value("${kakao.basic-image-url}")
+    private String basicImageUrl;
+
     private final RestClient kakaoRestClient;
     private final AesEncryptor aesEncryptor;
 
@@ -41,7 +44,9 @@ public class KakaoNotificationService {
 
         for (int i = 0; i < notificationItemRequests.size(); i++) {
             NotificationItemRequest item = notificationItemRequests.get(i);
+            String title = Optional.ofNullable(item.title()).orElse("제목 없음");
             String description = Optional.ofNullable(item.description()).orElse(" ");
+            String imageUrl = Optional.ofNullable(item.imageUrl()).orElse(basicImageUrl);
             contentsJson.append("""
                 {
                     "title": "%s",
@@ -55,9 +60,9 @@ public class KakaoNotificationService {
                     }
                 }
             """.formatted(
-                    escapeJson(item.title()),
-                    description,
-                    escapeJson(item.imageUrl()),
+                    escapeJson(title),
+                    escapeJson(description),
+                    escapeJson(imageUrl),
                     linkedUrl,
                     linkedUrl
             ));
@@ -91,8 +96,6 @@ public class KakaoNotificationService {
         """.formatted(notificationTitle, linkedUrl, linkedUrl, contentsJson.toString(), linkedUrl, linkedUrl);
 
         String formBody = "template_object=" + URLEncoder.encode(templateJson, StandardCharsets.UTF_8);
-
-        System.out.println(formBody);
 
         String response = kakaoRestClient.post()
                 .uri(messageSendUri)
