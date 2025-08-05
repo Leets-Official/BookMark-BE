@@ -147,8 +147,8 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         Category category = categoryGetService.findById(request.categoryId());
         Bookmark bookmark = bookmarkSaveService.save(request, user, category);
 
-        if (request.file() != null) {
-            fileUseCase.saveFile(user, bookmark, request.file());
+        if (request.thumbnailUrl() != null) {
+            fileUseCase.saveThumbnailFile(user, bookmark, request.thumbnailUrl());
         }
     }
 
@@ -163,10 +163,12 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
         if (request.title() != null && !request.title().trim().isEmpty()) {
             bookmark.updateTitle(request.title());
+            updated = true;
         }
 
-        if (request.file() != null) {
-            fileUseCase.updateFile(user, bookmark, request.file());
+        if (request.thumbnailUrl() != null) {
+            fileUseCase.updateThumbnailImage(user, bookmark, request.thumbnailUrl());
+            updated = true;
         }
 
         if (request.platform() != null) {

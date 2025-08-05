@@ -12,7 +12,7 @@ public record BookmarkUpdateRequest(
         String title,
         String url,
         String memo,
-        FileUpdateRequest file,
+        String thumbnailUrl,
         NotificationUpdateRequest notification,
         Platform platform,
         Long categoryId,
