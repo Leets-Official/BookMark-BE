@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCondition;
 import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPlatformResponse;
 import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
@@ -23,6 +24,7 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
+import leets.bookmark.domain.notification.application.dto.response.NotificationResponse;
 import leets.bookmark.domain.notification.domain.service.NotificationDeleteService;
 import leets.bookmark.domain.notification.domain.service.NotificationGetService;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -66,6 +68,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final FileUseCase fileUseCase;
     private final NotificationDeleteService notificationDeleteService;
     private final NotificationGetService notificationGetService;
+    private final NotificationUseCase notificationUseCase;
 
     private final FileMapper fileMapper;
 
@@ -74,7 +77,20 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
+    public BookmarkFullResponse findBookmark(Long userId, Long bookmarkId){
+        User user = userGetService.findById(userId);
+        Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
+
+        validateBookmarkOwner(user.getId(), bookmark);
+
+        FileResponse fileResponse = fileMapper.toFileResponse(bookmark.getFile());
+        NotificationResponse notificationResponse = notificationUseCase.getNotification(user, bookmark);
+        return bookmarkMapper.toFullResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark), fileResponse, notificationResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<BookmarkFullResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
         User user = userGetService.findById(userId);
 
         Pageable pageable = PageRequest.of(request.page(),
@@ -134,7 +150,9 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
         return bookmarks.map(bookmark -> {
                     FileResponse fileResponse = fileMapper.toFileResponse(bookmark.getFile());
-                    return bookmarkMapper.toResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark), fileResponse);
+                    NotificationResponse notificationResponse = notificationUseCase.getNotification(user, bookmark);
+                    return bookmarkMapper.toFullResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark),
+                            fileResponse, notificationResponse);
                 }
         );
     }

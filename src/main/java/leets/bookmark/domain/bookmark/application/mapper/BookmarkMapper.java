@@ -1,12 +1,13 @@
 package leets.bookmark.domain.bookmark.application.mapper;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkResponse;
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkTagInfoResponse;
 import leets.bookmark.domain.bookmark.domain.entity.BookmarkTagMapping;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
-import leets.bookmark.domain.file.domain.entity.File;
+import leets.bookmark.domain.notification.application.dto.response.NotificationResponse;
 import leets.bookmark.domain.tag.domain.entity.Tag;
 import leets.bookmark.domain.category.domain.entity.Category;
 
@@ -110,5 +111,25 @@ public class BookmarkMapper {
         return tags.stream()
             .map(tag -> toMapping(bookmark, tag))
             .toList();
+    }
+
+    public BookmarkFullResponse toFullResponse(Bookmark bookmark, List<BookmarkTagMapping> bookmarkTagMappings,
+                                           FileResponse fileResponse, NotificationResponse notificationResponse) {
+
+        BookmarkTagInfoResponse tagInfo = toBookmarkTagInfoResponseFromMappings(bookmarkTagMappings);
+
+        return BookmarkFullResponse.builder()
+                .id(bookmark.getId())
+                .url(bookmark.getUrl())
+                .title(bookmark.getTitle())
+                .memo(bookmark.getMemo())
+                .platform(String.valueOf(bookmark.getPlatform()))
+                .faviconUrl(bookmark.getFaviconUrl())
+                .categoryTagInfos(List.of(tagInfo))
+                .file(fileResponse)
+                .notificationResponse(notificationResponse)
+                .createdAt(bookmark.getCreatedAt())
+                .updatedAt(bookmark.getUpdatedAt())
+                .build();
     }
 }
