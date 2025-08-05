@@ -2,6 +2,7 @@ package leets.bookmark.domain.bookmark.application.usecase;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
@@ -27,5 +28,5 @@ public interface BookmarkUseCase {
 
     List<BookmarkPlatformResponse> getAllPlatforms(Long userId);
 
-    BookmarkResponse findBookmark(Long userId, Long bookmarkId);
+    BookmarkFullResponse findBookmark(Long userId, Long bookmarkId);
 }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
@@ -27,8 +28,8 @@ public class BookmarkController {
 
     @GetMapping("/{bookmarkId}")
     @Operation(summary = "북마크 단일 조회 API", description = "북마크를 조회합니다.")
-    public CommonResponse<BookmarkResponse> getBookmark(@CurrentUser Long userId, @PathVariable Long bookmarkId) {
-        BookmarkResponse response = bookmarkUseCase.findBookmark(userId, bookmarkId);
+    public CommonResponse<BookmarkFullResponse> getBookmark(@CurrentUser Long userId, @PathVariable Long bookmarkId) {
+        BookmarkFullResponse response = bookmarkUseCase.findBookmark(userId, bookmarkId);
         return CommonResponse.createSuccess(BOOKMARK_FIND_SUCCESS.getMessage(), response);
     }
 
