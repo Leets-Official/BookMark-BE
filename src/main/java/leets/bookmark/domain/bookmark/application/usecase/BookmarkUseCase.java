@@ -26,4 +26,6 @@ public interface BookmarkUseCase {
     List<BookmarkPreviewResponse> extractPreviewFromUrl(String url);
 
     List<BookmarkPlatformResponse> getAllPlatforms(Long userId);
+
+    BookmarkResponse findBookmark(Long userId, Long bookmarkId);
 }

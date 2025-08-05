@@ -25,12 +25,19 @@ public class BookmarkController {
     private final BookmarkUseCase bookmarkUseCase;
     private final NotificationUseCase notificationUseCase;
 
+    @GetMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 단일 조회 API", description = "북마크를 조회합니다.")
+    public CommonResponse<BookmarkResponse> getBookmark(@CurrentUser Long userId, @PathVariable Long bookmarkId) {
+        BookmarkResponse response = bookmarkUseCase.findBookmark(userId, bookmarkId);
+        return CommonResponse.createSuccess(BOOKMARK_FIND_SUCCESS.getMessage(), response);
+    }
+
     @PostMapping("/search")
     @Operation(summary = "북마크 필터링 API")
     public CommonResponse<Slice<BookmarkResponse>> getFilteredBookmarks(@CurrentUser Long userId,
                                                                         @RequestBody @Valid BookmarkSearchRequest bookmarkSearchRequest) {
         Slice<BookmarkResponse> responses = bookmarkUseCase.getFilteredBookmarks(userId, bookmarkSearchRequest);
-        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), responses);
+        return CommonResponse.createSuccess(BOOKMARK_FIND_SUCCESS.getMessage(), responses);
     }
 
     @PostMapping()

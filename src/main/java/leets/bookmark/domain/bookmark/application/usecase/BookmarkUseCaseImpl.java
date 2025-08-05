@@ -74,6 +74,18 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     @Transactional(readOnly = true)
+    public BookmarkResponse findBookmark(Long userId, Long bookmarkId){
+        User user = userGetService.findById(userId);
+        Bookmark bookmark = bookmarkGetService.getBookmarkById(bookmarkId);
+
+        validateBookmarkOwner(user.getId(), bookmark);
+
+        FileResponse fileResponse = fileMapper.toFileResponse(bookmark.getFile());
+        return bookmarkMapper.toResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark), fileResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
         User user = userGetService.findById(userId);
 
