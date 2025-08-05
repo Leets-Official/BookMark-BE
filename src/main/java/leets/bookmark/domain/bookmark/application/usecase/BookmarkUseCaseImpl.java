@@ -90,7 +90,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
+    public Slice<BookmarkFullResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request) {
         User user = userGetService.findById(userId);
 
         Pageable pageable = PageRequest.of(request.page(),
@@ -150,7 +150,9 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
         return bookmarks.map(bookmark -> {
                     FileResponse fileResponse = fileMapper.toFileResponse(bookmark.getFile());
-                    return bookmarkMapper.toResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark), fileResponse);
+                    NotificationResponse notificationResponse = notificationUseCase.getNotification(user, bookmark);
+                    return bookmarkMapper.toFullResponse(bookmark, bookmarkGetService.getMappingsByBookmark(bookmark),
+                            fileResponse, notificationResponse);
                 }
         );
     }

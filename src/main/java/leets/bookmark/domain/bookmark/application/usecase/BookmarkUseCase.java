@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public interface BookmarkUseCase {
-    Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request);
+    Slice<BookmarkFullResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request);
 
     void delete(Long userId, Long bookmarkId);
 

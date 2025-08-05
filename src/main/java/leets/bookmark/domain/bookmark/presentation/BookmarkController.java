@@ -35,9 +35,9 @@ public class BookmarkController {
 
     @PostMapping("/search")
     @Operation(summary = "북마크 필터링 API")
-    public CommonResponse<Slice<BookmarkResponse>> getFilteredBookmarks(@CurrentUser Long userId,
+    public CommonResponse<Slice<BookmarkFullResponse>> getFilteredBookmarks(@CurrentUser Long userId,
                                                                         @RequestBody @Valid BookmarkSearchRequest bookmarkSearchRequest) {
-        Slice<BookmarkResponse> responses = bookmarkUseCase.getFilteredBookmarks(userId, bookmarkSearchRequest);
+        Slice<BookmarkFullResponse> responses = bookmarkUseCase.getFilteredBookmarks(userId, bookmarkSearchRequest);
         return CommonResponse.createSuccess(BOOKMARK_FIND_SUCCESS.getMessage(), responses);
     }
 
