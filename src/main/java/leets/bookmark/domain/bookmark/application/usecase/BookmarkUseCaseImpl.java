@@ -168,6 +168,9 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         if (request.file() != null) {
             fileUseCase.saveFile(user, bookmark, request.file());
         }
+        if (request.notification() != null) {
+            notificationUseCase.saveNotification(user, bookmark, request.notification());
+        }
     }
 
     @Transactional
