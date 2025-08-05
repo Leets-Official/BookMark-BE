@@ -6,6 +6,7 @@ import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
 import leets.bookmark.domain.file.application.dto.request.FileUpdateRequest;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.dto.response.PresignedUrlResponse;
+import leets.bookmark.domain.file.application.dto.response.S3UrlResponse;
 import leets.bookmark.domain.file.application.exception.FileOwnerMismatchException;
 import leets.bookmark.domain.file.application.exception.InvalidFileExtensionException;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
@@ -103,4 +104,7 @@ public class FileUseCase {
                 .orElseThrow(InvalidFileExtensionException::new);
     }
 
+    public S3UrlResponse upload(String fileUrl) {
+        return null;
+    }
 }
