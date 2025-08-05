@@ -19,7 +19,8 @@ public enum FileType {
     PPTX(".pptx"),
     PPT(".ppt"),
     TXT(".txt"),
-    WEBP(".webp");
+    WEBP(".webp"),
+    HEIC(".heic");
 
     private final String extension;
 

@@ -26,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 public class FileUseCase {
 
     private final PreSignedService preSignedService;
+    private final S3UploadService s3UploadService;
     private final FileSaveService fileSaveService;
     private final FileGetService fileGetService;
     private final FileUpdateService fileUpdateService;
@@ -51,6 +52,17 @@ public class FileUseCase {
         fileSaveService.save(file);
     }
 
+    @Transactional
+    public void saveThumbnailFile(User user, Bookmark bookmark, String thumbnailUrl) {
+        String fileName = extractFileNameWithExtension(thumbnailUrl);
+        FileType type = getValidatedFileType(fileName);
+
+        String s3UrlResponse = s3UploadService.upload(thumbnailUrl);
+
+        File file = fileMapper.toThumbnailFile(user, bookmark, fileName, s3UrlResponse, type);
+        fileSaveService.save(file);
+    }
+
     @Transactional(readOnly = true)
     public FileResponse getFile(User user, Bookmark bookmark) {
         File file = fileGetService.findByBookmarkId(bookmark.getId());
@@ -65,6 +77,18 @@ public class FileUseCase {
         validateFileOwner(user, file);
 
         fileUpdateService.update(file, fileUpdateRequest, getValidatedFileType(fileUpdateRequest.fileName()));
+    }
+
+    public void updateThumbnailImage(User user, Bookmark bookmark, String thumbnailUrl) {
+        File file = fileGetService.findByBookmarkId(bookmark.getId());
+        validateFileOwner(user, file);
+
+        String fileName = extractFileNameWithExtension(thumbnailUrl);
+        FileType type = getValidatedFileType(fileName);
+
+        String s3UrlResponse = s3UploadService.upload(thumbnailUrl);
+
+        fileUpdateService.updateThumbnailImage(file, fileName, s3UrlResponse, type);
     }
 
     @Transactional

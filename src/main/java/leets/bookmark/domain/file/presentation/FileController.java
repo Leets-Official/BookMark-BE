@@ -20,4 +20,5 @@ public class FileController {
         PresignedUrlResponse response = fileUseCase.getPreSignedUrl(fileName);
         return CommonResponse.createSuccess(FileResponseCode.PRE_SIGNED_URL_SUCCESS.getMessage(), response);
     }
+
 }

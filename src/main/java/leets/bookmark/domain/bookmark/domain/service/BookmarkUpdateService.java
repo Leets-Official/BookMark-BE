@@ -27,7 +27,6 @@ public class BookmarkUpdateService {
 
     @Transactional
     public void update(Bookmark bookmark, BookmarkUpdateRequest request) {
-        FileUpdateRequest fileRequest = request.file();
         bookmark.updateBookmark(
             request.title(),
             request.memo()

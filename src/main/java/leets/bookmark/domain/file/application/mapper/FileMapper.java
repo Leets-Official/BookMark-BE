@@ -21,6 +21,17 @@ public class FileMapper {
                 .build();
     }
 
+    public File toThumbnailFile(User user, Bookmark bookmark, String fileName,
+                                String s3UrlResponse, FileType type) {
+        return File.builder()
+                .user(user)
+                .bookmark(bookmark)
+                .fileName(fileName)
+                .fileUrl(s3UrlResponse)
+                .fileType(type)
+                .build();
+    }
+
     public FileResponse toFileResponse(File file){
         return FileResponse.builder()
                 .fileId(file.getId())
