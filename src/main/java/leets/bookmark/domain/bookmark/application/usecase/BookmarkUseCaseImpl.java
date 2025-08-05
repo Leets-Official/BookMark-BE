@@ -66,6 +66,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final FileUseCase fileUseCase;
     private final NotificationDeleteService notificationDeleteService;
     private final NotificationGetService notificationGetService;
+    private final NotificationUseCase notificationUseCase;
 
     private final FileMapper fileMapper;
 
@@ -149,6 +150,9 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
         if (request.file() != null) {
             fileUseCase.saveFile(user, bookmark, request.file());
+        }
+        if (request.notification() != null) {
+            notificationUseCase.saveNotification(user, bookmark, request.notification());
         }
     }
 
