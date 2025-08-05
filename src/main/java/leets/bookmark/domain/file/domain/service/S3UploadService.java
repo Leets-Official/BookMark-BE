@@ -1,6 +1,7 @@
 package leets.bookmark.domain.file.domain.service;
 
 import leets.bookmark.domain.file.application.exception.S3UploadException;
+import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class S3UploadService {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    public String upload(String fileUrl) {
+    public String upload(String fileUrl, FileType fileType) {
         try {
             URL url = URI.create(fileUrl).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -36,7 +37,7 @@ public class S3UploadService {
 
             try (InputStream inputStream = connection.getInputStream()) {
 
-                String fileName = generateUrl(fileUrl);
+                String fileName = generateUrl(fileType);
 
                 PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                         .bucket(bucket)
@@ -54,8 +55,8 @@ public class S3UploadService {
         }
     }
 
-    private String generateUrl(String fileName) {
-        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-        return LocalDateTime.now().format(FORMATTER) + UUID.randomUUID().toString() + "." + extension;
+    private String generateUrl(FileType fileType) {
+        String extension = fileType.getExtension();
+        return LocalDateTime.now().format(FORMATTER) + UUID.randomUUID().toString() + extension;
     }
 }
