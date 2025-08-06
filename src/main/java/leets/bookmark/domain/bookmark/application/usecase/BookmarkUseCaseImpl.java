@@ -167,6 +167,11 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
 
         if (request.title() != null && !request.title().trim().isEmpty()) {
             bookmark.updateTitle(request.title());
+            updated = true;
+        }
+        if (request.memo() != null) {
+            bookmark.updateMemo(request.memo());
+            updated = true;
         }
 
         if (request.file() != null) {
