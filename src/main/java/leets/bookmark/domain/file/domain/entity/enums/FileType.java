@@ -24,15 +24,6 @@ public enum FileType {
 
     private final String extension;
 
-    public static Optional<FileType> fromExtension(String ext){
-        if(ext == null){
-            return Optional.empty();
-        }
-        return Stream.of(FileType.values())
-                .filter(fileType -> fileType.getExtension().equalsIgnoreCase(ext))
-                .findFirst();
-    }
-
     public static Optional<FileType> fromFileName(String fileName) {
         return Stream.of(FileType.values())
                 .filter(fileType -> fileName.toLowerCase().contains(fileType.getExtension()))

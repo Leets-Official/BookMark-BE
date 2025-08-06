@@ -2,10 +2,13 @@ package leets.bookmark.domain.file.application.mapper;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import leets.bookmark.domain.file.application.dto.response.FetchedThumbnailResponse;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.user.domain.entity.User;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -39,6 +42,14 @@ public class FileMapper {
                 .fileName(file.getFileName())
                 .createdAt(file.getCreatedAt())
                 .updatedAt(file.getUpdatedAt())
+                .build();
+    }
+
+    public FetchedThumbnailResponse toFetchedThumbnailResponse(InputStreamResource inputStreamResource,
+                                                               MediaType mediaType){
+        return FetchedThumbnailResponse.builder()
+                .inputStreamResource(inputStreamResource)
+                .mediaType(mediaType)
                 .build();
     }
 }
