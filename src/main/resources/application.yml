@@ -30,6 +30,7 @@ kakao:
   linked-url: ${KAKAO_LINKED_URL}
   message-send-uri: /v2/api/talk/memo/default/send
   notification-title : ${KAKAO_NOTIFICATION_TITLE}
+  basic-image-url : ${KAKAO_BASIC_IMAGE_URL}
 
 springdoc:
   swagger-ui:
