@@ -116,7 +116,9 @@ public class FileUseCase {
             String fileName = extractFileNameWithExtension(thumbnailUrl);
             FileType fileType = getValidatedFileType(thumbnailUrl);
 
-            URL url = URI.create(thumbnailUrl).toURL();
+            URI uri = URI.create(thumbnailUrl);
+
+            URL url = new URL(uri.toASCIIString());
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
