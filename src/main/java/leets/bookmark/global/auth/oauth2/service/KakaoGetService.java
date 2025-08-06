@@ -6,7 +6,6 @@ import leets.bookmark.global.auth.oauth2.application.exception.KakaoAccessTokenI
 import leets.bookmark.global.auth.oauth2.application.exception.KakaoAuthorizationCodeInvalidException;
 import leets.bookmark.global.auth.oauth2.application.exception.KakaoServerException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -15,15 +14,12 @@ import reactor.core.publisher.Mono;
 
 import static org.springframework.http.HttpHeaders.*;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class KakaoGetService {
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String redirectUri;
     @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
     private String tokenUri;
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
@@ -32,7 +28,7 @@ public class KakaoGetService {
     public static final String BEARER = "Bearer ";
     public static final String APPLICATION_X_WWW_FORM_URLENCODED_CHARSET_UTF_8 = "application/x-www-form-urlencoded;charset=utf-8";
 
-    public KakaoTokenResponse getTokenFromKakao(String code) {
+    public KakaoTokenResponse getTokenFromKakao(String code, String redirectUri) {
         return WebClient.create(tokenUri).post()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("grant_type", "authorization_code")

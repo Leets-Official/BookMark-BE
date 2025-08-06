@@ -34,6 +34,16 @@ public class NotificationUseCase {
     private final UserGetService userGetService;
 
     @Transactional(readOnly = true)
+    public NotificationResponse getNotification(User user, Bookmark bookmark) {
+        Optional<Notification> notification = notificationGetService.findByBookmarkId(bookmark.getId());
+
+        notification.ifPresent(value -> validateNotificationOwner(user, value));
+        return notification
+                .map(notificationMapper::toNotificationResponse)
+                .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
     public NotificationResponse getNotification(Long userId, Long bookmarkId) {
         User user = userGetService.findById(userId);
         Optional<Notification> notification = notificationGetService.findByBookmarkId(bookmarkId);

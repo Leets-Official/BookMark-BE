@@ -2,10 +2,13 @@ package leets.bookmark.domain.file.application.mapper;
 
 import leets.bookmark.domain.bookmark.domain.entity.Bookmark;
 import leets.bookmark.domain.file.application.dto.request.FileSaveRequest;
+import leets.bookmark.domain.file.application.dto.response.FetchedThumbnailResponse;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.domain.entity.File;
 import leets.bookmark.domain.file.domain.entity.enums.FileType;
 import leets.bookmark.domain.user.domain.entity.User;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,10 +24,32 @@ public class FileMapper {
                 .build();
     }
 
+    public File toThumbnailFile(User user, Bookmark bookmark, String fileName,
+                                String s3UrlResponse, FileType type) {
+        return File.builder()
+                .user(user)
+                .bookmark(bookmark)
+                .fileName(fileName)
+                .fileUrl(s3UrlResponse)
+                .fileType(type)
+                .build();
+    }
+
     public FileResponse toFileResponse(File file){
         return FileResponse.builder()
+                .fileId(file.getId())
                 .fileUrl(file.getFileUrl())
                 .fileName(file.getFileName())
+                .createdAt(file.getCreatedAt())
+                .updatedAt(file.getUpdatedAt())
+                .build();
+    }
+
+    public FetchedThumbnailResponse toFetchedThumbnailResponse(InputStreamResource inputStreamResource,
+                                                               MediaType mediaType){
+        return FetchedThumbnailResponse.builder()
+                .inputStreamResource(inputStreamResource)
+                .mediaType(mediaType)
                 .build();
     }
 }
