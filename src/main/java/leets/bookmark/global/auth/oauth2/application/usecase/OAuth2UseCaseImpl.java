@@ -41,8 +41,6 @@ public class OAuth2UseCaseImpl implements OAuth2UseCase {
         JwtTokenDto jwtToken = jwtProvider.createToken(user);
         user.updateJwtTokens(jwtToken.accessToken(), jwtToken.refreshToken());
 
-        userSaveService.save(user);
-
         return userMapper.toUserKakaoLoginResponse(user);
     }
 }
