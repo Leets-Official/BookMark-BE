@@ -11,6 +11,7 @@ import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPlatformResponse;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkUpdateFieldEmptyException;
 import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkPlatformMapper;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
@@ -24,6 +25,8 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
+import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
+import leets.bookmark.domain.notification.application.mapper.NotificationMapper;
 import leets.bookmark.domain.notification.application.dto.response.NotificationResponse;
 import leets.bookmark.domain.notification.domain.service.NotificationDeleteService;
 import leets.bookmark.domain.notification.domain.service.NotificationGetService;
@@ -69,6 +72,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
     private final NotificationDeleteService notificationDeleteService;
     private final NotificationGetService notificationGetService;
     private final NotificationUseCase notificationUseCase;
+    private final NotificationMapper notificationMapper;
 
     private final FileMapper fileMapper;
 
@@ -185,6 +189,12 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         if (request.title() != null && !request.title().trim().isEmpty()) {
             bookmark.updateTitle(request.title());
             updated = true;
+
+        }
+        if (request.memo() != null && !request.memo().trim().isEmpty()) {
+            bookmark.updateMemo(request.memo());
+            updated = true;
+
         }
 
         if (request.thumbnailUrl() != null) {
@@ -207,8 +217,13 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             updated = true;
         }
 
-        if (request.notification() != null && request.notification().notificationId() != null) {
-            notificationUseCase.updateNotification(user, bookmark, request.notification());
+        if (request.notification() != null) {
+            if (request.notification().notificationId() != null) {
+                notificationUseCase.updateNotification(user, bookmark, request.notification());
+            } else {
+                NotificationSaveRequest saveRequest = bookmarkMapper.toNotificationSaveRequest(request.notification());
+                notificationUseCase.saveNotification(user, bookmark, saveRequest);
+            }
             updated = true;
         }
 
@@ -245,7 +260,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
 
         if (!updated) {
-            throw new IllegalArgumentException("업데이트할 필드가 존재하지 않습니다.");
+            throw new BookmarkUpdateFieldEmptyException();
         }
     }
 

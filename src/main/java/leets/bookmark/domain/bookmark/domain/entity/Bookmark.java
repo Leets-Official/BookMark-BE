@@ -86,4 +86,8 @@ public class Bookmark extends BaseTimeEntity {
     public void updateCategory(Category category) {
         this.category = category;
     }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
 }
