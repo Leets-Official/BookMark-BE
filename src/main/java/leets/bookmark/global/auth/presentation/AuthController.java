@@ -29,8 +29,8 @@ public class AuthController {
     }
 
     @GetMapping("/login/kakao")
-    public CommonResponse<UserKakaoLoginResponse> kakaoLogin(@RequestParam("code") String code) {
-        UserKakaoLoginResponse response = oAuth2UseCase.kakaoLogin(code);
+    public CommonResponse<UserKakaoLoginResponse> kakaoLogin(@RequestParam("code") String code, @RequestParam("redirectUri") String redirectUri) {
+        UserKakaoLoginResponse response = oAuth2UseCase.kakaoLogin(code, redirectUri);
         return CommonResponse.createSuccess(KAKAO_LOGIN_SUCCESS.getMessage(), response);
     }
 }

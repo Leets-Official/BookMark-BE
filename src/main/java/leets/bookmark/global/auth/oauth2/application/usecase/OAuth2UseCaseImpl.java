@@ -26,8 +26,8 @@ public class OAuth2UseCaseImpl implements OAuth2UseCase {
 
     @Transactional
     @Override
-    public UserKakaoLoginResponse kakaoLogin(String code) {
-        KakaoTokenResponse kakaoToken = kakaoGetService.getTokenFromKakao(code);
+    public UserKakaoLoginResponse kakaoLogin(String code, String redirectUri) {
+        KakaoTokenResponse kakaoToken = kakaoGetService.getTokenFromKakao(code, redirectUri);
         KakaoUserInfoResponse kakaoUserInfo = kakaoGetService.getUserInfo(kakaoToken.accessToken());
 
         User user = userSaveService.save(kakaoUserInfo);
