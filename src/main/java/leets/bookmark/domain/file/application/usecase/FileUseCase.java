@@ -57,7 +57,7 @@ public class FileUseCase {
         String fileName = extractFileNameWithExtension(thumbnailUrl);
         FileType type = getValidatedFileType(fileName);
 
-        String s3UrlResponse = s3UploadService.upload(thumbnailUrl);
+        String s3UrlResponse = s3UploadService.upload(thumbnailUrl, type);
 
         File file = fileMapper.toThumbnailFile(user, bookmark, fileName, s3UrlResponse, type);
         fileSaveService.save(file);
@@ -86,7 +86,7 @@ public class FileUseCase {
         String fileName = extractFileNameWithExtension(thumbnailUrl);
         FileType type = getValidatedFileType(fileName);
 
-        String s3UrlResponse = s3UploadService.upload(thumbnailUrl);
+        String s3UrlResponse = s3UploadService.upload(thumbnailUrl, type);
 
         fileUpdateService.updateThumbnailImage(file, fileName, s3UrlResponse, type);
     }
