@@ -105,15 +105,8 @@ public class FileUseCase {
         }
     }
 
-    private String getExtension(String fileName){
-        if(fileName == null || !fileName.contains(".")){
-            throw new InvalidFileExtensionException();
-        }
-        return fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-    }
-
     private FileType getValidatedFileType(String fileName){
-       return FileType.fromExtension(getExtension(getExtension(fileName)))
+       return FileType.fromFileName(fileName)
                 .orElseThrow(InvalidFileExtensionException::new);
     }
 
