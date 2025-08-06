@@ -1,5 +1,7 @@
 package leets.bookmark.domain.notification.domain.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import leets.bookmark.global.auth.oauth2.application.dto.request.NotificationItemRequest;
 import leets.bookmark.domain.user.domain.entity.User;
 import leets.bookmark.global.auth.oauth2.service.KakaoTokenRefreshService;
@@ -12,8 +14,7 @@ import org.springframework.web.client.RestClient;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -36,64 +37,72 @@ public class KakaoNotificationService {
 
     private final KakaoTokenRefreshService kakaoTokenRefreshService;
 
-    public void sendListTemplate(User user, List<NotificationItemRequest> notificationItemRequests) {
+    public void sendListTemplate(User user, List<NotificationItemRequest> notificationItemRequests) throws JsonProcessingException {
 
-        kakaoTokenRefreshService.refreshAccessToken(user);  // 토큰 갱신
-        
-        StringBuilder contentsJson = new StringBuilder("[");
+        kakaoTokenRefreshService.refreshAccessToken(user);
 
-        for (int i = 0; i < notificationItemRequests.size(); i++) {
-            NotificationItemRequest item = notificationItemRequests.get(i);
-            String title = Optional.ofNullable(item.title()).orElse("제목 없음");
-            String description = Optional.ofNullable(item.description()).orElse(" ");
-            String imageUrl = Optional.ofNullable(item.imageUrl()).orElse(basicImageUrl);
-            contentsJson.append("""
-                {
-                    "title": "%s",
-                    "description": "%s",
-                    "image_url": "%s",
-                    "image_width": 640,
-                    "image_height": 640,
-                    "link": {
-                        "web_url": "%s",
-                        "mobile_web_url": "%s"
-                    }
-                }
-            """.formatted(
-                    escapeJson(title),
-                    escapeJson(description),
-                    escapeJson(imageUrl),
-                    linkedUrl,
-                    linkedUrl
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> templateMap = new HashMap<>();
+
+        // 알림이 1개일 경우
+        if (notificationItemRequests.size() == 1) {
+            NotificationItemRequest item = notificationItemRequests.get(0);
+
+            templateMap.put("object_type", "feed");
+            templateMap.put("content", Map.of(
+                    "title", Optional.ofNullable(item.title()).orElse("제목 없음"),
+                    "description", Optional.ofNullable(item.description()).orElse(" "),
+                    "image_url", Optional.ofNullable(item.imageUrl()).orElse(basicImageUrl),
+                    "image_width", 640,
+                    "image_height", 640,
+                    "link", Map.of(
+                            "web_url", linkedUrl,
+                            "mobile_web_url", linkedUrl
+                    )
             ));
 
-            if (i < notificationItemRequests.size() - 1) {
-                contentsJson.append(",");
+            templateMap.put("buttons", List.of(Map.of(
+                    "title", "웹으로 이동",
+                    "link", Map.of(
+                            "web_url", linkedUrl,
+                            "mobile_web_url", linkedUrl
+                    )
+            )));
+
+        } else if (notificationItemRequests.size() >= 2) {
+            templateMap.put("object_type", "list");
+            templateMap.put("header_title", notificationTitle);
+            templateMap.put("header_link", Map.of(
+                    "web_url", linkedUrl,
+                    "mobile_web_url", linkedUrl
+            ));
+
+            List<Map<String, Object>> contents = new ArrayList<>();
+            for (NotificationItemRequest item : notificationItemRequests) {
+                contents.add(Map.of(
+                        "title", Optional.ofNullable(item.title()).orElse("제목 없음"),
+                        "description", Optional.ofNullable(item.description()).orElse(" "),
+                        "image_url", Optional.ofNullable(item.imageUrl()).orElse(basicImageUrl),
+                        "image_width", 640,
+                        "image_height", 640,
+                        "link", Map.of(
+                                "web_url", linkedUrl,
+                                "mobile_web_url", linkedUrl
+                        )
+                ));
             }
+
+            templateMap.put("contents", contents);
+            templateMap.put("buttons", List.of(Map.of(
+                    "title", "웹으로 이동",
+                    "link", Map.of(
+                            "web_url", linkedUrl,
+                            "mobile_web_url", linkedUrl
+                    )
+            )));
         }
 
-        contentsJson.append("]");
-
-        String templateJson = """
-            {
-                "object_type": "list",
-                "header_title": "%s",
-                "header_link": {
-                    "web_url": "%s",
-                    "mobile_web_url": "%s"
-                },
-                "contents": %s,
-                "buttons": [
-                    {
-                        "title": "웹으로 이동",
-                        "link": {
-                            "web_url": "%s",
-                            "mobile_web_url": "%s"
-                        }
-                    }
-                ]
-            }
-        """.formatted(notificationTitle, linkedUrl, linkedUrl, contentsJson.toString(), linkedUrl, linkedUrl);
+        String templateJson = objectMapper.writeValueAsString(templateMap);
 
         String formBody = "template_object=" + URLEncoder.encode(templateJson, StandardCharsets.UTF_8);
 
@@ -108,8 +117,4 @@ public class KakaoNotificationService {
                 .body(String.class);
     }
 
-    private String escapeJson(String str) {
-        if (str == null) return "";
-        return str.replace("\"", "\\\"");
-    }
 }
