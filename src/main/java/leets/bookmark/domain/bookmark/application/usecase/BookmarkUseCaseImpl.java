@@ -10,6 +10,7 @@ import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchCond
 import leets.bookmark.domain.bookmark.application.dto.request.CategoryTagRequest;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPlatformResponse;
+import leets.bookmark.domain.bookmark.application.exception.BookmarkUpdateFieldEmptyException;
 import leets.bookmark.domain.bookmark.application.exception.TagCategoryMismatchException;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkPlatformMapper;
 import leets.bookmark.domain.bookmark.application.mapper.BookmarkSearchConditionMapper;
@@ -169,7 +170,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             bookmark.updateTitle(request.title());
             updated = true;
         }
-        if (request.memo() != null) {
+        if (request.memo() != null && !request.memo().trim().isEmpty()) {
             bookmark.updateMemo(request.memo());
             updated = true;
         }
@@ -231,7 +232,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
         }
 
         if (!updated) {
-            throw new IllegalArgumentException("업데이트할 필드가 존재하지 않습니다.");
+            throw new BookmarkUpdateFieldEmptyException();
         }
     }
 
