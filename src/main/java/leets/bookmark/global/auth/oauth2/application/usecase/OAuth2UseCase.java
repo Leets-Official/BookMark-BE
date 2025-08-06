@@ -4,5 +4,5 @@ import leets.bookmark.domain.user.application.dto.response.UserKakaoLoginRespons
 
 public interface OAuth2UseCase {
 
-    UserKakaoLoginResponse kakaoLogin(String code);
+    UserKakaoLoginResponse kakaoLogin(String code, String redirectUri);
 }
