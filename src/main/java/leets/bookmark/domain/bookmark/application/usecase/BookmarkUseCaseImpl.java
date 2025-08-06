@@ -24,6 +24,7 @@ import leets.bookmark.domain.bookmark.domain.service.BookmarkPreviewService;
 import leets.bookmark.domain.file.application.dto.response.FileResponse;
 import leets.bookmark.domain.file.application.mapper.FileMapper;
 import leets.bookmark.domain.file.application.usecase.FileUseCase;
+import leets.bookmark.domain.notification.application.dto.request.NotificationSaveRequest;
 import leets.bookmark.domain.notification.domain.service.NotificationDeleteService;
 import leets.bookmark.domain.notification.domain.service.NotificationGetService;
 import leets.bookmark.domain.user.domain.entity.User;
@@ -194,8 +195,15 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             updated = true;
         }
 
-        if (request.notification() != null && request.notification().notificationId() != null) {
-            notificationUseCase.updateNotification(user, bookmark, request.notification());
+        if (request.notification() != null) {
+            if (request.notification().notificationId() != null) {
+                notificationUseCase.updateNotification(user, bookmark, request.notification());
+            } else {
+                NotificationSaveRequest saveRequest = new NotificationSaveRequest(
+                        request.notification().notifyAt()
+                );
+                notificationUseCase.saveNotification(user, bookmark, saveRequest);
+            }
             updated = true;
         }
 
