@@ -2,6 +2,7 @@ package leets.bookmark.domain.bookmark.application.usecase;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.bookmark.application.dto.response.BookmarkPreviewResponse;
 
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 public interface BookmarkUseCase {
-    Slice<BookmarkResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request);
+    Slice<BookmarkFullResponse> getFilteredBookmarks(Long userId, BookmarkSearchRequest request);
 
     void delete(Long userId, Long bookmarkId);
 
@@ -26,4 +27,6 @@ public interface BookmarkUseCase {
     List<BookmarkPreviewResponse> extractPreviewFromUrl(String url);
 
     List<BookmarkPlatformResponse> getAllPlatforms(Long userId);
+
+    BookmarkFullResponse findBookmark(Long userId, Long bookmarkId);
 }

@@ -13,4 +13,8 @@ public class FileUpdateService {
     public void update(File file, FileUpdateRequest fileUpdateRequest, FileType fileType) {
         file.updateFile(fileUpdateRequest.fileName(), fileUpdateRequest.fileUrl(), fileType);
     }
+
+    public void updateThumbnailImage(File file, String fileName, String s3Url, FileType type) {
+        file.updateFile(fileName, s3Url, type);
+    }
 }

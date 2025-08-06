@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSearchRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkSaveRequest;
 import leets.bookmark.domain.bookmark.application.dto.request.BookmarkUpdateRequest;
+import leets.bookmark.domain.bookmark.application.dto.response.BookmarkFullResponse;
 import leets.bookmark.domain.notification.application.usecase.NotificationUseCase;
 import leets.bookmark.global.auth.annotation.CurrentUser;
 import leets.bookmark.global.common.response.CommonResponse;
@@ -25,12 +26,19 @@ public class BookmarkController {
     private final BookmarkUseCase bookmarkUseCase;
     private final NotificationUseCase notificationUseCase;
 
+    @GetMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 단일 조회 API", description = "북마크를 조회합니다.")
+    public CommonResponse<BookmarkFullResponse> getBookmark(@CurrentUser Long userId, @PathVariable Long bookmarkId) {
+        BookmarkFullResponse response = bookmarkUseCase.findBookmark(userId, bookmarkId);
+        return CommonResponse.createSuccess(BOOKMARK_FIND_SUCCESS.getMessage(), response);
+    }
+
     @PostMapping("/search")
     @Operation(summary = "북마크 필터링 API")
-    public CommonResponse<Slice<BookmarkResponse>> getFilteredBookmarks(@CurrentUser Long userId,
+    public CommonResponse<Slice<BookmarkFullResponse>> getFilteredBookmarks(@CurrentUser Long userId,
                                                                         @RequestBody @Valid BookmarkSearchRequest bookmarkSearchRequest) {
-        Slice<BookmarkResponse> responses = bookmarkUseCase.getFilteredBookmarks(userId, bookmarkSearchRequest);
-        return CommonResponse.createSuccess(BOOKMARK_FILTER_SUCCESS.getMessage(), responses);
+        Slice<BookmarkFullResponse> responses = bookmarkUseCase.getFilteredBookmarks(userId, bookmarkSearchRequest);
+        return CommonResponse.createSuccess(BOOKMARK_FIND_SUCCESS.getMessage(), responses);
     }
 
     @PostMapping()

@@ -18,6 +18,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,25 +32,18 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 
     private final QBookmark bookmark = QBookmark.bookmark;
     private final QBookmarkTagMapping tagMapping = QBookmarkTagMapping.bookmarkTagMapping;
-    private final QTag tag = QTag.tag;
-    private final QCategory category = QCategory.category;
-    private final QFile file = QFile.file;
 
     @Override
     public Slice<Bookmark> searchWithFilters(Long userId, BookmarkSearchCondition condition, Pageable pageable) {
 
-        Slice<Long> idSlice = findBookmarkIds(userId, condition, pageable);
-
-        List<Bookmark> bookmarks = findBookmarksWithAssociations(idSlice.getContent());
-
-        return new SliceImpl<>(bookmarks, pageable, idSlice.hasNext());
+        return findBookmarkIds(userId, condition, pageable);
     }
 
-    public Slice<Long> findBookmarkIds(Long userId, BookmarkSearchCondition condition, Pageable pageable) {
+    public Slice<Bookmark> findBookmarkIds(Long userId, BookmarkSearchCondition condition, Pageable pageable) {
         BooleanBuilder builder = buildCondition(userId, condition);
 
-        List<Long> ids = queryFactory
-                .select(bookmark.id)
+        List<Bookmark> bookmarks = queryFactory
+                .selectDistinct(bookmark)
                 .from(tagMapping)
                 .leftJoin(tagMapping.bookmark, bookmark)
                 .where(builder)
@@ -57,24 +52,10 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        boolean hasNext = ids.size() > pageable.getPageSize();
-        if (hasNext) ids.remove(pageable.getPageSize());
+        boolean hasNext = bookmarks.size() > pageable.getPageSize();
+        if (hasNext) bookmarks.remove(pageable.getPageSize());
 
-        return new SliceImpl<>(ids, pageable, hasNext);
-    }
-
-    public List<Bookmark> findBookmarksWithAssociations(List<Long> ids) {
-        if (ids.isEmpty()) return List.of();
-
-        return queryFactory
-                .select(bookmark)
-                .distinct()
-                .from(tagMapping)
-                .join(tagMapping.bookmark, bookmark)
-                .leftJoin(bookmark.category, category).fetchJoin()
-                .leftJoin(bookmark.file, file).fetchJoin()
-                .where(bookmark.id.in(ids))
-                .fetch();
+        return new SliceImpl<>(bookmarks, pageable, hasNext);
     }
 
     private BooleanBuilder buildCondition(Long userId, BookmarkSearchCondition condition) {
