@@ -221,7 +221,7 @@ public class BookmarkUseCaseImpl implements BookmarkUseCase {
             if (request.notification().notificationId() != null) {
                 notificationUseCase.updateNotification(user, bookmark, request.notification());
             } else {
-                NotificationSaveRequest saveRequest = new NotificationSaveRequest(request.notification().notifyAt());
+                NotificationSaveRequest saveRequest = bookmarkMapper.toNotificationSaveRequest(request.notification());
                 notificationUseCase.saveNotification(user, bookmark, saveRequest);
             }
             updated = true;
